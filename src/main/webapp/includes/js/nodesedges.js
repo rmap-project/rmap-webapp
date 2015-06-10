@@ -5,21 +5,26 @@
 		  style: cytoscape.stylesheet()
 		    .selector('node')
 		      .css({
-                'background-color': '#6272A3',
-                'width': 'mapData(weight, 40, 80, 20, 60)',
-                'height': 'mapData(weight, 40, 80, 20, 60)',
+                'background-color': '#4F4FCD',
+                'width': 'mapData(weight, 20, 80, 20, 60)',
+                'height': 'mapData(weight, 20, 80, 20, 60)',
 		        'content': 'data(name)',
-		        'text-valign': 'center',
-		        'color': 'black'
+		        'text-valign': 'top',
+		        'text-halign': 'center',
+		        'color': '#000',                
+                'font-size':'18px',
+                'text-max-width':'200',
+                'text-wrap':'wrap'
 		      })
 		    .selector('edge')
 		      .css({
-                'line-color':'#B1C1F2',
+                'line-color':'#B3B3D2',
 		        'target-arrow-shape': 'triangle',
-                'target-arrow-color': '#B1C1F2',
+                'target-arrow-color': '#B3B3D2',
 		        'content' : 'data(label)',
-                'width': 3,
+                'width': 4,
                 'edge-text-rotation': 'autorotate',
+                'font-size':'18px'
 		      })
           		  
           

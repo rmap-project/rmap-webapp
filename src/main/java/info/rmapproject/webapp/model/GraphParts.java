@@ -1,5 +1,9 @@
 package info.rmapproject.webapp.model;
 
+import info.rmapproject.core.model.RMapLiteral;
+import info.rmapproject.core.model.RMapResource;
+import info.rmapproject.core.model.RMapTriple;
+import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapps.utils.WebappUtils;
 
 import java.util.ArrayList;
@@ -16,6 +20,8 @@ public class GraphParts {
     private List<GraphEdge> edges;
     private Integer counter = 0;
 
+    private static Integer MAX_LITERAL_LENGTH = 30;
+    
 	public List<GraphNode> getNodes() {
 		return nodes;
 	}
@@ -72,6 +78,28 @@ public class GraphParts {
 		}
 		edges.add(edge);
 	}
+	
+	public void addEdge(RMapTriple triple)	{
+		RMapResource subject = triple.getSubject();
+		String predicate = triple.getPredicate().toString();
+		String object = triple.getObject().toString();
+		if (triple.getObject() instanceof RMapLiteral && object.length()>MAX_LITERAL_LENGTH) {
+			object = object.substring(0,MAX_LITERAL_LENGTH) + "...";
+		}
+		addEdge(subject.toString(), object, predicate);
+	}	
+	
+	
+	public void addEdge(String sourceKey, RMapValue targetKey, String label)	{
+		String sTargetKey = "";
+		if (targetKey!=null && sourceKey!=null){
+			sTargetKey= targetKey.toString();
+			if (targetKey instanceof RMapLiteral && targetKey.toString().length()>MAX_LITERAL_LENGTH) {
+				sTargetKey = sTargetKey.substring(0,MAX_LITERAL_LENGTH) + "...";
+			}
+			addEdge(sourceKey, sTargetKey, label);
+		}
+	}	
 	
 	public void addEdge(String sourceKey, String targetKey, String label)	{
 		GraphEdge edge = new GraphEdge();

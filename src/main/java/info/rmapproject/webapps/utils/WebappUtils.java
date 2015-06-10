@@ -18,7 +18,7 @@ import org.openrdf.model.vocabulary.RDFS;
 public class WebappUtils {
 
 	public static String replaceNamespace(String url) {
-
+		//TODO: make these into a properties file
 		if (url.contains(RDF.NAMESPACE))	{
 				return url.replace(RDF.NAMESPACE,"rdf:");
 		}
@@ -46,11 +46,20 @@ public class WebappUtils {
 		else if (url.contains(BIBO.NAMESPACE))	{
 			return url.replace(BIBO.NAMESPACE,  "bibo:");		
 		}
+		else if (url.contains("http://purl.org/spar/cito/")) {
+			return url.replace("http://purl.org/spar/cito/",  "cito:");		
+		}
+		else if (url.contains("http://purl.org/vocab/frbr/core#")) {
+			return url.replace("http://purl.org/vocab/frbr/core#",  "frbr:");		
+		}
 		else if (url.contains("http://www.loc.gov/mods/modsrdf/v1#")) {
 			return url.replace("http://www.loc.gov/mods/modsrdf/v1#",  "modsrdf:");		
 		}
 		else if (url.contains("http://www.loc.gov/premis/rdf/v1#")) {
 			return url.replace("http://www.loc.gov/premis/rdf/v1#", "premis:");						
+		}
+		else if (url.contains("http://purl.org/spar/scoro/")) {
+			return url.replace("http://purl.org/spar/scoro/", "scoro:");
 		}
 		else if (url.contains("http://purl.org/spar/fabio/")) {
 			return url.replace("http://purl.org/spar/fabio/","fabio:");						

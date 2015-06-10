@@ -52,8 +52,8 @@ public class EventController {
 	    model.addAttribute("EVENT_URI", eventUri);
 	    model.addAttribute("EVENT_DESCRIPTION", rmapEvent.getDescription());
 
-		//RMapUri associatedAgent = rmapEvent.getAssociatedAgent();
-	    //model.addAttribute("EVENT_AGENT", associatedAgent.toString());
+		RMapUri associatedAgent = rmapEvent.getAssociatedAgent();
+	    model.addAttribute("EVENT_AGENT", associatedAgent.toString());
 		model.addAttribute("EVENT_TARGETTYPE", rmapEvent.getEventTargetType());  //disco or agent
 	    model.addAttribute("EVENT_STARTTIME", rmapEvent.getStartTime()); 
 	    model.addAttribute("EVENT_ENDTIME", rmapEvent.getEndTime()); 

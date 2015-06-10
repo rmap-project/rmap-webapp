@@ -5,9 +5,9 @@
 <%@include file="/includes/header.inc" %>
 
 <h1>RMap Event Summary</h1>
-<h2>About: <em>${EVENT_URI}</em></h2>
+<h2>About: <a href="events?uri=${EVENT_URI}">${EVENT_URI}</a></h2>
 
-<h3>Event initiated by <!-- ${EVENT_AGENT} --> (not working right now) </h3>
+<h3><em>Event initiated by <a href="resources?uri=${EVENT_AGENT}">${EVENT_AGENT}</a></em></h3>
 <div class="CSSTableGenerator">
 <table>
 	<tr>

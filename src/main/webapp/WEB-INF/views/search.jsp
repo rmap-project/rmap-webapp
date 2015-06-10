@@ -9,7 +9,8 @@
 <form:form commandName="search" style="width:100%;display:inline; align:center;">
 	<!--<form:errors path="search" cssClass="validationErrors"/>-->
 	<form:label path="search">Enter URI</form:label> 
-	<form:input path="search" style="width:320px;" value="ark:/22573/rmdg0nq9 "/> 
+	<!--PROD-<form:input path="search" style="width:320px;" value="ark:/22573/rmdccm69"/> ->
+	<!--TEST--><form:input path="search" style="width:320px;" value="ark:/22573/rmd1s1kg2"/>
 	<input type="submit" value="GO"/>
 </form:form>
 <br/>

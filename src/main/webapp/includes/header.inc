@@ -21,12 +21,12 @@
 	<link rel="stylesheet" href="includes/stylesheets/base.css">
 	<link rel="stylesheet" href="includes/stylesheets/skeleton.css">
 	<link rel="stylesheet" href="includes/stylesheets/layout.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     
     <!-- CSS
   ================================================== -->
  	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script src="http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js"></script>
-
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->

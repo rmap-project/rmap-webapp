@@ -1,18 +1,12 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.core.model.RMapStatus;
-import info.rmapproject.core.model.RMapTriple;
+import info.rmapproject.core.model.statement.RMapStatement;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
-import info.rmapproject.webapp.model.ResourceDescription;
-import info.rmapproject.webapp.model.TripleDisplayFormat;
 
 import java.net.URI;
 import java.net.URLDecoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,41 +30,26 @@ public class StmtController {
 
 	@RequestMapping(value="/stmts", method = RequestMethod.GET)
 	public String statement(@RequestParam("uri") String stmtUri, Model model) throws Exception {
-		logger.info("Resource requested");
-		
-		URI uriResourceUri = null;
+		logger.info("Stmt requested");
+				
+		URI uriStmtUri = null;
 		stmtUri = URLDecoder.decode(stmtUri, "UTF-8");
-		uriResourceUri = new URI(stmtUri);
+		uriStmtUri = new URI(stmtUri);
 		
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		List<RMapTriple> rmapStatements = rmapService.getResourceRelatedTriples(uriResourceUri, RMapStatus.ACTIVE);
-	    model.addAttribute("RESOURCE_URI", stmtUri);
-	
-		Map<String,TripleDisplayFormat> types = new HashMap<String,TripleDisplayFormat>();	    	
-		Map<String,TripleDisplayFormat> properties = new HashMap<String,TripleDisplayFormat>(); 
+		RMapStatement rmapStmt = rmapService.readStatement(uriStmtUri);
 		
-		for (RMapTriple stmt : rmapStatements) {    		
-			TripleDisplayFormat tripleDF = new TripleDisplayFormat(stmt);
-			String listKey = tripleDF.getSubjectDisplay()+tripleDF.getPredicateDisplay()+tripleDF.getObjectDisplay();
-			
-			if (tripleDF.getPredicateDisplay().contains("rdf:type") 
-					&& stmt.getSubject().toString().equals(stmtUri))	{
-				types.put(listKey, tripleDF);	
-			}
-			else {
-				properties.put(listKey, tripleDF);				
-			}
-		}
-	
-		Map<String, TripleDisplayFormat> sortedTypes = new TreeMap<String, TripleDisplayFormat>(types);
-		Map<String, TripleDisplayFormat> sortedProperties = new TreeMap<String, TripleDisplayFormat>(properties);
-		
-		ResourceDescription resourceDescription = new ResourceDescription(stmtUri, sortedTypes, sortedProperties);	    	
-	        
-	    model.addAttribute("RESOURCE_DESCRIP", resourceDescription);
-	    
+	    model.addAttribute("STMT_URI", stmtUri);
+	    model.addAttribute("STMT_STATUS", rmapService.getStatementStatus(uriStmtUri));
+	    model.addAttribute("STMT_SUBJ", rmapStmt.getSubject().toString());
+	    model.addAttribute("STMT_PRED", rmapStmt.getPredicate().toString());
+	    model.addAttribute("STMT_OBJ", rmapStmt.getObject().toString());
+    	
+	    List <URI> events = rmapService.getStatementEvents(uriStmtUri);
+	    model.addAttribute("STMT_EVENTS", events);
+	    	    
 	    rmapService.closeConnection();
-	        
+
 		return "stmts";
 	}
 		
