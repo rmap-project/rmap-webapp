@@ -8,6 +8,9 @@ import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.PROV;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.RMAP;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.openrdf.model.vocabulary.DC;
 import org.openrdf.model.vocabulary.DCTERMS;
@@ -17,6 +20,11 @@ import org.openrdf.model.vocabulary.RDFS;
 
 public class WebappUtils {
 
+	/**
+	 * Replace the namespace URL with something more readable
+	 * @param url
+	 * @return
+	 */
 	public static String replaceNamespace(String url) {
 		//TODO: make these into a properties file
 		if (url.contains(RDF.NAMESPACE))	{
@@ -72,51 +80,67 @@ public class WebappUtils {
 		}
 	}
 	
-	public static String getRMapType(URI uriResourceUri){
+	/**
+	 * Determine whether the URI provided is an RMap object, or just a regular resource.
+	 * @param uriResourceUri
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getRMapType(URI uriResourceUri) throws Exception{
 
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		
-		try {
-			rmapService.getDiSCOStatus(uriResourceUri);
-			rmapService.closeConnection();
-			return "disco"; 
-		}
-		catch (Exception e) {
-			//not a DiSCO
-		}
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri);
+		rmapService.closeConnection();
 
-		try {
-			rmapService.getAgentStatus(uriResourceUri);
-			rmapService.closeConnection();
-			return "agent"; 
+		for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
+			Set<URI> contexttypes = type.getValue();
+			for (URI contexttype : contexttypes) {
+				if (contexttype.toString().equals(RMAP.DISCO.toString())) {
+					return "disco";
+				}
+				else if (contexttype.toString().equals(RMAP.AGENT.toString())) {
+					return "agent";
+				}
+				else if (contexttype.toString().equals(RMAP.STATEMENT.toString())) {
+					return "stmt";
+				}
+				else if (contexttype.toString().equals(RMAP.EVENT.toString())) {
+					return "event";
+				}
+			}
 		}
-		catch (Exception e) {
-			//not an Agent
-		}
-
-		try {
-			rmapService.getStatementEvents(uriResourceUri);
-			rmapService.closeConnection();
-			return "stmt";
-		}
-		catch (Exception e) {
-			//not a Statement
-		}
-		
-		try {
-			rmapService.readEvent(uriResourceUri);
-			rmapService.closeConnection();
-			return "event";
-		}
-		catch (Exception e) {
-			//not an Event
-		}
-		
+		//otherwise
 		return "";
-				
 	}
 	
-	
+
+	/**
+	 * Get a list of links for all RDF types associated with the resource
+	 * @param uriResourceUri
+	 * @return
+	 * @throws Exception
+	 * (NOT CURRENTLY USED, LEAVING IT HERE IN CASE WE DECIDE TO USE IT ANYWHERE)
+	 */
+	public static Map<URI,String> getAllRdfTypes(URI uriResourceUri) throws Exception{
+
+		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri);
+		rmapService.closeConnection();
+		
+		Map <URI, String> allRdfTypes = new HashMap<URI, String>();
+
+		for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
+			Set<URI> contexttypes = type.getValue();
+			for (URI contexttype : contexttypes) {
+				if (contexttype!=null && !allRdfTypes.containsKey(contexttype)) {
+					String link = "<a href=\"" + contexttype.toString() + "\">" 
+									+ replaceNamespace(contexttype.toString()) + "</a>";
+					allRdfTypes.put(contexttype, link);
+				}
+			}
+		}
+		return allRdfTypes;
+	}
 	
 	
 }

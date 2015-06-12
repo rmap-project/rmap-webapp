@@ -78,8 +78,8 @@ public class DiSCOController {
 		}
 		
 		RMapStatus discoStatus = rmapService.getDiSCOStatus(uriDiscoUri);
-	    
-	    model.addAttribute("DISCO_URI", discoUri);
+
+		model.addAttribute("DISCO_URI", discoUri);
 	    model.addAttribute("DISCO_DESCRIPTION", discoDescription);
 	    model.addAttribute("DISCO_CREATOR", discoCreator);
 	    model.addAttribute("DISCO_OTHERVERSIONS", otherVersions);
