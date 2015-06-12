@@ -18,8 +18,9 @@
 		<p>${DISCO_DESCRIPTION.toString()}</p>
 	</c:if>
 
-	<div id="cy"></div>
-	<a href="discos?uri=${DISCO_URI}&visualize=1">View larger visualization</a>
+	<div id="cy" class="cysmall"></div>
+	<a href="discos?uri=${DISCO_URI}&visualize=1">View larger visualization</a> | 
+	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
 	<br/><br/>
 	<h2>Aggregated Resources</h2>
 	<ul>
@@ -80,7 +81,7 @@
 				</c:if>
 			
 				<c:if test="${properties.size()==0}">
-					<tr><td colspan="2"><em>No additional assertions about this resource.</em></td></tr>
+					<tr><td colspan="2"><em>No additional properties for this Resource.</em></td></tr>
 				</c:if>
 				</table>
 			</div>

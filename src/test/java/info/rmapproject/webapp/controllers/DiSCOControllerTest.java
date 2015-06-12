@@ -1,6 +1,7 @@
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.core.model.RMapResource;
+import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.disco.RMapDiSCO;
 import info.rmapproject.core.rmapservice.RMapService;
@@ -25,11 +26,11 @@ public class DiSCOControllerTest {
 
 	@Test
 	public void testDisco() throws Exception{
-		String discoUri = "ark:/22573/rmdg0nq9";
+		String discoUri = "ark:/22573/rmd1s21t4";
 		URI uriDiscoUri = null;
 		discoUri = URLDecoder.decode(discoUri, "UTF-8");
 		uriDiscoUri = new URI(discoUri);
-		
+				
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
 		RMapDiSCO rmapDisco = rmapService.readDiSCO(uriDiscoUri);
 	    
@@ -37,26 +38,36 @@ public class DiSCOControllerTest {
 		if (rmapDisco.getDescription()!=null){
 			discoDescription=rmapDisco.getDescription().toString();
 		}
-	    
+		
 		String discoCreator = "";
 		if (rmapDisco.getCreator()!=null){
 			discoCreator=rmapDisco.getCreator().toString();
 		}
 		
+		List <URI> agentVersions = rmapService.getDiSCOAllAgentVersions(uriDiscoUri);
+		agentVersions.remove(uriDiscoUri);  //takes out current DiSCO URI
+		
+		List <URI> allVersions = rmapService.getDiSCOAllVersions(uriDiscoUri);
+		allVersions.remove(uriDiscoUri);  //takes out current DiSCO URI
+		List <URI> otherVersions = new ArrayList<URI>(); 
+		for (URI version : allVersions) {
+			if (!agentVersions.contains(version))	{
+				otherVersions.add(version);
+			}
+		}
+		
+		RMapStatus discoStatus = rmapService.getDiSCOStatus(uriDiscoUri);
+	    
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type");
-	    if (discoDescription.length()>0) {
-	    	graphParts.addEdge(discoUri,discoDescription,"dcterms:description");
-	    }
-	    if (discoCreator.length()>0) {
-	    	graphParts.addEdge(discoUri, discoCreator,"dcterms:creator");
-	    }
-	    
-		List <URI> aggregatedResources = rmapDisco.getAggregratedResources();
+	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", true);
+	    graphParts.addEdge(discoUri, rmapDisco.getDescription(),"dcterms:description");
+	    graphParts.addEdge(discoUri, rmapDisco.getCreator(),"dcterms:creator");
+    	
+    	List <URI> aggregatedResources = rmapDisco.getAggregratedResources();
 	    for (URI aggregate : aggregatedResources) {
-		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates");
+		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", true);
 	    }
 	    
 	    List <RMapTriple> rmapStatements = rmapDisco.getRelatedStatements();
@@ -77,8 +88,6 @@ public class DiSCOControllerTest {
 	    	
 	    	for (RMapTriple stmt : rmapStatements) {
 	    		RMapResource subject = stmt.getSubject();
-	    		String predicate = stmt.getPredicate().toString();
-	    		String object = stmt.getObject().toString();
 	    		
 	    		if (subject.toString().equals(resource)) {
 	    			TripleDisplayFormat tripleDF = new TripleDisplayFormat(stmt);
@@ -90,8 +99,7 @@ public class DiSCOControllerTest {
 	    			else {
 	    				properties.put(listKey, tripleDF);				
 	    			}
-
-				    graphParts.addEdge(subject.toString(), object, predicate);
+				    graphParts.addEdge(stmt);
 	    		}
 	    	}
 
@@ -100,7 +108,10 @@ public class DiSCOControllerTest {
 	    	
 	    	resourceDescriptions.add(new ResourceDescription(resource, sortedTypes, sortedProperties));	    	
 	    }
-	    	    	    
+	        
+	    
+	    List <URI> events = rmapService.getDiSCOEvents(uriDiscoUri);
+	    	    
 	    rmapService.closeConnection();
 	}
 

@@ -46,7 +46,7 @@ public class GraphParts {
 		this.uniqueNodes = uniqueNodes;
 	}
 	
-	public Integer addNode(String sNode){
+	public Integer addNode(String sNode, Boolean isUri){
 		Integer id = 0;
 		if (this.uniqueNodes == null){
 			this.uniqueNodes = new HashSet<String>();
@@ -58,7 +58,7 @@ public class GraphParts {
 		if (!uniqueNodes.contains(sNode)) {
 			id = addOne();
 			uniqueNodes.add(sNode);	
-			nodes.add(new GraphNode(id, sNode, 10));
+			nodes.add(new GraphNode(id, sNode, 10, isUri));
 		}
 		else {
 			//find matching node, add to weight
@@ -83,33 +83,42 @@ public class GraphParts {
 		RMapResource subject = triple.getSubject();
 		String predicate = triple.getPredicate().toString();
 		String object = triple.getObject().toString();
-		if (triple.getObject() instanceof RMapLiteral && object.length()>MAX_LITERAL_LENGTH) {
-			object = object.substring(0,MAX_LITERAL_LENGTH) + "...";
+		Boolean connectsUri = true;
+		if (triple.getObject() instanceof RMapLiteral) {
+			if (object.length()>MAX_LITERAL_LENGTH) {
+				object = object.substring(0,MAX_LITERAL_LENGTH) + "...";
+			}
+			connectsUri = false;
 		}
-		addEdge(subject.toString(), object, predicate);
+		addEdge(subject.toString(), object, predicate, connectsUri);
 	}	
 	
 	
 	public void addEdge(String sourceKey, RMapValue targetKey, String label)	{
 		String sTargetKey = "";
+		Boolean connectsUri = true;
 		if (targetKey!=null && sourceKey!=null){
 			sTargetKey= targetKey.toString();
-			if (targetKey instanceof RMapLiteral && targetKey.toString().length()>MAX_LITERAL_LENGTH) {
-				sTargetKey = sTargetKey.substring(0,MAX_LITERAL_LENGTH) + "...";
+			if (targetKey instanceof RMapLiteral) {
+				if (targetKey.toString().length()>MAX_LITERAL_LENGTH) {
+					sTargetKey = sTargetKey.substring(0,MAX_LITERAL_LENGTH) + "...";
+				}
+				connectsUri = false;
 			}
-			addEdge(sourceKey, sTargetKey, label);
+			addEdge(sourceKey, sTargetKey, label, connectsUri);
 		}
 	}	
 	
-	public void addEdge(String sourceKey, String targetKey, String label)	{
+	public void addEdge(String sourceKey, String targetKey, String label, Boolean connectsUri)	{
 		GraphEdge edge = new GraphEdge();
 		targetKey = targetKey.replaceAll("[\n\r]", "");
 		targetKey = targetKey.replaceAll("[ ]+", " ");
-		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey));
-		Integer target = addNode(WebappUtils.replaceNamespace(targetKey));
+		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey), true);
+		Integer target = addNode(WebappUtils.replaceNamespace(targetKey), connectsUri);
 		edge.setLabel(WebappUtils.replaceNamespace(label));
 		edge.setSource(source);
 		edge.setTarget(target);
+		edge.setConnectsUri(connectsUri);
 		addEdge(edge);
 	}	
 		

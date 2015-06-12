@@ -3,14 +3,15 @@
 <c:set var="pageTitle" value="Visualization | RMap DiSCO Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
 <%@include file="/includes/header.inc" %>
-<%@include file="/includes/js/nodesedgesbig.js" %>        
+<%@include file="/includes/js/nodesedges.js" %>        
 
 <h1>RMap DiSCO Summary</h1>
 <h2>About: <a href="discos?uri=${DISCO_URI}">${DISCO_URI}</a></h2>
-<a href="discos?uri=${DISCO_URI}">Return to summary</a>
+<a href="resources?uri=${DISCO_URI}">Return to summary</a> | 
+<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
 <br/>
 
-<div id="cybig"></div>
 
-
+<div id="cy" class="cybig"></div>
+<br/><br/>
 <%@include file="/includes/footer.inc" %>

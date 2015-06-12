@@ -29,8 +29,9 @@
 	</h3>
 </c:if>
 <c:if test="${properties.size()>0 || resource_types.size()>0}">
-	<div id="cy"></div>
-	<a href="resources?uri=${RESOURCE_URI}&visualize=1">View larger visualization</a>
+	<div id="cy" class="cysmall"></div>
+	<a href="resources?uri=${RESOURCE_URI}&visualize=1">View larger visualization</a> | 
+	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
 </c:if>
 <br/>
 	<div class="CSSTableGenerator">

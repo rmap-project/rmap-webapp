@@ -8,6 +8,7 @@ public class GraphEdge implements Serializable {
 	private Integer source;
 	private Integer target;
 	private String label;
+	private Boolean connectsUri;
 	
 	public GraphEdge(){
 	}
@@ -35,6 +36,14 @@ public class GraphEdge implements Serializable {
 	}
 	public void setLabel(String label) {
 		this.label = label;
+	}
+
+	public Boolean getConnectsUri() {
+		return connectsUri;
+	}
+
+	public void setConnectsUri(Boolean connectsUri) {
+		this.connectsUri = connectsUri;
 	}
 	
 }

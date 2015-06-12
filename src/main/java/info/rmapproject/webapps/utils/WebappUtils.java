@@ -64,6 +64,9 @@ public class WebappUtils {
 		else if (url.contains("http://purl.org/spar/fabio/")) {
 			return url.replace("http://purl.org/spar/fabio/","fabio:");						
 		}
+		else if (url.contains("http://prismstandard.org/namespaces/basic/2.0/")) {
+			return url.replace("http://prismstandard.org/namespaces/basic/2.0/", "prism:");
+		}
 		else {
 			return url;
 		}

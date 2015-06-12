@@ -80,7 +80,7 @@ public class ResourceControllerTest {
 	    	
 	    	graphParts.addEdge(triple.getSubject().toString(),
 	    						object,
-	    						triple.getPredicate().toString());	 
+	    						triple.getPredicate().toString(), true);	 
 	    }
 	    
 	    //model.addAttribute("OBJECT_NODES", graphParts.getNodes());

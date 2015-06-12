@@ -1,6 +1,6 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.core.model.RMapLiteral;
+import info.rmapproject.core.exception.RMapObjectNotFoundException;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.rmapservice.RMapService;
@@ -56,7 +56,13 @@ public class ResourceController {
 		
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
 		List<RMapTriple> rmapTriples = rmapService.getResourceRelatedTriples(uriResourceUri, RMapStatus.ACTIVE);
-	    model.addAttribute("RESOURCE_URI", resourceUri);
+    	
+		//if there are no triples, don't load an empty screen, show a not found error.
+    	if (rmapTriples.size()==0)	{
+    		throw new RMapObjectNotFoundException();
+    	}
+    	
+		model.addAttribute("RESOURCE_URI", resourceUri);
 
     	Map<String,TripleDisplayFormat> types = new HashMap<String,TripleDisplayFormat>();	    	
     	Map<String,TripleDisplayFormat> properties = new HashMap<String,TripleDisplayFormat>(); 

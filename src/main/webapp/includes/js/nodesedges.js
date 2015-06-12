@@ -44,12 +44,12 @@
 		  elements: {
 		    nodes: [
 			  <c:forEach var="node" items="${OBJECT_NODES}">
-		     	 { data: { id: '${node.getId()}', name: '${node.getName()}', weight:${node.getWeight()}} },
+		     	 { data: { id: '${node.getId()}', name: '${node.getName()}', weight:${node.getWeight()}, urielement:'${node.getIsUri().toString()}'} },
 		      </c:forEach>
 		    ],
 		    edges: [
 			  <c:forEach var="edge" items="${OBJECT_EDGES}">
-				{ data: { source: '${edge.getSource()}', target: '${edge.getTarget()}', label:'${edge.getLabel()}'} },
+				{ data: { source: '${edge.getSource()}', target: '${edge.getTarget()}', label:'${edge.getLabel()}', urielement:'${edge.getConnectsUri().toString()}'} },
 			  </c:forEach>
 		    ]
 		  },
@@ -92,4 +92,26 @@
 
 		}); // on dom ready
 
+
+		var removedElements;
+		
+		function toggleLiterals()
+			{
+			var toggleButton = document.getElementById('toggle');
+			var toggleText = toggleButton.innerHTML;
+						
+			if (toggleText=="Hide literals") 
+				{
+				removedElements = cy.remove("[urielement='false']"); 
+				toggleButton.innerHTML="Show literals";
+				}
+			else 
+				{
+				removedElements.restore();
+				toggleButton.innerHTML="Hide literals";
+				}
+			cy.load( cy.elements('*').jsons() );     
+			}
+	
+	
 </script>

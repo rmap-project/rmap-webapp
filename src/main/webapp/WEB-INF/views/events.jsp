@@ -43,6 +43,11 @@
 				<td>${affected_resource.getValue()}</td>
 			</tr>
 		</c:forEach>
+		<c:if test="${EVENT_RESAFFECTED.size()==0}">
+			<tr>
+				<td colspan="2">No Resources were affected by this RMap Event</td>
+			</tr>
+		</c:if>
 	</table>
 </div>
 	

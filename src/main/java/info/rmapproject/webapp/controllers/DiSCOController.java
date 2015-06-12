@@ -1,6 +1,5 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.core.model.RMapLiteral;
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
@@ -90,14 +89,14 @@ public class DiSCOController {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type");
+	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", true);
 	    graphParts.addEdge(discoUri, rmapDisco.getDescription(),"dcterms:description");
 	    graphParts.addEdge(discoUri, rmapDisco.getCreator(),"dcterms:creator");
     	
     	List <URI> aggregatedResources = rmapDisco.getAggregratedResources();
 	    model.addAttribute("RESOURCE_LIST", aggregatedResources);
 	    for (URI aggregate : aggregatedResources) {
-		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates");
+		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", true);
 	    }
 	    
 	    List <RMapTriple> rmapStatements = rmapDisco.getRelatedStatements();

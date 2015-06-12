@@ -240,7 +240,7 @@ acronym { border-bottom:1px dotted #ccc; }
 	border-width:0px 0px 1px 1px;
 }
 
-#cy {
+.cysmall {
   height: 470px;
   width: 100%;
   position: relative;
@@ -249,7 +249,7 @@ acronym { border-bottom:1px dotted #ccc; }
   border: 1px solid #ccc;
 }
 
-#cybig {
+.cybig {
   height: 800px;
   width: 100%;
   position: relative;
@@ -257,7 +257,6 @@ acronym { border-bottom:1px dotted #ccc; }
   background-color: #F7F7FF;
   border: 1px solid #ccc;
 }
-
 
 #info {
   color: #c88;
@@ -277,5 +276,11 @@ acronym { border-bottom:1px dotted #ccc; }
 	color:#CC0017;
 	text-align:center;
 	border:2px solid #CC0017;
+}
+
+.literaltoggle {
+	text-decoration: none; 
+	color: #0000C1; 
+	display: inline-block;
 }
 

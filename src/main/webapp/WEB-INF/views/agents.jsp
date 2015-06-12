@@ -16,8 +16,9 @@
 	<c:if test="${AGENT_DESCRIPTION.length()>0}">
 		<p>{AGENT_DESCRIPTION.toString()}</p>
 	</c:if>
-	<div id="cy"></div>
-	<a href="agents?uri=${AGENT_URI}&visualize=1">View larger visualization</a>
+	<div id="cy" class="cysmall"></div>
+	<a href="agents?uri=${AGENT_URI}&visualize=1">View larger visualization</a> | 
+	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
 	<br/><br/>
 	
 	<h2>Agent represented</h2>
@@ -83,7 +84,7 @@
 							<td>Property</td>
 							<td>Value</td>
 						</tr>
-						<tr><td colspan="2"><em>No additional statements about this resource.</em></td></tr>
+						<tr><td colspan="2"><em>No additional properties for this RMap:Agent.</em></td></tr>
 					</table>
 				</div>
 			</c:if>

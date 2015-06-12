@@ -1,6 +1,5 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.core.model.RMapLiteral;
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
@@ -67,9 +66,9 @@ public class AgentController {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(agentUri,"rmap:Agent","rdf:type");
+	    graphParts.addEdge(agentUri,"rmap:Agent","rdf:type", true);
 	    graphParts.addEdge(agentUri, rmapAgent.getCreator(),"dcterms:creator");
-	    graphParts.addEdge(agentUri, agentRepresented,"dcterms:isFormatOf");
+	    graphParts.addEdge(agentUri, agentRepresented,"dcterms:isFormatOf", true);
 	    
 	    model.addAttribute("AGENT_URI", agentUri);
 	    model.addAttribute("AGENT_RESPRESENTED", agentRepresented);
