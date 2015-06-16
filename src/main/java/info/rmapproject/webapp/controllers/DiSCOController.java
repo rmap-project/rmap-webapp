@@ -141,7 +141,10 @@ public class DiSCOController {
 	    model.addAttribute("DISCO_RESOURCE_DESCRIP", resourceDescriptions);
 	    
 	    List <URI> events = rmapService.getDiSCOEvents(uriDiscoUri);
-	    model.addAttribute("DISCO_EVENTS", events);
+	    Set <URI> uniqueEvents = new HashSet<URI>();
+	    uniqueEvents.addAll(events);
+	    
+	    model.addAttribute("DISCO_EVENTS", uniqueEvents);
 	    
 		model.addAttribute("OBJECT_NODES", graphParts.getNodes());
 	    model.addAttribute("OBJECT_EDGES", graphParts.getEdges());

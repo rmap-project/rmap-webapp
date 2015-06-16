@@ -1,4 +1,4 @@
-package info.rmapproject.webapps.utils;
+package info.rmapproject.webapp.utils;
 
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
@@ -74,6 +74,9 @@ public class WebappUtils {
 		}
 		else if (url.contains("http://prismstandard.org/namespaces/basic/2.0/")) {
 			return url.replace("http://prismstandard.org/namespaces/basic/2.0/", "prism:");
+		}
+		else if (url.contains("http://purl.org/dc/dcmitype/")) {
+			return url.replace("http://purl.org/dc/dcmitype/", "dcmitype:");
 		}
 		else {
 			return url;

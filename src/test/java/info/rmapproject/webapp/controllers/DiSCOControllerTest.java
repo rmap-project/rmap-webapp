@@ -26,7 +26,7 @@ public class DiSCOControllerTest {
 
 	@Test
 	public void testDisco() throws Exception{
-		String discoUri = "ark:/22573/rmd1s21t4";
+		String discoUri = "ark:/22573/rmd1s3cb8";
 		URI uriDiscoUri = null;
 		discoUri = URLDecoder.decode(discoUri, "UTF-8");
 		uriDiscoUri = new URI(discoUri);

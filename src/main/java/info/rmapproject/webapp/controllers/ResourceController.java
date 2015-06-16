@@ -8,7 +8,7 @@ import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.model.GraphParts;
 import info.rmapproject.webapp.model.ResourceDescription;
 import info.rmapproject.webapp.model.TripleDisplayFormat;
-import info.rmapproject.webapps.utils.WebappUtils;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;

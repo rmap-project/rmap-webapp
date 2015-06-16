@@ -11,7 +11,7 @@ import info.rmapproject.core.model.event.RMapEventType;
 import info.rmapproject.core.model.event.RMapEventUpdate;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
-import info.rmapproject.webapps.utils.WebappUtils;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -92,9 +92,9 @@ public class EventController {
 	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
 	    		resourcesAffected.put(uri.toString(), "Created " + type);
 	    	}
-	    	RMapUri inactivatedUri = derivationEvent.getDerivedObjectId();
-			String type = WebappUtils.getRMapType(new URI(inactivatedUri.toString()));
-    		resourcesAffected.put(inactivatedUri.toString(), "Inactivated " + type);	    	
+	    	RMapUri derivedUri = derivationEvent.getDerivedObjectId();
+			String type = WebappUtils.getRMapType(new URI(derivedUri.toString()));
+    		resourcesAffected.put(derivedUri.toString(), "Derived " + type);	    	
 	    }
 	    else if (eventType == RMapEventType.UPDATE)	{
 	    	RMapEventUpdate updateEvent = (RMapEventUpdate) rmapEvent;	   
@@ -103,9 +103,13 @@ public class EventController {
 	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
 	    		resourcesAffected.put(uri.toString(), "Created " + type);
 	    	}
-	    	RMapUri inactivatedUri = updateEvent.getDerivedObjectId();
-			String type = WebappUtils.getRMapType(new URI(inactivatedUri.toString()));
-    		resourcesAffected.put(inactivatedUri.toString(), "Inactivated " + type);	    			    	
+	    	RMapUri derivedUri = updateEvent.getDerivedObjectId();
+			String type = WebappUtils.getRMapType(new URI(derivedUri.toString()));
+    		resourcesAffected.put(derivedUri.toString(), "Derived " + type);	
+    		
+	    	RMapUri inactivatedUri = updateEvent.getInactivatedObjectId();
+	    	type = WebappUtils.getRMapType(new URI(inactivatedUri.toString()));
+    		resourcesAffected.put(inactivatedUri.toString(), "Inactivated " + type);	  	    			    	
 	    }
 	    else if (eventType == RMapEventType.INACTIVATION)	{
 	    	RMapEventInactivation inactivateEvent = (RMapEventInactivation) rmapEvent;	    

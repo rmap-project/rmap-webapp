@@ -30,16 +30,11 @@
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-
 	<!-- Favicons
 	================================================== -->
 	<link rel="shortcut icon" href="includes/images/favicon.ico">
-
 </head>
 <body>
-
-
-
 	<!-- Primary Page Layout
 	================================================== -->
 

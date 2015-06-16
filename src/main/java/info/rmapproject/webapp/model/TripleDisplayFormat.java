@@ -4,7 +4,7 @@ import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.RMapUri;
 import info.rmapproject.core.model.RMapValue;
-import info.rmapproject.webapps.utils.WebappUtils;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 public class TripleDisplayFormat {
 

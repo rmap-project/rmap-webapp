@@ -14,10 +14,7 @@
 
 <c:if test="${resource_types.size()>0}">
 	<h3>
-		A resource of type
-		<c:if test="${resource_types.size()>1}">
-			s
-		</c:if>
+		A resource of type<c:if test="${resource_types.size()>1}">s</c:if>
 		:&nbsp;
 		<em>
 			<c:forEach var="resource_type" items="${resource_types}">
