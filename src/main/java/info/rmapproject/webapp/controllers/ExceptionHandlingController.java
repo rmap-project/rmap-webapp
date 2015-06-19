@@ -9,6 +9,8 @@ import info.rmapproject.core.exception.RMapObjectNotFoundException;
 import info.rmapproject.core.exception.RMapStatementNotFoundException;
 import info.rmapproject.core.exception.RMapTombstonedObjectException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -16,20 +18,24 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlingController {
 
+	private static final Logger logger = LoggerFactory.getLogger(DiSCOController.class);
 	
 	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class, 
 						RMapStatementNotFoundException.class, RMapObjectNotFoundException.class})
-	 public String objectNotFoundError() {
+	 public String objectNotFoundError(Exception exception) {		
+		logger.error(exception.getMessage(), exception);
 		return "objectnotfound";
 	  }
 	
 	@ExceptionHandler({RMapDeletedObjectException.class, RMapTombstonedObjectException.class})
-	 public String deletionError() {
+	 public String deletionError(Exception exception) {	
+		logger.error(exception.getMessage(), exception);
 		return "deleted";
 	  }
 	
 	@ExceptionHandler({RMapException.class, Exception.class})
-	 public String genericError() {
+	 public String genericError(Exception exception) {	
+		logger.error(exception.getMessage(), exception);
 		return "error";
 	  }
 	

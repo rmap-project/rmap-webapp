@@ -95,20 +95,22 @@ public class WebappUtils {
 		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri);
 		rmapService.closeConnection();
 
-		for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
-			Set<URI> contexttypes = type.getValue();
-			for (URI contexttype : contexttypes) {
-				if (contexttype.toString().equals(RMAP.DISCO.toString())) {
-					return "disco";
-				}
-				else if (contexttype.toString().equals(RMAP.AGENT.toString())) {
-					return "agent";
-				}
-				else if (contexttype.toString().equals(RMAP.STATEMENT.toString())) {
-					return "stmt";
-				}
-				else if (contexttype.toString().equals(RMAP.EVENT.toString())) {
-					return "event";
+		if (types != null) {
+			for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
+				Set<URI> contexttypes = type.getValue();
+				for (URI contexttype : contexttypes) {
+					if (contexttype.toString().equals(RMAP.DISCO.toString())) {
+						return "disco";
+					}
+					else if (contexttype.toString().equals(RMAP.AGENT.toString())) {
+						return "agent";
+					}
+					else if (contexttype.toString().equals(RMAP.STATEMENT.toString())) {
+						return "stmt";
+					}
+					else if (contexttype.toString().equals(RMAP.EVENT.toString())) {
+						return "event";
+					}
 				}
 			}
 		}

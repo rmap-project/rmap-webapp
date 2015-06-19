@@ -5,6 +5,7 @@
 <%@include file="/includes/header.inc" %>
 <%@include file="/includes/js/nodesedges.js" %>
 
+<article class="twelve columns main-content">
 <h1>Resource Summary</h1>
 <h2>About: <a href="resources?uri=${RESOURCE_URI}">${RESOURCE_URI}</a></h2>
 
@@ -72,10 +73,25 @@
 					</tr>
 				</c:forEach>	
 			</c:if>
-		
-		
 	</table>
 </div>
 <br/><br/>
+</article>
+
+<!-- End main Content -->
+	    
+<aside class="four columns right-sidebar">
+    <div class="sidebar-widget">
+		<h1>&nbsp;</h1>
+		<h2>Related Active DiSCOs</h2>
+		<ul>
+			<c:forEach var="discouri" items="${RESOURCE_DISCOS}">
+				<li><a href="discos?uri=${discouri.toString()}">${discouri.toString()}</a></li>
+			</c:forEach>
+		</ul>
+	</div>
+</aside>
+<!-- End Right Sidebar -->
+
 
 <%@include file="/includes/footer.inc" %>

@@ -4,20 +4,24 @@ import java.io.Serializable;
 
 public class GraphNode implements Serializable{
 
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private String name;
-	private Integer weight;
-	private Boolean isUri;
-	
 	public GraphNode(){
 	}
 	
-	public GraphNode(Integer id, String name, Integer weight, Boolean isUri){
-		this.id = id;
-		this.name = name;
-		this.weight = weight;
-		this.isUri = isUri;
+	private static final long serialVersionUID = 1L;
+    private static Integer MAX_NODETEXT_LENGTH = 30;
+	private Integer id;
+	private String name;
+	private String shortname; 
+	private Integer weight;
+	private Boolean isUri;
+	private Boolean isDiSCO;
+	
+	public GraphNode(Integer id, String name, Integer weight, Boolean isUri, Boolean isDiSCO){
+		setId(id);
+		setName(name);
+		setWeight(weight);
+		setIsUri(isUri);
+		setIsDiSCO(isDiSCO);
 	}
 
 	public Integer getId() {
@@ -34,6 +38,13 @@ public class GraphNode implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
+		if (name.length() > MAX_NODETEXT_LENGTH) {
+			setShortname(name.substring(0, MAX_NODETEXT_LENGTH-3) + "...");
+		}
+		else {
+			setShortname(name);			
+		}
+		
 	}
 
 	public Integer getWeight() {
@@ -50,6 +61,22 @@ public class GraphNode implements Serializable{
 
 	public void setIsUri(Boolean isUri) {
 		this.isUri = isUri;
+	}
+
+	public Boolean getIsDiSCO() {
+		return isDiSCO;
+	}
+
+	public void setIsDiSCO(Boolean isDiSCO) {
+		this.isDiSCO = isDiSCO;
+	}
+
+	public String getShortname() {
+		return shortname;
+	}
+
+	public void setShortname(String shortname) {
+		this.shortname = shortname;
 	}	
 	
 }

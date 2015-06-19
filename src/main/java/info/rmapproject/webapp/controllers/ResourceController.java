@@ -87,6 +87,10 @@ public class ResourceController {
 	        
 	    model.addAttribute("RESOURCE_DESCRIP", resourceDescription);
 	    
+	    List <URI> relatedDiscos = rmapService.getResourceRelatedDiSCOs(uriResourceUri, RMapStatus.ACTIVE);
+	    model.addAttribute("RESOURCE_DISCOS", relatedDiscos);
+	    
+	    
 	    //used to create visual graph
 
 	    GraphParts graphParts = new GraphParts();

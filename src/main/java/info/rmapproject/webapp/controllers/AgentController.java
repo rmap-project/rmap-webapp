@@ -117,6 +117,11 @@ public class AgentController {
 	    model.addAttribute("AGENT_RESOURCE_DESCRIP", resourceDescriptions);
 	    
 	    List <URI> events = rmapService.getAgentEvents(uriAgentUri);
+	    //TODO:Quick fix for long lists, but eventually need an ajaxy way to show more or scroll or something.
+	    model.addAttribute("AGENT_EVENTS_NUM",events.size());
+	    if (events.size()>20){
+	    	events = events.subList(0, 20);
+	    }
 	    model.addAttribute("AGENT_EVENTS", events);
 	    
 		model.addAttribute("OBJECT_NODES", graphParts.getNodes());

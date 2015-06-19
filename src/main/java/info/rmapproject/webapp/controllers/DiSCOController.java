@@ -89,7 +89,7 @@ public class DiSCOController {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", true);
+	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", false);
 	    graphParts.addEdge(discoUri, rmapDisco.getDescription(),"dcterms:description");
 	    graphParts.addEdge(discoUri, rmapDisco.getCreator(),"dcterms:creator");
     	
@@ -137,9 +137,9 @@ public class DiSCOController {
 	    	
 	    	resourceDescriptions.add(new ResourceDescription(resource, sortedTypes, sortedProperties));	    	
 	    }
-	        
+
 	    model.addAttribute("DISCO_RESOURCE_DESCRIP", resourceDescriptions);
-	    
+	    	    
 	    List <URI> events = rmapService.getDiSCOEvents(uriDiscoUri);
 	    Set <URI> uniqueEvents = new HashSet<URI>();
 	    uniqueEvents.addAll(events);

@@ -6,6 +6,7 @@ import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.utils.WebappUtils;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,15 +14,13 @@ import java.util.Set;
 
 public class GraphParts {
 
-	public GraphParts(){}
-
     private Set<String> uniqueNodes;
     private List<GraphNode> nodes;
     private List<GraphEdge> edges;
     private Integer counter = 0;
 
-    private static Integer MAX_LITERAL_LENGTH = 30;
-    
+	public GraphParts(){}
+	
 	public List<GraphNode> getNodes() {
 		return nodes;
 	}
@@ -46,7 +45,7 @@ public class GraphParts {
 		this.uniqueNodes = uniqueNodes;
 	}
 	
-	public Integer addNode(String sNode, Boolean isUri){
+	public Integer addNode(String sNode, Boolean isUri) throws Exception{
 		Integer id = 0;
 		if (this.uniqueNodes == null){
 			this.uniqueNodes = new HashSet<String>();
@@ -56,9 +55,13 @@ public class GraphParts {
 		}		
 		
 		if (!uniqueNodes.contains(sNode)) {
+			Boolean isDiSCO = false;
 			id = addOne();
 			uniqueNodes.add(sNode);	
-			nodes.add(new GraphNode(id, sNode, 10, isUri));
+			if (isUri && WebappUtils.getRMapType(new URI(sNode))=="disco") {
+				isDiSCO = true;
+			}
+			nodes.add(new GraphNode(id, sNode, 10, isUri, isDiSCO));
 		}
 		else {
 			//find matching node, add to weight
@@ -79,37 +82,30 @@ public class GraphParts {
 		edges.add(edge);
 	}
 	
-	public void addEdge(RMapTriple triple)	{
+	public void addEdge(RMapTriple triple) throws Exception {
 		RMapResource subject = triple.getSubject();
 		String predicate = triple.getPredicate().toString();
 		String object = triple.getObject().toString();
 		Boolean connectsUri = true;
 		if (triple.getObject() instanceof RMapLiteral) {
-			if (object.length()>MAX_LITERAL_LENGTH) {
-				object = object.substring(0,MAX_LITERAL_LENGTH) + "...";
-			}
 			connectsUri = false;
 		}
 		addEdge(subject.toString(), object, predicate, connectsUri);
 	}	
 	
-	
-	public void addEdge(String sourceKey, RMapValue targetKey, String label)	{
+	public void addEdge(String sourceKey, RMapValue targetKey, String label) throws Exception 	{
 		String sTargetKey = "";
 		Boolean connectsUri = true;
 		if (targetKey!=null && sourceKey!=null){
 			sTargetKey= targetKey.toString();
 			if (targetKey instanceof RMapLiteral) {
-				if (targetKey.toString().length()>MAX_LITERAL_LENGTH) {
-					sTargetKey = sTargetKey.substring(0,MAX_LITERAL_LENGTH) + "...";
-				}
 				connectsUri = false;
 			}
 			addEdge(sourceKey, sTargetKey, label, connectsUri);
 		}
 	}	
 	
-	public void addEdge(String sourceKey, String targetKey, String label, Boolean connectsUri)	{
+	public void addEdge(String sourceKey, String targetKey, String label, Boolean connectsUri) throws Exception {
 		GraphEdge edge = new GraphEdge();
 		targetKey = targetKey.replaceAll("[\n\r]", "");
 		targetKey = targetKey.replaceAll("[ ]+", " ");

@@ -97,7 +97,10 @@
      
 	<div class="sidebar-widget">
 		<div class="status${AGENT_STATUS.toString()}"><h1>${AGENT_STATUS.toString()}</h1></div>
-		<h2>Related Events</h2>
+		<h2>Agent Events</h2>
+		<c:if test="${AGENT_EVENTS_NUM>20}">
+			<em>(Displaying <strong>20</strong> out of <strong>${AGENT_EVENTS_NUM})</strong></em><br/><br/>
+		</c:if>
 		<ul>
 			<c:forEach var="event" items="${AGENT_EVENTS}">
 				<li><a href="events?uri=${event.toString()}">${event.toString()}</a></li>
