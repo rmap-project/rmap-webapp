@@ -6,7 +6,6 @@ import info.rmapproject.core.exception.RMapDiSCONotFoundException;
 import info.rmapproject.core.exception.RMapEventNotFoundException;
 import info.rmapproject.core.exception.RMapException;
 import info.rmapproject.core.exception.RMapObjectNotFoundException;
-import info.rmapproject.core.exception.RMapStatementNotFoundException;
 import info.rmapproject.core.exception.RMapTombstonedObjectException;
 
 import org.slf4j.Logger;
@@ -20,8 +19,8 @@ public class ExceptionHandlingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(DiSCOController.class);
 	
-	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class, 
-						RMapStatementNotFoundException.class, RMapObjectNotFoundException.class})
+	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class,
+		RMapObjectNotFoundException.class}) // 	RMapStatementNotFoundException.class,
 	 public String objectNotFoundError(Exception exception) {		
 		logger.error(exception.getMessage(), exception);
 		return "objectnotfound";

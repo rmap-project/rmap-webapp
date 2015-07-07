@@ -6,7 +6,9 @@
 
 <article class="twelve columns main-content">
 	<h1>RMap Statement Summary</h1>
-	<h2>About: <a href="stmts?uri=${STMT_URI}">${STMT_URI}</a></h2>
+<!-- 
+No support for statements at the moment.
+<h2>About: <a href="stmts?uri=${STMT_URI}">${STMT_URI}</a></h2>
 	
 	<div class="CSSTableGenerator">
 		<table>
@@ -31,9 +33,9 @@
 	
 	<br/><br/>
 </article>
-
+ -->	
 <!-- End main Content -->
-	    
+<!--  
 <aside class="four columns right-sidebar">
      
 	<div class="sidebar-widget">
@@ -46,6 +48,7 @@
 		</ul>
 	</div>
 </aside>
+-->  
 <!-- End Right Sidebar -->
 	
 <br/>
