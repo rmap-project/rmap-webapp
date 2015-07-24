@@ -105,9 +105,6 @@ public class WebappUtils {
 					else if (contexttype.toString().equals(RMAP.AGENT.toString())) {
 						return "agent";
 					}
-					else if (contexttype.toString().equals(RMAP.STATEMENT.toString())) {
-						return "stmt";
-					}
 					else if (contexttype.toString().equals(RMAP.EVENT.toString())) {
 						return "event";
 					}
