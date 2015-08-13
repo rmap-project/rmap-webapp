@@ -3,18 +3,22 @@ package info.rmapproject.webapp.controllers;
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
+import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.model.disco.RMapDiSCO;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.model.GraphParts;
+import info.rmapproject.webapp.model.NodeType;
 import info.rmapproject.webapp.model.ResourceDescription;
 import info.rmapproject.webapp.model.TripleDisplayFormat;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -89,20 +93,33 @@ public class DiSCOController {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", false);
-	    graphParts.addEdge(discoUri, rmapDisco.getDescription(),"dcterms:description");
-	    graphParts.addEdge(discoUri, rmapDisco.getCreator(),"dcterms:creator");
-    	
+	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", NodeType.DISCO, NodeType.TYPE);
+	    
+	    RMapValue description = rmapDisco.getDescription();
+	    RMapValue creator = rmapDisco.getCreator();
+	    
+	    if (description != null) {
+	    	graphParts.addEdge(discoUri, description.toString(),"dcterms:description", NodeType.DISCO, NodeType.LITERAL);
+	    }
+	    if (creator != null) {
+	    	graphParts.addEdge(discoUri, creator.toString(),"dcterms:creator", NodeType.DISCO, NodeType.AGENT);
+	    }
     	List <URI> aggregatedResources = rmapDisco.getAggregratedResources();
 	    model.addAttribute("RESOURCE_LIST", aggregatedResources);
 	    for (URI aggregate : aggregatedResources) {
-		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", true);
+	    	NodeType targetNodeType = WebappUtils.getNodeType(aggregate, uriDiscoUri);
+		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", NodeType.DISCO, targetNodeType);
 	    }
 	    
 	    List <RMapTriple> rmapStatements = rmapDisco.getRelatedStatements();
  	    
 	    //first extract unique list of resources mentioned in subject	
-	    Set<String> resourcesDescribed = new HashSet<String>();
+	    Set<String> resourcesDescribed = new LinkedHashSet<String>();
+	    
+	    for (URI aggregate : aggregatedResources) {
+	    	resourcesDescribed.add(aggregate.toString());
+	    }
+	    	    
 	    for (RMapTriple stmt:rmapStatements) {
 	    	resourcesDescribed.add(stmt.getSubject().toString());
 	    }
@@ -128,7 +145,7 @@ public class DiSCOController {
 	    			else {
 	    				properties.put(listKey, tripleDF);				
 	    			}
-				    graphParts.addEdge(stmt);
+				    graphParts.addEdge(stmt, uriDiscoUri);
 	    		}
 	    	}
 

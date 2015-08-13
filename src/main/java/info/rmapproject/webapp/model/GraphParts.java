@@ -1,7 +1,5 @@
 package info.rmapproject.webapp.model;
 
-import info.rmapproject.core.model.RMapLiteral;
-import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.utils.WebappUtils;
@@ -45,7 +43,7 @@ public class GraphParts {
 		this.uniqueNodes = uniqueNodes;
 	}
 	
-	public Integer addNode(String sNode, Boolean isUri) throws Exception{
+	public Integer addNode(String sNode, NodeType nodeType) throws Exception{
 		Integer id = 0;
 		if (this.uniqueNodes == null){
 			this.uniqueNodes = new HashSet<String>();
@@ -55,13 +53,10 @@ public class GraphParts {
 		}		
 		
 		if (!uniqueNodes.contains(sNode)) {
-			Boolean isDiSCO = false;
 			id = addOne();
 			uniqueNodes.add(sNode);	
-			if (isUri && WebappUtils.getRMapType(new URI(sNode))=="disco") {
-				isDiSCO = true;
-			}
-			nodes.add(new GraphNode(id, sNode, 10, isUri, isDiSCO));
+			//TODO: quick fix for demo - need to do this properly respecting context, make types configurable and put this in a separate method
+			nodes.add(new GraphNode(id, sNode, 10, nodeType));
 		}
 		else {
 			//find matching node, add to weight
@@ -83,38 +78,46 @@ public class GraphParts {
 	}
 	
 	public void addEdge(RMapTriple triple) throws Exception {
-		RMapResource subject = triple.getSubject();
+		RMapValue subject = triple.getSubject();
 		String predicate = triple.getPredicate().toString();
-		String object = triple.getObject().toString();
-		Boolean connectsUri = true;
-		if (triple.getObject() instanceof RMapLiteral) {
-			connectsUri = false;
+		RMapValue object = triple.getObject();
+		NodeType sourceNodeType = WebappUtils.getNodeType(subject);
+		NodeType targetNodeType = null;
+		if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) {
+			targetNodeType = NodeType.TYPE; 
 		}
-		addEdge(subject.toString(), object, predicate, connectsUri);
-	}	
-	
-	public void addEdge(String sourceKey, RMapValue targetKey, String label) throws Exception 	{
-		String sTargetKey = "";
-		Boolean connectsUri = true;
-		if (targetKey!=null && sourceKey!=null){
-			sTargetKey= targetKey.toString();
-			if (targetKey instanceof RMapLiteral) {
-				connectsUri = false;
-			}
-			addEdge(sourceKey, sTargetKey, label, connectsUri);
+		else {
+			targetNodeType = WebappUtils.getNodeType(object);
 		}
+		addEdge(subject.toString(), object.toString(), predicate, sourceNodeType, targetNodeType);
 	}	
-	
-	public void addEdge(String sourceKey, String targetKey, String label, Boolean connectsUri) throws Exception {
+
+	public void addEdge(RMapTriple triple, URI context) throws Exception {
+		RMapValue subject = triple.getSubject();
+		String predicate = triple.getPredicate().toString();
+		RMapValue object = triple.getObject();
+		NodeType sourceNodeType = WebappUtils.getNodeType(subject, context);
+		NodeType targetNodeType = null;
+		if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) {
+			targetNodeType = NodeType.TYPE; 
+		}
+		else {
+			targetNodeType = WebappUtils.getNodeType(object, context);
+		}
+		addEdge(subject.toString(), object.toString(), predicate, sourceNodeType, targetNodeType);
+	}	
+		
+	public void addEdge(String sourceKey, String targetKey, String label, 
+							NodeType sourceNodeType, NodeType targetNodeType) throws Exception {
 		GraphEdge edge = new GraphEdge();
 		targetKey = targetKey.replaceAll("[\n\r]", "");
 		targetKey = targetKey.replaceAll("[ ]+", " ");
-		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey), true);
-		Integer target = addNode(WebappUtils.replaceNamespace(targetKey), connectsUri);
+		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey), sourceNodeType);
+		Integer target = addNode(WebappUtils.replaceNamespace(targetKey), targetNodeType);
 		edge.setLabel(WebappUtils.replaceNamespace(label));
 		edge.setSource(source);
 		edge.setTarget(target);
-		edge.setConnectsUri(connectsUri);
+		edge.setTargetNodeType(targetNodeType);
 		addEdge(edge);
 	}	
 		

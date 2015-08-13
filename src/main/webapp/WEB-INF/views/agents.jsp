@@ -2,10 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" value="RMap Agent Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
-<%@include file="/includes/header.inc" %>
-<%@include file="/includes/js/nodesedges.js" %>        
-                        
-        
+<%@include file="/includes/headstart.inc" %>
+<%@include file="/includes/js/nodesedges.js" %> 
+</head>       
+<body onload="drawgraph();">
+<%@include file="/includes/bodystart.inc" %>       
 <article class="twelve columns main-content">
 	<h1>RMap Agent Summary</h1>
 	<h2>About: <a href="agents?uri=${AGENT_URI}">${AGENT_URI}</a></h2>
@@ -16,9 +17,11 @@
 	<c:if test="${AGENT_DESCRIPTION.length()>0}">
 		<p>{AGENT_DESCRIPTION.toString()}</p>
 	</c:if>
-	<div id="cy" class="cysmall"></div>
+	<img src="includes/images/graphlegend.png" class="graphlegend" />
+	<div id="mynetwork" class="cysmall"></div>
 	<a href="agents?uri=${AGENT_URI}&visualize=1">View larger visualization</a> | 
-	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
+	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
+	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	
 	<h2>Agent represented</h2>

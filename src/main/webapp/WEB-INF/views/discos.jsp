@@ -2,9 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" value="RMap DiSCO Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
-<%@include file="/includes/header.inc" %>
+<%@include file="/includes/headstart.inc" %>
 <%@include file="/includes/js/nodesedges.js" %>        
-                        
+</head>
+<body onload="drawgraph();">
+<%@include file="/includes/bodystart.inc" %>        
         
 <article class="twelve columns main-content">
 
@@ -18,9 +20,11 @@
 		<p>${DISCO_DESCRIPTION.toString()}</p>
 	</c:if>
 
-	<div id="cy" class="cysmall"></div>
+	<img src="includes/images/graphlegend.png" class="graphlegend" />
+	<div id="mynetwork" class="cysmall"></div>
 	<a href="discos?uri=${DISCO_URI}&visualize=1">View larger visualization</a> | 
-	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
+	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
+	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	<h2>Aggregated Resources</h2>
 	<ul>
@@ -104,9 +108,11 @@
 		<h2>Other DiSCO Versions</h2>
 		<h3>Same agent</h3>
 		<c:if test="${DISCO_AGENTVERSIONS!=null && DISCO_AGENTVERSIONS.size()>0}">
+			<ul>
 			<c:forEach var="version" items="${DISCO_AGENTVERSIONS}">
-				<p><a href="discos?uri=${version.toString()}">${version.toString()}</a></p>
+				<li><a href="discos?uri=${version.toString()}">${version.toString()}</a></li>
 			</c:forEach>
+			</ul>
 		</c:if>
 		<c:if test="${DISCO_AGENTVERSIONS==null || DISCO_AGENTVERSIONS.size()==0}">
 			<p><em>None found</em></p>
@@ -114,9 +120,11 @@
 
 		<h3>Other agents</h3>
 		<c:if test="${DISCO_OTHERVERSIONS!=null && DISCO_OTHERVERSIONS.size()>0}">
+			<ul>
 			<c:forEach var="version" items="${DISCO_OTHERVERSIONS}">
-				<p><a href="discos?uri=${version.toString()}">${version.toString()}</a></p>
+				<li><a href="discos?uri=${version.toString()}">${version.toString()}</a></li>
 			</c:forEach>
+			</ul>
 		</c:if>
 		<c:if test="${DISCO_OTHERVERSIONS==null || DISCO_OTHERVERSIONS.size()==0}">
 			<p><em>None found</em></p>

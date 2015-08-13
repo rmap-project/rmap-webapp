@@ -1,25 +1,21 @@
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.core.model.RMapLiteral;
-import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
-import info.rmapproject.core.model.disco.RMapDiSCO;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.model.GraphParts;
+import info.rmapproject.webapp.model.NodeType;
 import info.rmapproject.webapp.model.ResourceDescription;
 import info.rmapproject.webapp.model.TripleDisplayFormat;
 import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.junit.Test;
@@ -31,7 +27,7 @@ public class ResourceControllerTest {
 
 		//WARNING: NOT A PROPER TEST JUST A COPY OF THE CODE!
 		
-		String resourceUri = "ark:/22573/rmdg0nq9";
+		String resourceUri = "http://dx.doi.org/10.5281/zenodo.10307";
 		URI uriResourceUri = null;
 		resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
 		uriResourceUri = new URI(resourceUri);
@@ -77,10 +73,12 @@ public class ResourceControllerTest {
 	    	if (triple.getObject() instanceof RMapLiteral && object.length()>30){
 	    		object = object.substring(0,30) + "...";
 	    	}
-	    	
+
+	    	NodeType sourceType = WebappUtils.getNodeType(triple.getSubject());
+	    	NodeType targetType = WebappUtils.getNodeType(triple.getObject());
 	    	graphParts.addEdge(triple.getSubject().toString(),
 	    						object,
-	    						triple.getPredicate().toString(), true);	 
+	    						triple.getPredicate().toString(), sourceType, targetType);	 
 	    }
 	    
 	    //model.addAttribute("OBJECT_NODES", graphParts.getNodes());

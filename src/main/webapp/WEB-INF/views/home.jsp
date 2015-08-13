@@ -1,7 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="pageTitle" value="Home | RMap Project"/>
 <c:set var="currPage" value="home"/>
-<%@include file="/includes/header.inc" %>
+<%@include file="/includes/headstart.inc" %>  
+</head>
+<body>
+<%@include file="/includes/bodystart.inc" %> 
 <h1>Welcome to the RMap Project!</h1>
 
 <p>RMap Project is an Alfred P. Sloan Foundation-funded initiative undertaken by the Data Conservancy, Portico, and IEEE. 

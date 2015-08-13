@@ -95,8 +95,8 @@ public class ResourceController {
 	    //used to create visual graph
 
 	    GraphParts graphParts = new GraphParts();
-	    
-	    for (RMapTriple triple :  rmapTriples)	{	    	
+
+	    for (RMapTriple triple :  rmapTriples)	{	 
 	    	graphParts.addEdge(triple);	 
 	    }
 	    

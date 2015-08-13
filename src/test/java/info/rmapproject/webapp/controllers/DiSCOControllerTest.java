@@ -7,8 +7,10 @@ import info.rmapproject.core.model.disco.RMapDiSCO;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.model.GraphParts;
+import info.rmapproject.webapp.model.NodeType;
 import info.rmapproject.webapp.model.ResourceDescription;
 import info.rmapproject.webapp.model.TripleDisplayFormat;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -26,7 +28,7 @@ public class DiSCOControllerTest {
 
 	@Test
 	public void testDisco() throws Exception{
-		String discoUri = "ark:/22573/rmd1s3cb8";
+		String discoUri = "ark:/22573/rmd18mddgf";
 		URI uriDiscoUri = null;
 		discoUri = URLDecoder.decode(discoUri, "UTF-8");
 		uriDiscoUri = new URI(discoUri);
@@ -61,13 +63,14 @@ public class DiSCOControllerTest {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", true);
-	    graphParts.addEdge(discoUri, rmapDisco.getDescription(),"dcterms:description");
-	    graphParts.addEdge(discoUri, rmapDisco.getCreator(),"dcterms:creator");
+	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", NodeType.DISCO, NodeType.UNDEFINED);
+	    graphParts.addEdge(discoUri, rmapDisco.getDescription().toString(),"dcterms:description", NodeType.DISCO, NodeType.LITERAL);
+	    graphParts.addEdge(discoUri, rmapDisco.getCreator().toString(),"dcterms:creator", NodeType.DISCO, NodeType.AGENT);
     	
     	List <URI> aggregatedResources = rmapDisco.getAggregratedResources();
 	    for (URI aggregate : aggregatedResources) {
-		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", true);
+	    	NodeType type = WebappUtils.getNodeType(aggregate, uriDiscoUri);
+		    graphParts.addEdge(discoUri, aggregate.toString(),"ore:aggregates", NodeType.DISCO, type);
 	    }
 	    
 	    List <RMapTriple> rmapStatements = rmapDisco.getRelatedStatements();

@@ -2,8 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" value="RMap Resource Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
-<%@include file="/includes/header.inc" %>
-<%@include file="/includes/js/nodesedges.js" %>
+<%@include file="/includes/headstart.inc" %>
+<%@include file="/includes/js/nodesedges.js" %>        
+</head>
+<body onload="drawgraph();">
+<%@include file="/includes/bodystart.inc" %> 
 
 <article class="twelve columns main-content">
 <h1>Resource Summary</h1>
@@ -27,9 +30,11 @@
 	</h3>
 </c:if>
 <c:if test="${properties.size()>0 || resource_types.size()>0}">
-	<div id="cy" class="cysmall"></div>
+	<img src="includes/images/graphlegend.png" class="graphlegend" />
+	<div id="mynetwork" class="cysmall"></div>
 	<a href="resources?uri=${RESOURCE_URI}&visualize=1">View larger visualization</a> | 
-	<div id="toggle" class="literaltoggle" onclick="toggleLiterals();">Hide literals</div>
+	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
+	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 </c:if>
 <br/>
 	<div class="CSSTableGenerator">

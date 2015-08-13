@@ -258,6 +258,12 @@ acronym { border-bottom:1px dotted #ccc; }
   border: 1px solid #ccc;
 }
 
+.graphlegend{
+	z-index:1;
+	position:absolute;
+	padding:5px;
+}
+
 #info {
   color: #c88;
   font-size: 1em;
@@ -278,7 +284,17 @@ acronym { border-bottom:1px dotted #ccc; }
 	border:2px solid #CC0017;
 }
 
-.literaltoggle {
+.toggle {
+	text-decoration: none; 
+	color: #0000C1; 
+	display: inline-block;
+}
+.toggleLiterals {
+	text-decoration: none; 
+	color: #0000C1; 
+	display: inline-block;
+}
+.toggleTypes {
 	text-decoration: none; 
 	color: #0000C1; 
 	display: inline-block;

@@ -10,15 +10,15 @@ public class GraphEdge implements Serializable {
 	private Integer target;
 	private String label;
 	private String shortlabel;
-	private Boolean connectsUri;
+	private NodeType targetNodeType;
 	
 	public GraphEdge(){
 	}
 	
 	public GraphEdge(Integer source, Integer target, String label){
-		this.source = source;
-		this.target = target;
-		this.label = label;
+		setSource(source);
+		setTarget(target);
+		setLabel(label);
 	}
 	
 	public Integer getSource() {
@@ -37,6 +37,15 @@ public class GraphEdge implements Serializable {
 		return label;
 	}
 	public void setLabel(String label) {
+		if (label.contains(":")){
+			label=label.substring(label.lastIndexOf(":")+1);
+		}
+		if (label.contains("/")){
+			label=label.substring(label.lastIndexOf("/")+1);
+		}
+		if (label.contains("#")){
+			label=label.substring(label.lastIndexOf("#")+1);
+		}
 		this.label = label;
 		if (label.length() > MAX_EDGETEXT_LENGTH) {
 			setShortlabel(label.substring(0, MAX_EDGETEXT_LENGTH-3) + "...");
@@ -46,12 +55,12 @@ public class GraphEdge implements Serializable {
 		}
 	}
 
-	public Boolean getConnectsUri() {
-		return connectsUri;
+	public NodeType getTargetNodeType() {
+		return targetNodeType;
 	}
 
-	public void setConnectsUri(Boolean connectsUri) {
-		this.connectsUri = connectsUri;
+	public void setTargetNodeType(NodeType targetNodeType) {
+		this.targetNodeType = targetNodeType;
 	}
 
 	public String getShortlabel() {

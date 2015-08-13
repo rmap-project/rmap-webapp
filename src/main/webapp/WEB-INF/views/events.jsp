@@ -2,7 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" value="RMap Event Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
-<%@include file="/includes/header.inc" %>
+<%@include file="/includes/headstart.inc" %>       
+</head>
+<body>
+<%@include file="/includes/bodystart.inc" %> 
 
 <h1>RMap Event Summary</h1>
 <h2>About: <a href="events?uri=${EVENT_URI}">${EVENT_URI}</a></h2>

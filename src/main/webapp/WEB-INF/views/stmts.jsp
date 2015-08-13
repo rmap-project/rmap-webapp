@@ -2,7 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="pageTitle" value="RMap Resource Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
-<%@include file="/includes/header.inc" %>
+<%@include file="/includes/headstart.inc" %>    
+</head>
+<body>
+<%@include file="/includes/bodystart.inc" %> 
 
 <article class="twelve columns main-content">
 	<h1>RMap Statement Summary</h1>

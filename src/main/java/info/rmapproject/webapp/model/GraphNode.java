@@ -8,20 +8,18 @@ public class GraphNode implements Serializable{
 	}
 	
 	private static final long serialVersionUID = 1L;
-    private static Integer MAX_NODETEXT_LENGTH = 30;
+    private static Integer MAX_NODETEXT_LENGTH = 21;
 	private Integer id;
 	private String name;
 	private String shortname; 
 	private Integer weight;
-	private Boolean isUri;
-	private Boolean isDiSCO;
+	private NodeType type;
 	
-	public GraphNode(Integer id, String name, Integer weight, Boolean isUri, Boolean isDiSCO){
+	public GraphNode(Integer id, String name, Integer weight, NodeType type){
 		setId(id);
 		setName(name);
 		setWeight(weight);
-		setIsUri(isUri);
-		setIsDiSCO(isDiSCO);
+		setType(type);
 	}
 
 	public Integer getId() {
@@ -37,6 +35,8 @@ public class GraphNode implements Serializable{
 	}
 
 	public void setName(String name) {
+		name=name.replace("\\", "\\\\");
+		name=name.replace("'", "\\'");
 		this.name = name;
 		if (name.length() > MAX_NODETEXT_LENGTH) {
 			setShortname(name.substring(0, MAX_NODETEXT_LENGTH-3) + "...");
@@ -55,20 +55,12 @@ public class GraphNode implements Serializable{
 		this.weight = weight;
 	}
 
-	public Boolean getIsUri() {
-		return isUri;
+	public NodeType getType() {
+		return type;
 	}
 
-	public void setIsUri(Boolean isUri) {
-		this.isUri = isUri;
-	}
-
-	public Boolean getIsDiSCO() {
-		return isDiSCO;
-	}
-
-	public void setIsDiSCO(Boolean isDiSCO) {
-		this.isDiSCO = isDiSCO;
+	public void setType(NodeType type) {
+		this.type = type;
 	}
 
 	public String getShortname() {

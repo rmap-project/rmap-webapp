@@ -1,7 +1,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="pageTitle" value="Home | RMap Project"/>
 <c:set var="currPage" value="home"/>
-<%@include file="/includes/header.inc" %>
+<%@include file="/includes/headstart.inc" %>      
+</head>
+<body>
+<%@include file="/includes/bodystart.inc" %> 
 <h1>Contact Us</h1>
 
 <p>Please contact the RMap Project team at rmap.project@gmail.com</p>

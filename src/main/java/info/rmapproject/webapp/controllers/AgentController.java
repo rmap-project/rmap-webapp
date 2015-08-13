@@ -7,6 +7,7 @@ import info.rmapproject.core.model.agent.RMapAgent;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.model.GraphParts;
+import info.rmapproject.webapp.model.NodeType;
 import info.rmapproject.webapp.model.ResourceDescription;
 import info.rmapproject.webapp.model.TripleDisplayFormat;
 
@@ -66,9 +67,9 @@ public class AgentController {
 		//need to construct list of nodes and edges as we go through.
 	    GraphParts graphParts = new GraphParts();
 	    
-	    graphParts.addEdge(agentUri,"rmap:Agent","rdf:type", true);
-	    graphParts.addEdge(agentUri, rmapAgent.getCreator(),"dcterms:creator");
-	    graphParts.addEdge(agentUri, agentRepresented,"dcterms:isFormatOf", true);
+	    graphParts.addEdge(agentUri,"rmap:Agent","rdf:type", NodeType.AGENT, NodeType.TYPE);
+	    graphParts.addEdge(agentUri, rmapAgent.getCreator().toString(),"dcterms:creator", NodeType.AGENT, NodeType.AGENT);
+	    graphParts.addEdge(agentUri, agentRepresented,"dcterms:isFormatOf", NodeType.AGENT, NodeType.AGENT);
 	    
 	    model.addAttribute("AGENT_URI", agentUri);
 	    model.addAttribute("AGENT_RESPRESENTED", agentRepresented);
@@ -104,7 +105,7 @@ public class AgentController {
 	    			else {
 	    				properties.put(listKey, tripleDF);				
 	    			}
-				    graphParts.addEdge(triple);
+				    graphParts.addEdge(triple, uriAgentUri);
 	    		}
 	    	}
 
