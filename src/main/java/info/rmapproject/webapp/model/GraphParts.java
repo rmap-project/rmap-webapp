@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.openrdf.model.vocabulary.RDF;
+
 public class GraphParts {
 
     private Set<String> uniqueNodes;
@@ -83,7 +85,7 @@ public class GraphParts {
 		RMapValue object = triple.getObject();
 		NodeType sourceNodeType = WebappUtils.getNodeType(subject);
 		NodeType targetNodeType = null;
-		if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) {
+		if (predicate.equals(RDF.TYPE)) {
 			targetNodeType = NodeType.TYPE; 
 		}
 		else {
@@ -98,7 +100,7 @@ public class GraphParts {
 		RMapValue object = triple.getObject();
 		NodeType sourceNodeType = WebappUtils.getNodeType(subject, context);
 		NodeType targetNodeType = null;
-		if (predicate.equals("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")) {
+		if (predicate.equals(RDF.TYPE)) {
 			targetNodeType = NodeType.TYPE; 
 		}
 		else {

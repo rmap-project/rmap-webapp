@@ -219,7 +219,7 @@ public class WebappUtils {
 		}
 	}
 
-	
+	//TODO: types should be configured in the properties.
 	public static NodeType selectNodeType(Set<String> rdfTypes) throws Exception{
 		NodeType nodeType = NodeType.UNDEFINED;
 		
