@@ -18,7 +18,17 @@
 		<p>{AGENT_DESCRIPTION.toString()}</p>
 	</c:if>
 	<img src="includes/images/graphlegend.png" class="graphlegend" />
-	<div id="mynetwork" class="cysmall"></div>
+	<div id="wrapper">
+		<div id="mynetwork" class="cysmall"></div>
+		<div id="loadbar">
+			<div class="outerBorder">
+				<div id="loadbarText">0%</div>
+				<div id="loadbarBorder">
+					<div id="loadbarBar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<a href="agents?uri=${AGENT_URI}&visualize=1">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>

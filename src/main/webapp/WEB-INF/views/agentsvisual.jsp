@@ -14,7 +14,17 @@
 <div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 <div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 <img src="includes/images/graphlegend.png" class="graphlegend" />
-<div id="mynetwork" class="cybig"></div>
+<div id="visualWrapperBig">
+    <div id="mynetwork" class="cybig"></div>
+    <div id="loadbar" class="loadbarBig">
+        <div class="loadbarOuterBorder">
+            <div id="loadbarText">0%</div>
+            <div id="loadbarBorder">
+                <div id="loadbarBar"></div>
+            </div>
+        </div>
+    </div>
+</div>
 <br/><br/>
 
 <%@include file="/includes/footer.inc" %>

@@ -4,17 +4,15 @@ var nodes, edges, network;
 
 function drawgraph(){
 	nodes = new vis.DataSet([
-                 <c:forEach var="node" items="${OBJECT_NODES}" varStatus="loop">
-                 {id: ${node.getId()}, title: '${node.getName()}', label: '${node.getShortname()}', value:${node.getWeight()}, group:'${node.getType().toString()}'}<c:if test="${!loop.last}">,</c:if>
-                 </c:forEach>
-                 ])
-	
-				;
+			 <c:forEach var="node" items="${OBJECT_NODES}" varStatus="loop">
+			 {id: ${node.getId()}, title: '${node.getName()}', label: '${node.getShortname()}', value:${node.getWeight()}, group:'${node.getType().toString()}'}<c:if test="${!loop.last}">,</c:if>
+			 </c:forEach>
+			 ]);
 	edges = new vis.DataSet([
-                 <c:forEach var="edge" items="${OBJECT_EDGES}" varStatus="loop">
-                 {from: ${edge.getSource()}, to: ${edge.getTarget()}, label:'${edge.getLabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
-                 </c:forEach>
-                 ]);
+			 <c:forEach var="edge" items="${OBJECT_EDGES}" varStatus="loop">
+			 {from: ${edge.getSource()}, to: ${edge.getTarget()}, label:'${edge.getLabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
+			 </c:forEach>
+			 ]);
 			
 	
 	var container = document.getElementById('mynetwork');
@@ -99,9 +97,25 @@ function drawgraph(){
 		    }
 		});
 	  });
+	  
+	network.on("stabilizationProgress", function(params) {
+		var maxWidth = 200;
+		var minWidth = 20;
+		var widthFactor = params.iterations/params.total;
+		var width = Math.max(minWidth,maxWidth * widthFactor); 
+
+		document.getElementById('loadbarBar').style.width = width + 'px'; 
+		document.getElementById('loadbarText').innerHTML = Math.round(widthFactor*100) + '%';
+	});
+	
+	network.once("stabilizationIterationsDone", function() {
+		document.getElementById('loadbarText').innerHTML = '100%';
+		document.getElementById('loadbarBar').style.width = '200px';
+		document.getElementById('loadbar').style.opacity = 0;
+		// really clean the dom element
+		setTimeout(function () {document.getElementById('loadbar').style.display = 'none';}, 320);
+	});
 }
-
-
  
 function toggleLiterals()
 	{
@@ -138,8 +152,7 @@ function toggle(type)
 	var toggleLiteralBtn = document.getElementById('toggleLiterals');
 	var toggleLiteralText = toggleLiteralBtn.innerHTML;
 				
-	if ((type=="TYPE" && toggleTypeText=="Hide types")
-			|| (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
+	if ((type=="TYPE" && toggleTypeText=="Hide types") || (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
 		{		
 		nodes.forEach(function(node) {
 		    if (node.group == type)	{
@@ -156,6 +169,8 @@ function toggle(type)
 		}
 	else 
 		{
+		document.getElementById('loadbar').style.opacity = 100;
+		setTimeout(function () {document.getElementById('loadbar').style.display = 'inline';}, 320);
 		drawgraph();
 		toggleTypeBtn.innerHTML="Hide types";
 		toggleLiteralBtn.innerHTML="Hide literals";

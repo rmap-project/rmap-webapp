@@ -31,7 +31,17 @@
 </c:if>
 <c:if test="${properties.size()>0 || resource_types.size()>0}">
 	<img src="includes/images/graphlegend.png" class="graphlegend" />
-	<div id="mynetwork" class="cysmall"></div>
+	<div id="visualWrapperSmall">
+		<div id="mynetwork" class="cysmall"></div>
+		<div id="loadbar" class="loadbarSmall">
+			<div class="loadbarOuterBorder">
+				<div id="loadbarText">0%</div>
+				<div id="loadbarBorder">
+					<div id="loadbarBar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<a href="resources?uri=${RESOURCE_URI}&visualize=1">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
