@@ -1,6 +1,7 @@
 package info.rmapproject.webapp.utils;
 
 import info.rmapproject.core.model.RMapLiteral;
+import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
@@ -99,7 +100,7 @@ public class WebappUtils {
 	public static String getRMapType(URI uriResourceUri) throws Exception{
 
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri);
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
 		rmapService.closeConnection();
 		
 		if (types != null) {
@@ -198,7 +199,7 @@ public class WebappUtils {
 	public static NodeType getNodeType(URI resourceUri) throws Exception{
 		
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resourceUri);
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resourceUri, RMapStatus.ACTIVE);
 
 		if (types!=null){
 			Set <String> rdfTypes = new HashSet<String>();
@@ -260,7 +261,7 @@ public class WebappUtils {
 public static Map<URI,String> getAllRdfTypes(URI uriResourceUri) throws Exception{
 
 	RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-	Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri);
+	Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
 	rmapService.closeConnection();
 	
 	Map <URI, String> allRdfTypes = new HashMap<URI, String>();

@@ -152,7 +152,8 @@ function toggle(type)
 	var toggleLiteralBtn = document.getElementById('toggleLiterals');
 	var toggleLiteralText = toggleLiteralBtn.innerHTML;
 				
-	if ((type=="TYPE" && toggleTypeText=="Hide types") || (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
+	if ((type=="TYPE" && toggleTypeText=="Hide types") 
+			|| (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
 		{		
 		nodes.forEach(function(node) {
 		    if (node.group == type)	{
