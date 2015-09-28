@@ -3,6 +3,7 @@ package info.rmapproject.webapp.controllers;
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
+import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.model.disco.RMapDiSCO;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
@@ -64,7 +65,10 @@ public class DiSCOControllerTest {
 	    GraphParts graphParts = new GraphParts();
 	    
 	    graphParts.addEdge(discoUri,"rmap:DiSCO","rdf:type", NodeType.DISCO, NodeType.UNDEFINED);
-	    graphParts.addEdge(discoUri, rmapDisco.getDescription().toString(),"dcterms:description", NodeType.DISCO, NodeType.LITERAL);
+	    
+	    if (discoDescription !=  null) {
+	    graphParts.addEdge(discoUri, discoDescription,"dcterms:description", NodeType.DISCO, NodeType.LITERAL);
+	    }
 	    graphParts.addEdge(discoUri, rmapDisco.getCreator().toString(),"dcterms:creator", NodeType.DISCO, NodeType.AGENT);
     	
     	List <URI> aggregatedResources = rmapDisco.getAggregratedResources();

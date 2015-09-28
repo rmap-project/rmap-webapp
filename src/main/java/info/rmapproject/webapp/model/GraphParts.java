@@ -85,7 +85,7 @@ public class GraphParts {
 		RMapValue object = triple.getObject();
 		NodeType sourceNodeType = WebappUtils.getNodeType(subject);
 		NodeType targetNodeType = null;
-		if (predicate.equals(RDF.TYPE)) {
+		if (predicate.equals(RDF.TYPE.toString())) {
 			targetNodeType = NodeType.TYPE; 
 		}
 		else {
@@ -100,7 +100,7 @@ public class GraphParts {
 		RMapValue object = triple.getObject();
 		NodeType sourceNodeType = WebappUtils.getNodeType(subject, context);
 		NodeType targetNodeType = null;
-		if (predicate.equals(RDF.TYPE)) {
+		if (predicate.equals(RDF.TYPE.toString())) {
 			targetNodeType = NodeType.TYPE; 
 		}
 		else {
