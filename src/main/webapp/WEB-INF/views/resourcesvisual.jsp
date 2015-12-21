@@ -9,9 +9,9 @@
 <%@include file="/includes/bodystart.inc" %>  
 
 <h1>Resource Summary</h1>
-<h2>About: <a href="resources?uri=${RESOURCE_URI}">${RESOURCE_URI}</a></h2>
+<h2>About: <a href="resources?uri=${RESOURCE.getUri()}">${RESOURCE.getUri()}</a></h2>
 
-<a href="resources?uri=${RESOURCE_URI}">Return to summary</a> | 
+<a href="resources?uri=${RESOURCE.getUri()}">Return to summary</a> | 
 <div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 <div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 <br/>

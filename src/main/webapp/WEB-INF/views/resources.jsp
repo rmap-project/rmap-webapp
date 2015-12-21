@@ -10,9 +10,9 @@
 
 <article class="twelve columns main-content">
 <h1>Resource Summary</h1>
-<h2>About: <a href="resources?uri=${RESOURCE_URI}">${RESOURCE_URI}</a></h2>
+<h2>About: <a href="resources?uri=${RESOURCE.getUri()}">${RESOURCE.getUri()}</a></h2>
 
-<c:set var="resource_descrip" value="${RESOURCE_DESCRIP}"/>
+<c:set var="resource_descrip" value="${RESOURCE.getResourceDescription()}"/>
 <c:set var="properties" value="${resource_descrip.getPropertyValues()}"/>
 <c:set var="resource_types" value="${resource_descrip.getResourceTypes()}"/>
 
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 	</div>
-	<a href="resources?uri=${RESOURCE_URI}&visualize=1">View larger visualization</a> | 
+	<a href="resources?uri=${RESOURCE.getUri()}&visualize=1">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 </c:if>
@@ -100,7 +100,7 @@
 		<h1>&nbsp;</h1>
 		<h2>Related Active DiSCOs</h2>
 		<ul>
-			<c:forEach var="discouri" items="${RESOURCE_DISCOS}">
+			<c:forEach var="discouri" items="${RESOURCE.getRelatedDiSCOs()}">
 				<li><a href="discos?uri=${discouri.toString()}">${discouri.toString()}</a></li>
 			</c:forEach>
 		</ul>

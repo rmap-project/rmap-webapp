@@ -9,8 +9,8 @@
 <%@include file="/includes/bodystart.inc" %>  
 
 <h1>RMap DiSCO Summary</h1>
-<h2>About: <a href="discos?uri=${DISCO_URI}">${DISCO_URI}</a></h2>
-<a href="resources?uri=${DISCO_URI}">Return to summary</a> | 
+<h2>About: <a href="discos?uri=${DISCO.getUri()}">${DISCO.getUri()}</a></h2>
+<a href="resources?uri=${DISCO.getUri()}">Return to summary</a> | 
 <div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 <div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 <br/>

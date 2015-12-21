@@ -9,13 +9,10 @@
 <%@include file="/includes/bodystart.inc" %>       
 <article class="twelve columns main-content">
 	<h1>RMap Agent Summary</h1>
-	<h2>About: <a href="agents?uri=${AGENT_URI}">${AGENT_URI}</a></h2>
+	<h2>About: <a href="agents?uri=${AGENT.getUri()}">${AGENT.getUri()}</a></h2>
 		
-	<c:if test="${AGENT_CREATOR.length()>0}">
-		<h3><em>Created by <a href="resources?uri=${AGENT_CREATOR.toString()}">${AGENT_CREATOR.toString()}</a></em></h3>
-	</c:if>
-	<c:if test="${AGENT_DESCRIPTION.length()>0}">
-		<p>{AGENT_DESCRIPTION.toString()}</p>
+	<c:if test="${AGENT.getCreator().length()>0}">
+		<h3><em>Created by <a href="resources?uri=${AGENT.getCreator()}">${AGENT.getCreator()}</a></em></h3>
 	</c:if>
 	<img src="includes/images/graphlegend.png" class="graphlegend" />
 	<div id="wrapper">
@@ -29,17 +26,17 @@
 			</div>
 		</div>
 	</div>
-	<a href="agents?uri=${AGENT_URI}&visualize=1">View larger visualization</a> | 
+	<a href="agents?uri=${AGENT.getUri()}&visualize=1">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	
 	<h2>Agent represented</h2>
-	<p><a href="resources?uri=${AGENT_REPRESENTED.toString()}">${AGENT_RESPRESENTED.toString()}</a></p>
+	<p><a href="resources?uri=${AGENT.getAgentRepresented()}">${AGENT.getAgentRepresented()}</a></p>
 	
 	<h2>Additional Properties</h2>
 	
-	<c:forEach var="resource_descrip" items="${AGENT_RESOURCE_DESCRIP}">
+	<c:forEach var="resource_descrip" items="${AGENT.getResourceDescriptions()}">
 		<c:set var="properties" value="${resource_descrip.getPropertyValues()}"/>
 		<c:set var="resource_types" value="${resource_descrip.getResourceTypes()}"/>
 			
@@ -109,13 +106,13 @@
 <aside class="four columns right-sidebar">
      
 	<div class="sidebar-widget">
-		<div class="status${AGENT_STATUS.toString()}"><h1>${AGENT_STATUS.toString()}</h1></div>
+		<div class="status${AGENT.getStatus()}"><h1>${AGENT.getStatus()}</h1></div>
 		<h2>Agent Events</h2>
-		<c:if test="${AGENT_EVENTS_NUM>20}">
-			<em>(Displaying <strong>20</strong> out of <strong>${AGENT_EVENTS_NUM})</strong></em><br/><br/>
+		<c:if test="${AGENT.getNumEvents()>20}">
+			<em>(Displaying <strong>20</strong> out of <strong>${AGENT.getNumEvents()})</strong></em><br/><br/>
 		</c:if>
 		<ul>
-			<c:forEach var="event" items="${AGENT_EVENTS}">
+			<c:forEach var="event" items="${AGENT.getEvents()}" begin="1" end="20">
 				<li><a href="events?uri=${event.toString()}">${event.toString()}</a></li>
 			</c:forEach>
 		</ul>

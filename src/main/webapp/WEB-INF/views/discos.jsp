@@ -11,13 +11,13 @@
 <article class="twelve columns main-content">
 
 	<h1>RMap DiSCO Summary</h1>
-	<h2>About: <a href="discos?uri=${DISCO_URI}">${DISCO_URI}</a></h2>
+	<h2>About: <a href="discos?uri=${DISCO.getUri()}">${DISCO.getUri()}</a></h2>
 		
-	<c:if test="${DISCO_CREATOR.length()>0}">
-		<h3><em>Created by <a href="resources?uri=${DISCO_CREATOR.toString()}">${DISCO_CREATOR.toString()}</a></em></h3>
+	<c:if test="${DISCO.getCreator().length()>0}">
+		<h3><em>Created by <a href="resources?uri=${DISCO.getCreator()}">${DISCO.getCreator()}</a></em></h3>
 	</c:if>
-	<c:if test="${DISCO_DESCRIPTION.length()>0}">
-		<p>${DISCO_DESCRIPTION.toString()}</p>
+	<c:if test="${DISCO.getDescription().length()>0}">
+		<p>${DISCO.getDescription()}</p>
 	</c:if>
 
 	<img src="includes/images/graphlegend.png" class="graphlegend" />
@@ -32,13 +32,13 @@
 			</div>
 		</div>
 	</div>
-	<a href="discos?uri=${DISCO_URI}&visualize=1">View larger visualization</a> | 
+	<a href="discos?uri=${DISCO.getUri()}&visualize=1">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	<h2>Aggregated Resources</h2>
 	<ul>
-	<c:forEach var="agg_resource" items="${RESOURCE_LIST}">
+	<c:forEach var="agg_resource" items="${DISCO.getAggregatedResources()}">
 		<li><a href="resources?uri=${agg_resource}">${agg_resource}</a></li>
 	</c:forEach>
 	</ul>
@@ -46,7 +46,7 @@
 	
 	<h2>Additional Statements</h2>
 	
-	<c:forEach var="resource_descrip" items="${DISCO_RESOURCE_DESCRIP}">
+	<c:forEach var="resource_descrip" items="${DISCO.getResourceDescriptions()}">
 		<c:set var="properties" value="${resource_descrip.getPropertyValues()}"/>
 		<c:set var="resource_types" value="${resource_descrip.getResourceTypes()}"/>
 			
@@ -107,36 +107,38 @@
 <aside class="four columns right-sidebar">
      
 	<div class="sidebar-widget">
-		<div class="status${DISCO_STATUS.toString()}"><h1>${DISCO_STATUS.toString()}</h1></div>
+		<div class="status${DISCO.getStatus().toString()}"><h1>${DISCO.getStatus().toString()}</h1></div>
 		<h2>Related Events</h2>
 		<ul>
-			<c:forEach var="event" items="${DISCO_EVENTS}">
+			<c:forEach var="event" items="${DISCO.getEvents()}">
 				<li><a href="events?uri=${event.toString()}">${event.toString()}</a></li>
 			</c:forEach>
 		</ul>
-
+		
+		<c:set var="agentVersions" value="${DISCO.getAgentVersions()}"/>
 		<h2>Other DiSCO Versions</h2>
 		<h3>Same agent</h3>
-		<c:if test="${DISCO_AGENTVERSIONS!=null && DISCO_AGENTVERSIONS.size()>0}">
+		<c:if test="${agentVersions!=null && agentVersions.size()>0}">
 			<ul>
-			<c:forEach var="version" items="${DISCO_AGENTVERSIONS}">
+			<c:forEach var="version" items="${agentVersions}">
 				<li><a href="discos?uri=${version.toString()}">${version.toString()}</a></li>
 			</c:forEach>
 			</ul>
 		</c:if>
-		<c:if test="${DISCO_AGENTVERSIONS==null || DISCO_AGENTVERSIONS.size()==0}">
+		<c:if test="${agentVersions==null || agentVersions.size()==0}">
 			<p><em>None found</em></p>
 		</c:if>
 
+		<c:set var="otherAgentVersions" value="${DISCO.getOtherAgentVersions()}"/>
 		<h3>Other agents</h3>
-		<c:if test="${DISCO_OTHERVERSIONS!=null && DISCO_OTHERVERSIONS.size()>0}">
+		<c:if test="${otherAgentVersions!=null && otherAgentVersions.size()>0}">
 			<ul>
-			<c:forEach var="version" items="${DISCO_OTHERVERSIONS}">
+			<c:forEach var="version" items="${otherAgentVersions}">
 				<li><a href="discos?uri=${version.toString()}">${version.toString()}</a></li>
 			</c:forEach>
 			</ul>
 		</c:if>
-		<c:if test="${DISCO_OTHERVERSIONS==null || DISCO_OTHERVERSIONS.size()==0}">
+		<c:if test="${otherAgentVersions==null || otherAgentVersions.size()==0}">
 			<p><em>None found</em></p>
 		</c:if>
 	</div>

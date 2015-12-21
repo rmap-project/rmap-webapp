@@ -92,7 +92,7 @@ function drawgraph(){
 
 	network.on("click", function (params) {
 		nodes.forEach(function (node) {
-		  if (node.id==params.nodes && node.group!='LITERAL'){
+		  if (node.id==params.nodes && node.group!='LITERAL' && node.group!='TYPE'){
 			location.href="resources?uri=" + node.title;
 		    }
 		});

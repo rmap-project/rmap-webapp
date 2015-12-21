@@ -1,19 +1,15 @@
 package info.rmapproject.webapp.utils;
 
-import info.rmapproject.core.model.RMapLiteral;
 import info.rmapproject.core.model.RMapStatus;
-import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.BIBO;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.ORE;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.PROV;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.RMAP;
-import info.rmapproject.webapp.model.NodeType;
 
 import java.net.URI;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -122,162 +118,41 @@ public class WebappUtils {
 		//otherwise
 		return "";
 	}
-	
+		
+		
 	/**
-	 * Get a NodeType to aid parsing the display of the graph - limited by context... so types must come from within context.
-	 * @param value
-	 * @param contextUri
-	 * @return NodeType
-	 * @throws Exception
-	 */
-	public static NodeType getNodeType(RMapValue value, URI contextUri) throws Exception{
-		NodeType nodeType = NodeType.UNDEFINED;
-		if (value instanceof RMapLiteral) {
-			nodeType = NodeType.LITERAL;
-		}
-		else {
-			nodeType = getNodeType(new URI(value.toString()), contextUri);
-		}
-		return nodeType;
-	}
-	
-	/**
-	 * Get a NodeType to aid parsing the display of the graph - not limited by context.
-	 * @param value
-	 * @param contextUri
-	 * @return NodeType
-	 * @throws Exception
-	 */
-	public static NodeType getNodeType(RMapValue value) throws Exception{
-		NodeType nodeType = NodeType.UNDEFINED;
-		if (value instanceof RMapLiteral) {
-			nodeType = NodeType.LITERAL;
-		}
-		else {
-			nodeType = getNodeType(new URI(value.toString()));
-		}
-		return nodeType;
-	}
-	
-	
-	/**
-	 * Get a NodeType to aid parsing the display of the graph - limited by context... so types must come from within context.
-	 * @param resourceUri
-	 * @param contextUri
+	 * Get a list of links for all RDF types associated with the resource
+	 * @param uriResourceUri
 	 * @return
 	 * @throws Exception
-	 * (QUICK FIX FOR DEMO - NEED TO DO THIS PROPERLY!)
+	 * (NOT CURRENTLY USED, LEAVING IT HERE IN CASE WE DECIDE TO USE IT ANYWHERE)
 	 */
-	public static NodeType getNodeType(URI resourceUri, URI contextUri) throws Exception{
-
+	public static Map<URI,String> getAllRdfTypes(URI uriResourceUri) throws Exception{
+	
 		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Set <URI> rdfTypes = rmapService.getResourceRdfTypes(resourceUri, contextUri);
-
-		if (rdfTypes!=null){
-			Set <String> rdfTypeStrings = new HashSet<String>();
-	
-			for (URI type : rdfTypes){
-				rdfTypeStrings.add(replaceNamespace(type.toString()));
-			}
-
-			NodeType nodeType = selectNodeType(rdfTypeStrings);
-			return nodeType;
-		}
-		else {
-			return NodeType.UNDEFINED;
-		}
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
+		rmapService.closeConnection();
 		
-	}
+		Map <URI, String> allRdfTypes = new HashMap<URI, String>();
 	
-	/**
-	 * Get a NodeType to aid parsing the display of the graph - not limited by context - used for general resource links
-	 * @param resourceUri
-	 * @return
-	 * @throws Exception
-	 * (QUICK FIX FOR DEMO - NEED TO DO THIS PROPERLY!)
-	 */
-	public static NodeType getNodeType(URI resourceUri) throws Exception{
-		
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resourceUri, RMapStatus.ACTIVE);
-
-		if (types!=null){
-			Set <String> rdfTypes = new HashSet<String>();
-	
-			for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
-				Set<URI> contexttypes = type.getValue();
-				for (URI contexttype : contexttypes) {
-					if (contexttype!=null) {
-						rdfTypes.add(replaceNamespace(contexttype.toString()));
-					}
+		for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
+			Set<URI> contexttypes = type.getValue();
+			for (URI contexttype : contexttypes) {
+				if (contexttype!=null && !allRdfTypes.containsKey(contexttype)) {
+					String link = "<a href=\"" + contexttype.toString() + "\">" 
+									+ replaceNamespace(contexttype.toString()) + "</a>";
+					allRdfTypes.put(contexttype, link);
 				}
 			}
-			NodeType nodeType = selectNodeType(rdfTypes);
-			return nodeType;
 		}
-		else {
-			return NodeType.UNDEFINED;
-		}
-	}
-
-	//TODO: types should be configured in the properties.
-	public static NodeType selectNodeType(Set<String> rdfTypes) throws Exception{
-		NodeType nodeType = NodeType.UNDEFINED;
-		
-		if (rdfTypes.contains("rmap:DiSCO")) {
-			nodeType = NodeType.DISCO;
-		}
-		else if (rdfTypes.contains("fabio:Dataset")){
-			nodeType = NodeType.DATASET;					
-		}
-		else if (rdfTypes.contains("dcmitype:Software")
-				|| rdfTypes.contains("fabio:Algorithm")){
-			nodeType = NodeType.CODE;					
-		}
-		else if (rdfTypes.contains("foaf:Agent")
-				|| rdfTypes.contains("foaf:Person")
-				|| rdfTypes.contains("foaf:Organization")
-				|| rdfTypes.contains("rmap:Agent")
-				|| rdfTypes.contains("dcterms:Agent")){
-			nodeType = NodeType.AGENT;					
-		}	
-		else if (rdfTypes.contains("dcmitype:Text")
-				|| rdfTypes.contains("fabio:JournalArticle")
-				|| rdfTypes.contains("fabio:ConferencePaper")){
-			nodeType = NodeType.TEXT;					
-		}
-		
-		return nodeType;
+		return allRdfTypes;
 	}
 	
 	
-/**
- * Get a list of links for all RDF types associated with the resource
- * @param uriResourceUri
- * @return
- * @throws Exception
- * (NOT CURRENTLY USED, LEAVING IT HERE IN CASE WE DECIDE TO USE IT ANYWHERE)
- */
-public static Map<URI,String> getAllRdfTypes(URI uriResourceUri) throws Exception{
-
-	RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-	Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
-	rmapService.closeConnection();
 	
-	Map <URI, String> allRdfTypes = new HashMap<URI, String>();
+	
 
-	for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
-		Set<URI> contexttypes = type.getValue();
-		for (URI contexttype : contexttypes) {
-			if (contexttype!=null && !allRdfTypes.containsKey(contexttype)) {
-				String link = "<a href=\"" + contexttype.toString() + "\">" 
-								+ replaceNamespace(contexttype.toString()) + "</a>";
-				allRdfTypes.put(contexttype, link);
-			}
-		}
-	}
-	return allRdfTypes;
-}
+	
 	
 	
 }

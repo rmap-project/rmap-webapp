@@ -9,16 +9,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Handles requests for the application home page.
  */
 @Controller
-public class LoginController {
+public class ReportController {
 	
+	//private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value={"/login"}, method = RequestMethod.GET)
-	public String home(Model model) {
-				
-		return "login";
+
+	@RequestMapping(value="/user/reports", method=RequestMethod.GET)
+	public String showKeyList(Model model) throws Exception {
+        return "user/reports";	
 	}
-	
 }

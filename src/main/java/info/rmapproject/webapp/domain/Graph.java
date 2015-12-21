@@ -1,25 +1,20 @@
-package info.rmapproject.webapp.model;
+package info.rmapproject.webapp.domain;
 
-import info.rmapproject.core.model.RMapTriple;
-import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.utils.WebappUtils;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.openrdf.model.vocabulary.RDF;
-
-public class GraphParts {
+public class Graph {
 
     private Set<String> uniqueNodes;
     private List<GraphNode> nodes;
     private List<GraphEdge> edges;
     private Integer counter = 0;
 
-	public GraphParts(){}
+	public Graph(){}
 	
 	public List<GraphNode> getNodes() {
 		return nodes;
@@ -78,37 +73,7 @@ public class GraphParts {
 		}
 		edges.add(edge);
 	}
-	
-	public void addEdge(RMapTriple triple) throws Exception {
-		RMapValue subject = triple.getSubject();
-		String predicate = triple.getPredicate().toString();
-		RMapValue object = triple.getObject();
-		NodeType sourceNodeType = WebappUtils.getNodeType(subject);
-		NodeType targetNodeType = null;
-		if (predicate.equals(RDF.TYPE.toString())) {
-			targetNodeType = NodeType.TYPE; 
-		}
-		else {
-			targetNodeType = WebappUtils.getNodeType(object);
-		}
-		addEdge(subject.toString(), object.toString(), predicate, sourceNodeType, targetNodeType);
-	}	
-
-	public void addEdge(RMapTriple triple, URI context) throws Exception {
-		RMapValue subject = triple.getSubject();
-		String predicate = triple.getPredicate().toString();
-		RMapValue object = triple.getObject();
-		NodeType sourceNodeType = WebappUtils.getNodeType(subject, context);
-		NodeType targetNodeType = null;
-		if (predicate.equals(RDF.TYPE.toString())) {
-			targetNodeType = NodeType.TYPE; 
-		}
-		else {
-			targetNodeType = WebappUtils.getNodeType(object, context);
-		}
-		addEdge(subject.toString(), object.toString(), predicate, sourceNodeType, targetNodeType);
-	}	
-		
+			
 	public void addEdge(String sourceKey, String targetKey, String label, 
 							NodeType sourceNodeType, NodeType targetNodeType) throws Exception {
 		GraphEdge edge = new GraphEdge();

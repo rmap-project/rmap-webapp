@@ -1,6 +1,6 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.webapp.model.SearchCommand;
+import info.rmapproject.webapp.domain.SearchCommand;
 
 import java.net.URLDecoder;
 

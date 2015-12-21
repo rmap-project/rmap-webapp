@@ -5,9 +5,9 @@
 </head>
 <body>
 <%@include file="/includes/bodystart.inc" %> 
-<h1>Login</h1>
+<h1>Sign in</h1>
 
-<p>Nothing here yet!</p>
+<p>Sign in with Twitter</p>
 <br/>
 <br/>
 

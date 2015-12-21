@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlingController {
 
-	private static final Logger logger = LoggerFactory.getLogger(DiSCOController.class);
+	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);
 	
 	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class,
 		RMapObjectNotFoundException.class}) // 	RMapStatementNotFoundException.class,

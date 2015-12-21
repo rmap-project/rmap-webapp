@@ -9,10 +9,11 @@
 <%@include file="/includes/bodystart.inc" %>  
 
 <h1>RMap Agent Visualization</h1>
-<h2>About: <a href="agents?uri=${AGENT_URI}">${AGENT_URI}</a></h2>
-<a href="agents?uri=${AGENT_URI}">Return to summary</a> | 
+<h2>About: <a href="agents?uri=${AGENT.getUri()}">${AGENT.getUri()}</a></h2>
+<a href="agents?uri=${AGENT.getUri()}">Return to summary</a> | 
 <div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 <div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
+<br/>
 <img src="includes/images/graphlegend.png" class="graphlegend" />
 <div id="visualWrapperBig">
     <div id="mynetwork" class="cybig"></div>

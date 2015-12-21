@@ -1,4 +1,4 @@
-package info.rmapproject.webapp.model;
+package info.rmapproject.webapp.domain;
 
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapTriple;

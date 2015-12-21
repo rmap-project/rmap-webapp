@@ -1,4 +1,4 @@
-package info.rmapproject.webapp.model;
+package info.rmapproject.webapp.domain;
 
 
 public class SearchCommand {
