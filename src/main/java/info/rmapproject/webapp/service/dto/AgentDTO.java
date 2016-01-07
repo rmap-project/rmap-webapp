@@ -13,9 +13,9 @@ import java.util.List;
  */
 public interface AgentDTO {
 	public URI getUri();
-	public String getCreator();
+	public String getName();
 	public List<URI> getEvents();
-	public String getAgentRepresented();
+	public String getIdProvider();
 	public List<ResourceDescription> getResourceDescriptions();
 	public Graph getGraph();
 	public int getNumEvents();

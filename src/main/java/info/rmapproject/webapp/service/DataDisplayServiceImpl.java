@@ -105,7 +105,6 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		return discoDTO;
 	}
 
-	
 
 	@Override
 	public AgentDTO getAgentDTO(String sAgentUri) throws Exception {
@@ -119,22 +118,15 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		agentDTO.setUri(agentUri);
 		
 		RMapAgent agent = rmapService.readAgent(agentUri);
-		agentDTO.setCreator(agent.getCreator());		
-		
+		agentDTO.setName(agent.getName());		
 		agentDTO.setStatus(rmapService.getAgentStatus(agentUri));
 		agentDTO.setEvents(rmapService.getAgentEvents(agentUri));
+		agentDTO.setIdProvider(agent.getIdProvider().getStringValue());
+		agentDTO.setAuthId(agent.getAuthId().getStringValue());
 		
-		URI representedAgent = new URI(agent.getRepresentationId().toString());
-		agentDTO.setAgentRepresented(representedAgent.toString());
-
-	    List <RMapTriple> triples = agent.getProperties();
-		
-	    Graph graph = createAgentGraph(agentUri,  agentDTO.getCreator(), representedAgent.toString(), triples);	  
+	    Graph graph = createAgentGraph(agentUri,  agentDTO.getName(),  agentDTO.getIdProvider(), agentDTO.getAuthId());	  
 	    agentDTO.setGraph(graph);
-	    	  
-	    List<ResourceDescription> resourceDescriptions = getResourceDescriptions(representedAgent, triples);
-	    agentDTO.setResourceDescriptions(resourceDescriptions);
-	    	    
+	    	  	    	    
 	    rmapService.closeConnection();
 		
 		return agentDTO;
@@ -220,8 +212,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	private List<ResourceDescription> getResourceDescriptions(URI keyResource, List<RMapTriple> triples) {
 		List<URI> keyResources = new ArrayList<URI>();
 		keyResources.add(keyResource);
-		return getResourceDescriptions(keyResources, triples);
-		
+		return getResourceDescriptions(keyResources, triples);		
 	}
 
 	private List<ResourceDescription> getResourceDescriptions(List<URI> keyResources, List<RMapTriple> triples) {
@@ -301,21 +292,18 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		}	
 	
 	private Graph createAgentGraph(URI agentUri, 
-			String agentCreator,
-			String representedAgent,
-			List<RMapTriple> triples) throws Exception {
+			String agentName,
+			String idProvider,
+			String authId) throws Exception {
 
 		Graph graph = new Graph();
 		String sAgentUri = agentUri.toString();
 		
 		graph.addEdge(sAgentUri,"rmap:Agent","rdf:type", NodeType.AGENT, NodeType.TYPE);
-		if (agentCreator.length()>0) {
-			graph.addEdge(sAgentUri, agentCreator,"dcterms:creator", NodeType.AGENT, NodeType.AGENT);
-		}
-		graph.addEdge(sAgentUri, representedAgent,"dcterms:isFormatOf", NodeType.AGENT, NodeType.AGENT);
-			
-		graph = addTriplesToGraph(graph, triples, agentUri);
-		
+		graph.addEdge(sAgentUri, agentName,"foaf:name", NodeType.AGENT, NodeType.LITERAL);
+		graph.addEdge(sAgentUri, idProvider,"rmap:identityProvider", NodeType.AGENT, NodeType.AGENT);
+		graph.addEdge(sAgentUri, authId,"rmap:userAuthId", NodeType.AGENT, NodeType.UNDEFINED);
+					
 		return graph;
 		}	
 	

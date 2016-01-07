@@ -111,7 +111,7 @@ public class DataDisplayController {
 			visualize = 0;
 		}
 		if (objpage == null) {
-			visualize = 0;
+			objpage = 0;
 		}
 
 		/*

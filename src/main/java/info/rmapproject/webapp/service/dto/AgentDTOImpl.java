@@ -1,7 +1,7 @@
 package info.rmapproject.webapp.service.dto;
 
 import info.rmapproject.core.model.RMapStatus;
-import info.rmapproject.core.model.RMapUri;
+import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.domain.Graph;
 import info.rmapproject.webapp.domain.ResourceDescription;
 
@@ -18,10 +18,11 @@ import java.util.Set;
 public class AgentDTOImpl implements AgentDTO {
 
 	private URI uri;
-	private String creator;
+	private String name;
 	private RMapStatus status;
 	private List <URI> events;
-	private String agentRepresented;
+	private String idProvider;
+	private String authId;
 	private Graph graph;
 	private List<ResourceDescription> resourceDescriptions;
 	
@@ -31,18 +32,18 @@ public class AgentDTOImpl implements AgentDTO {
 	public void setUri(URI uri) {
 		this.uri = uri;
 	}
-	public String getCreator() {
-		return creator;
+	public String getName() {
+		return name;
 	}
-	public void setCreator(String creator) {
-		this.creator = creator;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setCreator(RMapUri creator) {
-		if (creator!=null){
-			this.creator=creator.toString();
+	public void setName(RMapValue name) {
+		if (name!=null){
+			this.name=name.toString();
 		}
 		else {
-			this.creator="";
+			this.name="";
 		}
 	}
 	public RMapStatus getStatus() {
@@ -61,11 +62,17 @@ public class AgentDTOImpl implements AgentDTO {
 	    events.addAll(uniqueEvents);
 		this.events = events;
 	}
-	public String getAgentRepresented() {
-		return agentRepresented;
+	public String getIdProvider() {
+		return idProvider;
 	}
-	public void setAgentRepresented(String agentRepresented) {
-		this.agentRepresented = agentRepresented;
+	public void setIdProvider(String idProvider) {
+		this.idProvider = idProvider;
+	}
+	public String getAuthId() {
+		return authId;
+	}
+	public void setAuthId(String authId) {
+		this.authId = authId;
 	}
 	public List<ResourceDescription> getResourceDescriptions() {
 		return resourceDescriptions;
