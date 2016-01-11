@@ -12,29 +12,29 @@
 
 <br/>
 <script>
-$(document).ready(function () {
-    $("#addtype").click(function () {
+/*$(document).ready(function () {
+    $("#addtype").click(function () {*/
         //Create a new select box
-        $("#agentTypeSet").append($("#userAgentType:first").clone(true).attr({id: "userAgentType"}));	
+/*        $("#agentTypeSet").append($("#userAgentType:first").clone(true).attr({id: "userAgentType"}));	
 		$("#userAgentType #remtype").css("visibility","visible");	
 		$("#userAgentType:first #remtype").css("visibility","hidden");
     });
-    $("#adduri").click(function () {
+    $("#adduri").click(function () {*/
         //Create a new select box
-        $("#agentUriSet").append($("#userAgentUri:first").clone(true).attr({id: "userAgentUri"}));
+/*        $("#agentUriSet").append($("#userAgentUri:first").clone(true).attr({id: "userAgentUri"}));
 		$("#agentUriSet").find("input:last").val("");
 		$("#userAgentUri #remuri").css("visibility","visible");
 		$("#userAgentUri:first #remuri").css("visibility","hidden");
     });
-	$(document).on('click',"#remtype", function () {
+	$(document).on('click',"#remtype", function () {*/
 		//remove an input box
-		$(this).parent().remove();
+/* 		$(this).parent().remove();
     });
 	$(document).on('click',"#remuri", function () {
 		//remove an input box
 		$(this).parent().remove();
     });
-});
+});*/
 </script>
 
 <form:form method="POST" modelAttribute="user">

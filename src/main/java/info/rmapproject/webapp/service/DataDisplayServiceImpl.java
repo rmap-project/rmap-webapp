@@ -62,12 +62,6 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 
 	//private static final Logger logger = LoggerFactory.getLogger(DiSCOServiceImpl.class);
 	
-	/*@Autowired
-	AuthService authService;
-	public void setAuthService(AuthService authService) {
-		this.authService = authService;
-	}*/
-	
 	@Override
 	public DiSCODTO getDiSCODTO(String sDiscoUri) throws Exception {
 		
@@ -209,6 +203,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		return resourceDTO;
 	}
 	
+	@SuppressWarnings("unused")
 	private List<ResourceDescription> getResourceDescriptions(URI keyResource, List<RMapTriple> triples) {
 		List<URI> keyResources = new ArrayList<URI>();
 		keyResources.add(keyResource);

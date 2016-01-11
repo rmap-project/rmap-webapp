@@ -3,7 +3,7 @@ package info.rmapproject.webapp.controllers;
 import info.rmapproject.auth.model.User;
 import info.rmapproject.auth.model.UserAgentType;
 import info.rmapproject.auth.model.UserAgentUri;
-import info.rmapproject.webapp.service.UserService;
+import info.rmapproject.webapp.service.UserMgtService;
 
 import java.util.Set;
 
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +29,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class AccountController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-	private UserService userService;
-	
-	@Autowired(required=true)
-	@Qualifier(value="userService")
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
+	@Autowired
+	private UserMgtService userMgtService;
 	
 	@RequestMapping(value="/user/signin", method=RequestMethod.GET)
 	public String signInPage() {
@@ -54,7 +47,7 @@ public class AccountController {
 	public String signupForm(Model model) {
 		model.addAttribute(new User());
        // model.addAttribute("KEY_STATUSES", new KeyStatus());
-        model.addAttribute("agentTypes", this.userService.getAgentTypes());
+       //model.addAttribute("agentTypes", this.userMgtService.getAgentTypes());
 		return "/user/signup";
 	}
 	
@@ -85,10 +78,10 @@ public class AccountController {
 	@RequestMapping(value="/user/signup", method=RequestMethod.POST)
 	public String addUser(@Valid User user, BindingResult result, ModelMap model) throws Exception {
         if (result.hasErrors()) {
-            model.addAttribute("agentTypes", this.userService.getAgentTypes());
+            //model.addAttribute("agentTypes", this.userMgtService.getAgentTypes());
             return "user/signup";
         }
-		this.userService.addUser(user);
+		this.userMgtService.addUser(user);
 		return "redirect:/user/welcome"; 		
 	}	
 	
@@ -96,14 +89,18 @@ public class AccountController {
 	public String settingsForm(Model model) throws Exception {
 		//TODO:hardcoded id for now... need to replace this with the actual user Id when we have had auth setup
 		int id = 3;
-        model.addAttribute("user", this.userService.getUserById(id));
-        model.addAttribute("agentTypes", this.userService.getAgentTypes());
+        model.addAttribute("user", this.userMgtService.getUserById(id));
+        model.addAttribute("agentTypes", this.userMgtService.getAgentTypes());
         return "/user/settings";	
 	}
 	
 	@RequestMapping(value="/user/settings", method=RequestMethod.POST)
-	public String updateUserSettings(@ModelAttribute("user") User user) throws Exception {
-		this.userService.updateUserSettings(user);
+	public String updateUserSettings(@ModelAttribute("user") User user, BindingResult result, ModelMap model) throws Exception {
+        if (result.hasErrors()) {
+            //model.addAttribute("agentTypes", this.userMgtService.getAgentTypes());
+            return "user/signup";
+        }
+		this.userMgtService.updateUserSettings(user);
 		return "/user/settings"; 		
 	}
 		

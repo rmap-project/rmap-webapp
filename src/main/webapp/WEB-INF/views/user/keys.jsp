@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false" %>
 <c:set var="pageTitle" value="Manage Keys | RMap Project"/>
 <c:set var="currPage" value="home"/>
@@ -44,8 +45,8 @@
 		            <td style="text-align:center;">${key.apiKeyId}</td>
 		            <td>${key.label}</td>
 		            <td>${key.keyStatus}</td>
-		            <td>${key.startDate}</td>
-		            <td>${key.endDate}</td>
+		            <td><fmt:formatDate type="date" value="${key.startDate}" /></td>
+		            <td><fmt:formatDate type="date" value="${key.endDate}" /></td>
 		            <td style="text-align:center;"><a href="<c:url value='/user/key/download?keyid=${key.apiKeyId}'/>" target="_blank" >download</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 		            <a href="<c:url value='/user/key/edit?keyid=${key.apiKeyId}' />" >edit</a></td>
 		        </tr>

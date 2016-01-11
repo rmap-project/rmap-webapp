@@ -3,11 +3,11 @@ package info.rmapproject.webapp.service;
 import info.rmapproject.auth.model.AgentType;
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
-import info.rmapproject.auth.service.AuthService;
+import info.rmapproject.auth.service.RMapAuthService;
+import info.rmapproject.auth.service.RMapAuthServiceFactory;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,57 +17,66 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 
-@Service("userService")
+@Service("userMgtService")
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserMgtServiceImpl implements UserMgtService {
 
 //private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
-	@Autowired
-	AuthService authService;
-	public void setAuthService(AuthService authService) {
-		this.authService = authService;
+	private static RMapAuthService rMapAuthService=null;
+	
+	private void init() {
+		if (rMapAuthService ==null) {
+			rMapAuthService = RMapAuthServiceFactory.createService();			
+		}
 	}
-	
-	
+		
 	@Override
 	public List<AgentType> getAgentTypes() {
-		return authService.getAgentTypes();
+		init();
+		return rMapAuthService.getAgentTypes();
 	}
 	
 	@Override
 	public void addApiKey(ApiKey apiKey) {
-		authService.addApiKey(apiKey);
+		init();
+		rMapAuthService.addApiKey(apiKey);
 	}
 	
 	@Override
 	public void updateApiKey(ApiKey apiKey) {
-		authService.updateApiKey(apiKey);
+		init();
+		rMapAuthService.updateApiKey(apiKey);
 	}
 	
 	@Override
 	public ApiKey getApiKeyById(int apiKeyId) {
-		return authService.getApiKeyById(apiKeyId);
+		init();
+		return rMapAuthService.getApiKeyById(apiKeyId);
 	}
 	
 	@Override
 	public List<ApiKey> listApiKeyByUser(int userId) {
-		return authService.listApiKeyByUser(userId);
+		init();
+		return rMapAuthService.listApiKeyByUser(userId);
 	}
 	
 	@Override
 	public void addUser(User user) {
-		authService.addUser(user);
+		init();
+		rMapAuthService.addUser(user);
 	}
 	
 	@Override
 	public void updateUserSettings(User user) {
-		authService.updateUserSettings(user);
+		init();
+		rMapAuthService.updateUserSettings(user);
 	}
 	
 	@Override
 	public User getUserById(int userId) {
-		return authService.getUserById(userId);
+		init();
+		return rMapAuthService.getUserById(userId);
 	}
 	
 }

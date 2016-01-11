@@ -10,7 +10,7 @@ import java.util.List;
  * @author khanson
  *
  */
-public interface UserService {
+public interface UserMgtService {
 	public List<AgentType> getAgentTypes();
 	public void addApiKey(ApiKey apiKey);
 	public void updateApiKey(ApiKey apiKey);

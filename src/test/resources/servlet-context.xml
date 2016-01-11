@@ -33,12 +33,10 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
-	<!--<beans:bean id="rmapAuthService" class="info.rmapproject.auth.service.RMapAuthServiceFactory" factory-method="createService"/>-->
-    <beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>
+				
+    <beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>		
 	<beans:bean id="dataDisplayService" class="info.rmapproject.webapp.service.DataDisplayServiceImpl"/>
-							
-	<aop:aspectj-autoproxy proxy-target-class="true"/>
+			
 	
 	
 </beans:beans>
