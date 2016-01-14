@@ -18,6 +18,7 @@ public enum NodeType {
 	UNDEFINED, 
 	TYPE;
 
+	//TODO:move namespace and type configurations to a properties file
 	
 	private final List<String> values;
 
@@ -76,35 +77,4 @@ public enum NodeType {
 		
 	}
 	
-	//TODO: types should be configured in the properties.
-	/*public static NodeType selectNodeType(Set<String> rdfTypes) throws Exception{
-		NodeType nodeType = UNDEFINED;
-		
-		if (rdfTypes.contains("rmap:DiSCO")) {
-			nodeType = DISCO;
-		}
-		else if (rdfTypes.contains("fabio:Dataset")){
-			nodeType = DATASET;					
-		}
-		else if (rdfTypes.contains("dcmitype:Software")
-				|| rdfTypes.contains("fabio:Algorithm")){
-			nodeType = CODE;					
-		}
-		else if (rdfTypes.contains("foaf:Agent")
-				|| rdfTypes.contains("foaf:Person")
-				|| rdfTypes.contains("foaf:Organization")
-				|| rdfTypes.contains("rmap:Agent")
-				|| rdfTypes.contains("dcterms:Agent")){
-			nodeType = AGENT;					
-		}	
-		else if (rdfTypes.contains("dcmitype:Text")
-				|| rdfTypes.contains("fabio:JournalArticle")
-				|| rdfTypes.contains("fabio:ConferencePaper")){
-			nodeType = TEXT;					
-		}
-		
-		return nodeType;
-	}*/
-	
-
 }

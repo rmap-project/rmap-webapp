@@ -168,26 +168,21 @@ public class DataDisplayServiceImpl implements DataDisplayService {
     		throw new RMapObjectNotFoundException();
     	}
 
-    	Map<String,TripleDisplayFormat> types = new HashMap<String,TripleDisplayFormat>();	    	
-    	Map<String,TripleDisplayFormat> properties = new HashMap<String,TripleDisplayFormat>(); 
-    	
+    	//start new resource description
+    	ResourceDescription resourceDescription = new ResourceDescription(sResourceUri);	    
+    	    	
     	for (RMapTriple triple : rmapTriples) {    		
     		TripleDisplayFormat tripleDF = new TripleDisplayFormat(triple);
-    		String listKey = tripleDF.getSubjectDisplay()+tripleDF.getPredicateDisplay()+tripleDF.getObjectDisplay();
     		
     		if (tripleDF.getPredicateDisplay().contains("rdf:type") 
     				&& triple.getSubject().toString().equals(sResourceUri))	{
-    			types.put(listKey, tripleDF);	
+    			resourceDescription.addResourceType(tripleDF);
     		}
     		else {
-    			properties.put(listKey, tripleDF);				
+    			resourceDescription.addPropertyValue(tripleDF);		
     		}
     	}
-
-    	Map<String, TripleDisplayFormat> sortedTypes = new TreeMap<String, TripleDisplayFormat>(types);
-    	Map<String, TripleDisplayFormat> sortedProperties = new TreeMap<String, TripleDisplayFormat>(properties);
-    	
-    	ResourceDescription resourceDescription = new ResourceDescription(sResourceUri, sortedTypes, sortedProperties);	    	
+    	    		
 	    resourceDTO.setResourceDescription(resourceDescription);
 
 	    List <URI> relatedDiSCOs = rmapService.getResourceRelatedDiSCOs(resourceUri, RMapStatus.ACTIVE);
@@ -226,8 +221,8 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	    //now sort statements into blocks by resource
 	    for (String resource : resourcesDescribed) {
 	    	
-	    	Map<String,TripleDisplayFormat> types = new HashMap<String,TripleDisplayFormat>();	    	
-	    	Map<String,TripleDisplayFormat> properties = new HashMap<String,TripleDisplayFormat>(); 
+	    	Map<String,TripleDisplayFormat> types = new TreeMap<String,TripleDisplayFormat>();	    	
+	    	Map<String,TripleDisplayFormat> properties = new TreeMap<String,TripleDisplayFormat>(); 
 	    	
 	    	for (RMapTriple stmt : triples) {
 	    		RMapResource subject = stmt.getSubject();
@@ -244,11 +239,8 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	    			}
 	    		}
 	    	}
-
-	    	Map<String, TripleDisplayFormat> sortedTypes = new TreeMap<String, TripleDisplayFormat>(types);
-	    	Map<String, TripleDisplayFormat> sortedProperties = new TreeMap<String, TripleDisplayFormat>(properties);
-	    	
-	    	resourceDescriptions.add(new ResourceDescription(resource, sortedTypes, sortedProperties));	    	
+	    		    	
+	    	resourceDescriptions.add(new ResourceDescription(resource, types, properties));	    	
 	    }
 
 	return resourceDescriptions;

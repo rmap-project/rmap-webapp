@@ -1,6 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<%@ page session="false" %>
 <c:set var="pageTitle" value="Sign Up Form | RMap Project"/>
 <c:set var="currPage" value="home"/>
 <%@include file="/includes/headstart.inc" %>  

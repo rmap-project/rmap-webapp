@@ -1,6 +1,7 @@
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.ApiKey;
+import info.rmapproject.auth.model.User;
 import info.rmapproject.webapp.domain.KeyStatus;
 import info.rmapproject.webapp.service.UserMgtService;
 
@@ -8,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,58 +17,99 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Handles requests for the application home page.
+ * Handles requests related to creation and management of API keys
+ * @author khanson
+ *
  */
 @Controller
+@SessionAttributes("user")
 public class ApiKeyController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	/**Service for user management*/
 	@Autowired
 	private UserMgtService userMgtService;
 	
+	/**
+	 * GET the list of API keys for the current user
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/keys", method=RequestMethod.GET)
-	public String showKeyList(Model model) throws Exception {
-		//TODO:hardcoded id for now... need to replace this with the actual user Id when we have had auth setup
-		int userId = 3;
-		model.addAttribute("user", this.userMgtService.getUserById(userId));
-        model.addAttribute("apiKeyList", this.userMgtService.listApiKeyByUser(userId));
+	public String showKeyList(Model model, HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("user"); //retrieve logged in user
+		if (user == null || user.getUserId()==0){//no user
+			return "redirect:/home";
+		}
+        model.addAttribute("apiKeyList", this.userMgtService.listApiKeyByUser(user.getUserId()));
         return "/user/keys";	
 	}
 	
+	/**
+	 * GET the form to create a new key
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/key/new", method=RequestMethod.GET)
-	public String newKey(Model model) throws Exception {
-		//TODO:hardcoded id for now... need to replace this with the actual user Id when we have had auth setup
-		int userId = 3;
+	public String newKey(Model model, HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("user"); //retrieve logged in user
+		if (user == null || user.getUserId()==0){//no user
+			return "redirect:/home";
+		}
 		ApiKey apiKey = new ApiKey();
-		apiKey.setUserId(userId);
 		model.addAttribute("apiKey", apiKey);
 		model.addAttribute("keyStatuses", KeyStatus.values());
 		model.addAttribute("targetPage", "keynew");
 	    return "/user/key";        
 	}
 	
+	/**
+	 * Receives the POSTed New API Key form to be processed. Returns any form errors.
+	 * @param apiKey
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/key/new", method=RequestMethod.POST)
-	public String createKey(@Valid ApiKey apiKey, BindingResult result, ModelMap model) throws Exception {
+	public String createKey(@Valid ApiKey apiKey, BindingResult result, ModelMap model, HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("user"); //retrieve logged in user
+		if (user == null || user.getUserId()==0){//no user
+			return "redirect:/home";
+		}
         if (result.hasErrors()) {
             return "/user/key";
         }
+		apiKey.setUserId(user.getUserId());
 		this.userMgtService.addApiKey(apiKey);
 		return "redirect:/user/keys"; 		
 	}
 	
+	/**
+	 * Receives the POSTed New API Key form to be processed. Returns any form errors.
+	 * @param apiKey
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.GET)
-	public String showKeyForm(@RequestParam("keyid") Integer keyId, Model model) throws Exception {
-		//TODO:hardcoded id for now... need to replace this with the actual user Id when we have had auth setup
-		int userid = 3;
+	public String showKeyForm(@RequestParam("keyid") Integer keyId, Model model, HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("user"); //retrieve logged in user
+		if (user == null || user.getUserId()==0){//no user
+			return "redirect:/home";
+		}
 		ApiKey apiKey = this.userMgtService.getApiKeyById(keyId);
-		if (apiKey.getUserId()==userid)	{
+		if (apiKey.getUserId()==user.getUserId())	{
 			model.addAttribute("apiKey", this.userMgtService.getApiKeyById(keyId));
 			model.addAttribute("targetPage", "keyedit");
 	        return "user/key";	
@@ -74,18 +117,35 @@ public class ApiKeyController {
 		return "redirect:/user/keys"; 		  
 	}
 	
+	/**
+	 * Receives the POSTed Edit API Key form to be processed. Returns any form errors.
+	 * @param apiKey
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.POST)
-	public String updateUser(@ModelAttribute("apiKey") ApiKey apiKey) throws Exception {
+	public String updateUser(@Valid ApiKey apiKey, BindingResult result, ModelMap model) throws Exception {
+        if (result.hasErrors()) {
+            return "/user/key";
+        }
 		this.userMgtService.updateApiKey(apiKey);		
 		return "redirect:/user/keys"; 
 	}
 	
+	/**
+	 * GET API Key file containing AccessKey and Secret that can be used for API requests
+	 * @param keyId
+	 * @param response
+	 * @throws Exception
+	 */
 	@RequestMapping(value="/user/key/download", method=RequestMethod.GET)
-	public @ResponseBody void downloadKey(@RequestParam("keyid") Integer keyId, HttpServletResponse response) throws Exception {
-		//TODO:hardcoded id for now... need to replace this with the actual user Id when we have had auth setup
-		int userid = 3;
+	public @ResponseBody void downloadKey(@RequestParam("keyid") Integer keyId, 
+				HttpServletResponse response, HttpSession session) throws Exception {
+		User user = (User) session.getAttribute("user"); //retrieve logged in user
 		ApiKey apiKey = this.userMgtService.getApiKeyById(keyId);
-		if (apiKey.getUserId()==userid)	{
+		if (apiKey.getUserId()==user.getUserId())	{
 			String downloadFileName= "rmap.key";
 			String key = apiKey.getAccessKey() + ":" + apiKey.getSecret();
 			OutputStream out = response.getOutputStream();
@@ -96,9 +156,6 @@ public class ApiKeyController {
 			out.close();
 		}
 
-		/*else {
-			return "redirect:/user/keys"; 	
-		}*/
 	}
 
 		

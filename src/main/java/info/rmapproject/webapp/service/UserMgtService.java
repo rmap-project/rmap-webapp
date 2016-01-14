@@ -16,7 +16,7 @@ public interface UserMgtService {
 	public void updateApiKey(ApiKey apiKey);
 	public ApiKey getApiKeyById(int apiKeyId);
 	public List<ApiKey> listApiKeyByUser(int userId);
-	public void addUser(User user);
+	public int addUser(User user);
 	public void updateUserSettings(User user);
 	public User getUserById(int userId);
 }

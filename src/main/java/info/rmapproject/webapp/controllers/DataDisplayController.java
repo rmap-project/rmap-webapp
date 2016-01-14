@@ -17,26 +17,31 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Handles requests for the data visualization page
+ * Handles requests for the data visualization pages
+ * @author khanson
+ *
  */
+
 @Controller
+@SessionAttributes("user")
 public class DataDisplayController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);
+	/**Service for managing RMap data display*/
 	@Autowired
 	private DataDisplayService dataDisplayService;
 	
 	/**
-	 * Get details of a DiSCO
+	 * GET details of a DiSCO
 	 */
 	@RequestMapping(value="/discos", method = RequestMethod.GET)
 	public String disco(@RequestParam("uri") String discoUri, @RequestParam(value="visualize", required=false) 
 				Integer visualize, Model model) throws Exception {
 
 		logger.info("DiSCO requested");
-		
 		if (visualize == null) {
 			visualize = 0;
 		}
@@ -57,7 +62,7 @@ public class DataDisplayController {
 	
 
 	/**
-	 * Get details of an Agent
+	 * GET details of an Agent
 	 */
 	@RequestMapping(value="/agents", method = RequestMethod.GET)
 	public String agent(@RequestParam("uri") String agentUri, 
@@ -82,7 +87,7 @@ public class DataDisplayController {
 	}	
 	
 	/**
-	 * Get details of a resource
+	 * GET details of a resource
 	 * @param resourceUri
 	 * @param visualize - if "1" the larger visualization page will be displayed
 	 * @param objpage - This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
@@ -136,7 +141,7 @@ public class DataDisplayController {
 	
 	
 	/**
-	 * Get details of an Event
+	 * GET details of an Event
 	 */
 	@RequestMapping(value="/events", method = RequestMethod.GET)
 	public String event(@RequestParam("uri") String eventUri, Model model) throws Exception {

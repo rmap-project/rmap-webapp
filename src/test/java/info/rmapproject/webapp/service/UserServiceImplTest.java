@@ -1,5 +1,6 @@
 package info.rmapproject.webapp.service;
 
+import static org.junit.Assert.assertTrue;
 import info.rmapproject.auth.model.AgentType;
 
 import java.util.List;
@@ -10,12 +11,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class UserServiceImplTest {
-	//@Autowired
+
 	UserMgtService userMgtservice;
 
 	@Before
 	public void setup(){
-		//@SuppressWarnings("resource")
+		@SuppressWarnings("resource")
+		//NOTE: This uses a local servlet-context.xml for testing!
 		ApplicationContext context = new ClassPathXmlApplicationContext("servlet-context.xml");
 		userMgtservice = (UserMgtService)context.getBean("userMgtService", UserMgtService.class);    
 		//userservice = new UserServiceImpl();
@@ -24,9 +26,8 @@ public class UserServiceImplTest {
 	
 	@Test
 	public void testGetAgentTypes() {
-		@SuppressWarnings("unused")
 		List<AgentType> agentTypes = userMgtservice.getAgentTypes();
-		
+		assertTrue(agentTypes.size()>0);
 	}
 
 //	@Test

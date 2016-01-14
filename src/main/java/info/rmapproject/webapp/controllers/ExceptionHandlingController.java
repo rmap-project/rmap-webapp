@@ -12,13 +12,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-
+/**
+ * Handles display of error messages
+ * @author khanson
+ *
+ */
 @ControllerAdvice
+@SessionAttributes("user")
 public class ExceptionHandlingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);
-	
+	/**
+	 * Handles object not found exceptions
+	 * @param exception
+	 * @return
+	 */
 	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class,
 		RMapObjectNotFoundException.class}) // 	RMapStatementNotFoundException.class,
 	 public String objectNotFoundError(Exception exception) {		
@@ -26,12 +36,22 @@ public class ExceptionHandlingController {
 		return "objectnotfound";
 	  }
 	
+	/**
+	 * Handles deleted object exceptions
+	 * @param exception
+	 * @return
+	 */
 	@ExceptionHandler({RMapDeletedObjectException.class, RMapTombstonedObjectException.class})
 	 public String deletionError(Exception exception) {	
 		logger.error(exception.getMessage(), exception);
 		return "deleted";
 	  }
 	
+	/**
+	 * Generic error message to handle all other exceptions e.g. system errors
+	 * @param exception
+	 * @return
+	 */
 	@ExceptionHandler({RMapException.class, Exception.class})
 	 public String genericError(Exception exception) {	
 		logger.error(exception.getMessage(), exception);

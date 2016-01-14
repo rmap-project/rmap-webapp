@@ -12,16 +12,25 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Handles display of the search page 
+ * @author khanson
+ *
+ */
 @Controller
+@SessionAttributes("user")
 @RequestMapping(value="/search")
 public class SearchController {
 
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	
 	/**
-	 * Simply selects the home view to render by returning its name.
+	 * GETs the search form
+	 * @param model
+	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public String searchForm(Model model) {
@@ -31,6 +40,11 @@ public class SearchController {
 		return "search";
 	}
 	
+	/**
+	 * Processes the POSTed search form
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public String searchResults(@ModelAttribute("search") SearchCommand search,
 									BindingResult result, RedirectAttributes redirectAttributes) throws Exception {

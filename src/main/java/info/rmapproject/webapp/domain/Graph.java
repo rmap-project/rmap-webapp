@@ -1,5 +1,6 @@
 package info.rmapproject.webapp.domain;
 
+import info.rmapproject.webapp.utils.Constants;
 import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.util.ArrayList;
@@ -7,12 +8,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Holds a Graph description
+ * @author khanson
+ *
+ */
 public class Graph {
 
-    private Set<String> uniqueNodes;
+	/** Unique list of nodes stored to prevent duplicate nodes being added */
+    private Set<String> uniqueNodes;  
+	/** List of nodes */
     private List<GraphNode> nodes;
+	/** List of edges */
     private List<GraphEdge> edges;
-    private Integer counter = 0;
+        
+    //Each node must be assigned a number that is unique within the context of the graph
+    //The counter keeps track of an incrementing number that is assigned to each node as it is added to the graph
+    private Integer counter = 0; 
 
 	public Graph(){}
 	
@@ -40,6 +52,13 @@ public class Graph {
 		this.uniqueNodes = uniqueNodes;
 	}
 	
+	/**
+	 * Creates GraphNode object and adds it to the Graph
+	 * @param sNode
+	 * @param nodeType
+	 * @return
+	 * @throws Exception
+	 */
 	public Integer addNode(String sNode, NodeType nodeType) throws Exception{
 		Integer id = 0;
 		if (this.uniqueNodes == null){
@@ -50,16 +69,15 @@ public class Graph {
 		}		
 		
 		if (!uniqueNodes.contains(sNode)) {
-			id = addOne();
+			id = getNextId();
 			uniqueNodes.add(sNode);	
-			//TODO: quick fix for demo - need to do this properly respecting context, make types configurable and put this in a separate method
-			nodes.add(new GraphNode(id, sNode, 10, nodeType));
+			nodes.add(new GraphNode(id, sNode, Constants.NODE_WEIGHT_INCREMENT, nodeType));
 		}
 		else {
 			//find matching node, add to weight
 			for (GraphNode node:this.nodes) {
 				if (node.getName().equals(sNode)){
-					node.setWeight(node.getWeight() + 10);
+					node.setWeight(node.getWeight() + Constants.NODE_WEIGHT_INCREMENT);
 					id = node.getId();
 				}
 			}
@@ -74,6 +92,15 @@ public class Graph {
 		edges.add(edge);
 	}
 			
+	/**
+	 * Creates GraphEdge object and adds it to the Graph
+	 * @param sourceKey
+	 * @param targetKey
+	 * @param label
+	 * @param sourceNodeType
+	 * @param targetNodeType
+	 * @throws Exception
+	 */
 	public void addEdge(String sourceKey, String targetKey, String label, 
 							NodeType sourceNodeType, NodeType targetNodeType) throws Exception {
 		GraphEdge edge = new GraphEdge();
@@ -88,7 +115,7 @@ public class Graph {
 		addEdge(edge);
 	}	
 		
-	private Integer addOne(){
+	private Integer getNextId(){
 		this.counter = this.counter+1;
 		return this.counter;
 	}

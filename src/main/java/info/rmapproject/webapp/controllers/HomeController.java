@@ -6,17 +6,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Handles requests for the application home page.
+ * Handles display of the home and contact pages
+ * @author khanson
+ *
  */
 @Controller
+@SessionAttributes("user")
 public class HomeController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
-	 * Simply selects the home view to render by returning its name.
+	 * GETs the Home page
 	 */
 	@RequestMapping(value={"/", "/home"}, method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -25,6 +29,11 @@ public class HomeController {
 		return "home";
 	}
 	
+	/**
+	 * GETs the Contact page
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value={"/contact"}, method = RequestMethod.GET)
 	public String home(Model model) {
 				

@@ -1,9 +1,8 @@
 package info.rmapproject.webapp.domain;
 
 /**
- * 
+ * Enum to describe possible API Key Status
  * @author khanson
- *
  */
 public enum KeyStatus {
 
