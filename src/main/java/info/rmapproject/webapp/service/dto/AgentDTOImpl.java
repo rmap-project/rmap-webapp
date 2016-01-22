@@ -3,7 +3,6 @@ package info.rmapproject.webapp.service.dto;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.domain.Graph;
-import info.rmapproject.webapp.domain.ResourceDescription;
 
 import java.net.URI;
 import java.util.HashSet;
@@ -21,10 +20,10 @@ public class AgentDTOImpl implements AgentDTO {
 	private String name;
 	private RMapStatus status;
 	private List <URI> events;
+	private List <URI> discos;
 	private String idProvider;
 	private String authId;
 	private Graph graph;
-	private List<ResourceDescription> resourceDescriptions;
 	
 	public URI getUri() {
 		return uri;
@@ -62,6 +61,17 @@ public class AgentDTOImpl implements AgentDTO {
 	    events.addAll(uniqueEvents);
 		this.events = events;
 	}
+	
+	public List <URI> getDiscos() {
+		return discos;
+	}
+	public void setDiscos(List <URI> discos) {
+	    Set <URI> uniqueDiSCOs = new HashSet<URI>();
+	    uniqueDiSCOs.addAll(discos);
+	    discos.clear();
+	    discos.addAll(uniqueDiSCOs);
+		this.discos = discos;
+	}
 	public String getIdProvider() {
 		return idProvider;
 	}
@@ -74,13 +84,6 @@ public class AgentDTOImpl implements AgentDTO {
 	public void setAuthId(String authId) {
 		this.authId = authId;
 	}
-	public List<ResourceDescription> getResourceDescriptions() {
-		return resourceDescriptions;
-	}
-	public void setResourceDescriptions(
-			List<ResourceDescription> resourceDescriptions) {
-		this.resourceDescriptions = resourceDescriptions;
-	}
 	public Graph getGraph() {
 		return graph;
 	}
@@ -92,5 +95,9 @@ public class AgentDTOImpl implements AgentDTO {
 	public int getNumEvents() {
 		int numEvents = events.size();
 		return numEvents;
+	}
+	public int getNumDiscos() {
+		int numDiSCOs = discos.size();
+		return numDiSCOs;
 	}
 }

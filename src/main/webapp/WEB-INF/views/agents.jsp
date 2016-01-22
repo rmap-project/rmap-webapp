@@ -11,8 +11,8 @@
 	<h1>RMap Agent Summary</h1>
 	<h2>About: <a href="agents?uri=${AGENT.getUri()}">${AGENT.getUri()}</a></h2>
 		
-	<c:if test="${AGENT.getCreator().length()>0}">
-		<h3><em>Created by <a href="resources?uri=${AGENT.getCreator()}">${AGENT.getCreator()}</a></em></h3>
+	<c:if test="${AGENT.getName().length()>0}">
+		<h2>Name: <em>${AGENT.getName()}</em></h2>
 	</c:if>
 	<img src="includes/images/graphlegend.png" class="graphlegend" />
 	<div id="wrapper">
@@ -31,72 +31,42 @@
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	
-	<h2>Agent represented</h2>
-	<p><a href="resources?uri=${AGENT.getAgentRepresented()}">${AGENT.getAgentRepresented()}</a></p>
+	<h2>ID Provider</h2>
+	<p><a href="resources?uri=${AGENT.getIdProvider()}">${AGENT.getIdProvider()}</a></p>
 	
-	<h2>Additional Properties</h2>
+	<h2>User Authentication ID</h2>
+	<p><a href="resources?uri=${AGENT.getAuthId()}">${AGENT.getAuthId()}</a></p>
 	
-	<c:forEach var="resource_descrip" items="${AGENT.getResourceDescriptions()}">
-		<c:set var="properties" value="${resource_descrip.getPropertyValues()}"/>
-		<c:set var="resource_types" value="${resource_descrip.getResourceTypes()}"/>
+	
+	<c:set var="discos" value="${AGENT.getDiscos()}"/>
+	<c:set var="numdiscos" value="${AGENT.getNumDiscos()}"/>
+	<c:if test="${numdiscos>50}">
+		<h2>DiSCOs Created (Displaying 50 out of ${numdiscos})</h2>
+	</c:if>
+	<c:if test="${numdiscos<=50}">
+		<h2>DiSCOs Created (${numdiscos})</h2>
+	</c:if>
+				
+	<div class="CSSTableGenerator">
+		<table>
+			<tr>
+				<td>DiSCO URI</td>
+			</tr>		
 			
-		<c:if test="${properties.size()>0||resource_types.size()>0}">
-			<h3>
-				About: <em><a href="${resource_descrip.getResourceName()}">${resource_descrip.getResourceName()}</a></em>
-			</h3>
-			<c:if test="${resource_types.size()>0}">
-				<h4>
-					A resource of type<c:if test="${resource_types.size()>1}">s</c:if>
-					:&nbsp;
-					<em>
-						<c:forEach var="resource_type" items="${resource_types}">
-							<a href="${resource_type.getValue().getObjectLink()}">
-								${resource_type.getValue().getObjectDisplay()}
-							</a>;&nbsp;
-						</c:forEach>
-					</em>
-				</h4>
+			<c:if test="${numdiscos>0}">			
+				<c:forEach var="disco" items="${discos}" begin="0" end="49">
+					<tr>
+						<td>
+							<a href="discos?uri=${disco.toString()}">${disco.toString()}</a>
+						</td>
+					</tr>
+				</c:forEach>	
 			</c:if>
-			<c:if test="${properties.size()>0}">
-				<div class="CSSTableGenerator">
-					<table>
-						<tr>
-							<td>Property</td>
-							<td>Value</td>
-						</tr>
-		
-						<c:forEach var="property" items="${properties}">	
-							<tr>
-								<td><a href="${property.getValue().getPredicateLink()}">${property.getValue().getPredicateDisplay()}</a></td>
-								<td>
-									<c:set var="objectLink" value="${property.getValue().getObjectLink()}"/>
-									<c:if test="${objectLink.length()>0}">
-										<a href="${objectLink}">
-									</c:if>
-									${property.getValue().getObjectDisplay()}
-									<c:if test="${objectLink.length()>0}">
-										</a>
-									</c:if>
-								</td>
-							</tr>
-						</c:forEach>	
-					</table>
-				</div>
+			<c:if test="${numdiscos==0}">
+				<tr><td><em>No DiSCOs created by this RMap:Agent.</em></td></tr>
 			</c:if>
-			
-			<c:if test="${properties.size()==0}">
-				<div class="CSSTableGenerator">
-					<table>
-						<tr>
-							<td>Property</td>
-							<td>Value</td>
-						</tr>
-						<tr><td colspan="2"><em>No additional properties for this RMap:Agent.</em></td></tr>
-					</table>
-				</div>
-			</c:if>
-		</c:if>
-	</c:forEach>
+		</table>
+	</div>
 	<br/>
 	<br/>
 </article>
@@ -112,7 +82,7 @@
 			<em>(Displaying <strong>20</strong> out of <strong>${AGENT.getNumEvents()})</strong></em><br/><br/>
 		</c:if>
 		<ul>
-			<c:forEach var="event" items="${AGENT.getEvents()}" begin="1" end="20">
+			<c:forEach var="event" items="${AGENT.getEvents()}" begin="0" end="19">
 				<li><a href="events?uri=${event.toString()}">${event.toString()}</a></li>
 			</c:forEach>
 		</ul>

@@ -1,6 +1,5 @@
 package info.rmapproject.webapp.service;
 
-import info.rmapproject.auth.model.AgentType;
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
 import info.rmapproject.auth.service.RMapAuthService;
@@ -33,12 +32,7 @@ public class UserMgtServiceImpl implements UserMgtService {
 			rMapAuthService = RMapAuthServiceFactory.createService();			
 		}
 	}
-		
-	@Override
-	public List<AgentType> getAgentTypes() {
-		return rMapAuthService.getAgentTypes();
-	}
-	
+
 	@Override
 	public void addApiKey(ApiKey apiKey) {
 		rMapAuthService.addApiKey(apiKey);
@@ -61,12 +55,18 @@ public class UserMgtServiceImpl implements UserMgtService {
 	
 	@Override
 	public int addUser(User user) {
+		//TODO:replace this with a real value!!
+		user.setPrimaryIdProvider("http://www.google.com");
 		return rMapAuthService.addUser(user);
 	}
 	
 	@Override
 	public void updateUserSettings(User user) {
 		rMapAuthService.updateUserSettings(user);
+		if (user.hasRMapAgent() && user.isDoRMapAgentSync()){
+			// update the RMap Agent
+			rMapAuthService.createOrUpdateAgentFromUser(user);
+		}
 	}
 	
 	@Override

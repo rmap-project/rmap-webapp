@@ -37,7 +37,7 @@
 			
 			<c:if test="${uid>0}">
 			<li id="menu-item-4">
-				<a href="<c:url value='/user/settings/>"><div id="truncate">${uname}</div></a>
+				<a href="<c:url value='/user/settings'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
 				<ul class="dropdown-menu">
 					<li><a href="<c:url value='/user/keys'/>">Manage API keys</a></li>
 					<li><a href="<c:url value='/user/reports'/>">View API activity</a></li>

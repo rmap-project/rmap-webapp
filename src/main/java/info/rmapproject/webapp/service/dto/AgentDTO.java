@@ -1,7 +1,6 @@
 package info.rmapproject.webapp.service.dto;
 
 import info.rmapproject.webapp.domain.Graph;
-import info.rmapproject.webapp.domain.ResourceDescription;
 
 import java.net.URI;
 import java.util.List;
@@ -15,8 +14,9 @@ public interface AgentDTO {
 	public URI getUri();
 	public String getName();
 	public List<URI> getEvents();
+	public List<URI> getDiscos();
 	public String getIdProvider();
-	public List<ResourceDescription> getResourceDescriptions();
 	public Graph getGraph();
 	public int getNumEvents();
+	public int getNumDiscos();
 }

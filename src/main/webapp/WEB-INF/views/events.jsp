@@ -28,11 +28,14 @@
 	<tr>
 		<td>Event type</td><td>${EVENT.getType()}</td>
 	</tr>		
+	
+<c:if test="${EVENT.getDescription().length()>0}">
+	<tr>
+		<td>Event description</td><td>${EVENT.getDescription()}</td>
+	</tr>	
+</c:if>
 </table>
 
-<c:if test="${EVENT.getDescription().length()>0}">
-	<em>${EVENT.getDescription()}</em>
-</c:if>
 <br/>
 <h2>Affected Resources</h2>
 	<table>

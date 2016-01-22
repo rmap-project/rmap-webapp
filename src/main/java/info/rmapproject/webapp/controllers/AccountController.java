@@ -2,24 +2,16 @@ package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.exception.RMapAuthException;
 import info.rmapproject.auth.model.User;
-import info.rmapproject.auth.model.UserAgentType;
-import info.rmapproject.auth.model.UserAgentUri;
 import info.rmapproject.webapp.service.UserMgtService;
 
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,37 +35,37 @@ public class AccountController {
 	
 	
 
-	/**
-	 * NOT CURRENTLY USED - MAY DELETE IF NOT ADDED BACK IN
-	 * Converts String result from form fields to their relevant object types and binds the field to the model.
-	 * Specifically String to UserAgentUri object and String to UserAgentType object
-	 * @param request
-	 * @param binder
-	 * @throws Exception
-	 */
-	@InitBinder("user") 
-	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-		
-		binder.registerCustomEditor(Set.class, "userAgentUris", new CustomCollectionEditor(Set.class) {
-			@Override
-			protected Object convertElement(Object element) {
-				String uri = (String) element;
-				UserAgentUri userAgentUri = new UserAgentUri();
-				userAgentUri.setUri(uri);
-				return userAgentUri;
-			}
-			});
-		
-		binder.registerCustomEditor(Set.class, "userAgentTypes", new CustomCollectionEditor(Set.class) {
-			@Override
-			protected Object convertElement(Object element) {
-			String uri = (String) element;
-			UserAgentType userAgentType = new UserAgentType();
-			userAgentType.setUri(uri);
-			return userAgentType;
-			}
-			});
-	}	
+//	/**
+//	 * NOT CURRENTLY USED - MAY DELETE IF NOT ADDED BACK IN
+//	 * Converts String result from form fields to their relevant object types and binds the field to the model.
+//	 * Specifically String to UserAgentUri object and String to UserAgentType object
+//	 * @param request
+//	 * @param binder
+//	 * @throws Exception
+//	 */
+//	@InitBinder("user") 
+//	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+//		
+//		binder.registerCustomEditor(Set.class, "userAgentUris", new CustomCollectionEditor(Set.class) {
+//			@Override
+//			protected Object convertElement(Object element) {
+//				String uri = (String) element;
+//				UserAgentUri userAgentUri = new UserAgentUri();
+//				userAgentUri.setUri(uri);
+//				return userAgentUri;
+//			}
+//			});
+//		
+//		binder.registerCustomEditor(Set.class, "userAgentTypes", new CustomCollectionEditor(Set.class) {
+//			@Override
+//			protected Object convertElement(Object element) {
+//			String uri = (String) element;
+//			UserAgentType userAgentType = new UserAgentType();
+//			userAgentType.setUri(uri);
+//			return userAgentType;
+//			}
+//			});
+//	}	
 	
 	
 	/***************************
@@ -112,7 +104,11 @@ public class AccountController {
             return "user/login";
         }
         try {
-        	fulluserdets = this.userMgtService.getUserById(user.getUserId()); //refresh record
+        	int userid = user.getUserId();
+        	if (userid==0){
+        		return "user/login";
+        	}
+        	fulluserdets = this.userMgtService.getUserById(userid); //refresh record
         }
         catch (RMapAuthException ex) {
             return "user/login";
@@ -177,11 +173,13 @@ public class AccountController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/user/settings", method=RequestMethod.GET)
-	public String settingsForm(HttpSession session) {
+	public String settingsForm(HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
 		if (user == null || user.getUserId()==0){
 			return "redirect:/home";
 		}
+		user = this.userMgtService.getUserById(user.getUserId()); //refresh record to make sure editing latest
+		model.addAttribute("user",user);
         return "/user/settings";	
 	}
 	
@@ -203,6 +201,22 @@ public class AccountController {
 		model.addAttribute("user", user); //save latest user details to session
 		return "/user/settings"; 		
 	}
+
+	/**
+	 * Get the Agent Creation confirmation form
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/user/createagent", method=RequestMethod.GET)
+	public String createAgent(HttpSession session) {
+		User user = (User) session.getAttribute("user");
+		if (user == null || user.getUserId()==0){
+			return "redirect:/home";
+		}
+        return "/user/createagent";	
+	}
+	
 
 	/**
 	 * Logs out the user by completing the session.
@@ -229,14 +243,6 @@ public class AccountController {
 		return "redirect:/home";
 	}	
 
-	/**
-	 * Cancels sign in, purges session data
-	 * @return home page
-	 */
-	@RequestMapping(value="/user/settingscancel", method=RequestMethod.GET)
-	public String cancelSettingsEdits(SessionStatus status) {
-		return "redirect:/user/welcome";
-	}
 	
 	
 }

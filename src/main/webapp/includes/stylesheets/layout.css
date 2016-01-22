@@ -392,11 +392,26 @@ fieldset {
     display: block;
     margin-left: 2px;
     margin-right: 2px;
-    padding-top: 3em;
-    padding-bottom: 3em;
+    padding-top: 2em;
+    padding-bottom: 2em;
     padding-left: 3em;
     padding-right: 3em;
     border: 2px groove;
+}
+
+
+.boxedsidebar { 
+    display: block;
+	margin-top:10px;
+    margin-left: 2px;
+    margin-right: 2px;
+	margin-bottom:2px;
+    padding-top: 2em;
+    padding-bottom: 2em;
+    padding-left: 1.4em;
+    padding-right: 1.4em;
+    border: 2px groove;
+	text-align:center;
 }
 
 
@@ -413,32 +428,33 @@ p.notice{
     font-style: italic;
 }
 
+p.greybox{ 
+    display: block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    border: 2px;
+    background-color:#f0f0f0;
+    font-style: italic;
+}
+
 legend {
     font-size:1.4em;
-}
-
-a.addFieldBtn {
-	color:green;
-	font-size:1em;
-	cursor:pointer;
-	margin-left:440px;
-}
-
-a.remFieldBtn {
-	color:red;
-	font-size:2em;
-	font-weight:bold;
-	cursor:pointer;
 }
 
 #formButtons {
 	text-align:right;
 }
 
+
 select {padding: 5px; border: 1px solid #ccc; margin: 5px 0; width:507px;}
 input[type=text] {padding: 5px; width:500px;border: 1px solid #ccc; margin: 5px 0;}
 textarea {width:500px;padding: 5px; margin: 5px 0; resize: vertical;}
 input[type=text].dateInput {width:200px; }
+input[readonly]{background-color:#f0f0f0;}
 
 #truncate {
   width: 120px;

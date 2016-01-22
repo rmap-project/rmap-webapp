@@ -3,7 +3,6 @@ package info.rmapproject.webapp.utils;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
-import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.BIBO;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.ORE;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.PROV;
 import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.RMAP;
@@ -52,8 +51,8 @@ public class WebappUtils {
 		else if (url.contains(DCTERMS.NAMESPACE))	{
 			return url.replace(DCTERMS.NAMESPACE,  "dcterms:");			
 		}
-		else if (url.contains(BIBO.NAMESPACE))	{
-			return url.replace(BIBO.NAMESPACE,  "bibo:");		
+		else if (url.contains("http://purl.org/ontology/bibo/"))	{
+			return url.replace("http://purl.org/ontology/bibo/",  "bibo:");		
 		}
 		else if (url.contains("http://purl.org/spar/cito/")) {
 			return url.replace("http://purl.org/spar/cito/",  "cito:");		

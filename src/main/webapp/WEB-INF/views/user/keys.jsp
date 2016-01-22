@@ -10,12 +10,12 @@
 
 <h1>Manage API keys</h1>
 
-<c:if test="${not user.hasRMapAgent}">
+<c:if test="${not user.hasRMapAgent() && not user.doRMapAgentSync}">
 <p class="notice">
-	IMPORTANT NOTE: Currently the keys you generate will provide read-only access to the RMap triplestore.  
+	NOTE: Currently the keys you generate will provide read-only access to the RMap triplestore.  
 	To create content in RMap, an RMap System Agent must be created for your account.  
 	This will be associated with any content you create in RMap. 
-	To trigger the creation of a System Agent, visit the <a href="settings">settings</a> page.
+	To trigger the creation of a System Agent, visit the <a href="<c:url value='/user/settings' />">settings</a> page.
 </p>
 </c:if>
 <p style="text-align:right;">
@@ -46,8 +46,8 @@
 		            <td>${key.keyStatus}</td>
 		            <td><fmt:formatDate type="date" value="${key.startDate}" /></td>
 		            <td><fmt:formatDate type="date" value="${key.endDate}" /></td>
-		            <td style="text-align:center;"><a href="<c:url value='/user/key/download?keyid=${key.apiKeyId}'/>" target="_blank" >download</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-		            <a href="<c:url value='/user/key/edit?keyid=${key.apiKeyId}' />" >edit</a></td>
+		            <td style="text-align:center;"><a href="<c:url value='/user/key/download?keyid=${key.apiKeyId}'/>" target="_blank" >download</a>&nbsp;&nbsp;
+		            |&nbsp;&nbsp;<a href="<c:url value='/user/key/edit?keyid=${key.apiKeyId}' />" >edit</a></td>
 		        </tr>
 		    </c:forEach>
 	    </tbody>

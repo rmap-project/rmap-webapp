@@ -1,12 +1,6 @@
 package info.rmapproject.webapp.service;
 
-import static org.junit.Assert.assertTrue;
-import info.rmapproject.auth.model.AgentType;
-
-import java.util.List;
-
 import org.junit.Before;
-import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -24,12 +18,6 @@ public class UserServiceImplTest {
 	}
 	
 	
-	@Test
-	public void testGetAgentTypes() {
-		List<AgentType> agentTypes = userMgtservice.getAgentTypes();
-		assertTrue(agentTypes.size()>0);
-	}
-
 //	@Test
 //	public void testAddApiKey() {
 //		fail("Not yet implemented");

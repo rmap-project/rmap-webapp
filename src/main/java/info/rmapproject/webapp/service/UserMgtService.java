@@ -1,6 +1,5 @@
 package info.rmapproject.webapp.service;
 
-import info.rmapproject.auth.model.AgentType;
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
 
@@ -11,7 +10,6 @@ import java.util.List;
  *
  */
 public interface UserMgtService {
-	public List<AgentType> getAgentTypes();
 	public void addApiKey(ApiKey apiKey);
 	public void updateApiKey(ApiKey apiKey);
 	public ApiKey getApiKeyById(int apiKeyId);

@@ -10,6 +10,9 @@
 
 <h1>RMap Agent Visualization</h1>
 <h2>About: <a href="agents?uri=${AGENT.getUri()}">${AGENT.getUri()}</a></h2>
+<c:if test="${AGENT.getName().length()>0}">
+	<h2>Name: <em>${AGENT.getName()}</em></h2>
+</c:if>
 <a href="agents?uri=${AGENT.getUri()}">Return to summary</a> | 
 <div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 <div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>

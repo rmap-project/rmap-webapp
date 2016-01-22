@@ -17,6 +17,7 @@ import info.rmapproject.core.model.event.RMapEventInactivation;
 import info.rmapproject.core.model.event.RMapEventTombstone;
 import info.rmapproject.core.model.event.RMapEventType;
 import info.rmapproject.core.model.event.RMapEventUpdate;
+import info.rmapproject.core.model.event.RMapEventUpdateWithReplace;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
 import info.rmapproject.webapp.domain.Graph;
@@ -117,6 +118,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		agentDTO.setEvents(rmapService.getAgentEvents(agentUri));
 		agentDTO.setIdProvider(agent.getIdProvider().getStringValue());
 		agentDTO.setAuthId(agent.getAuthId().getStringValue());
+		agentDTO.setDiscos(rmapService.getAgentDiSCOs(agentUri, RMapStatus.ACTIVE));
 		
 	    Graph graph = createAgentGraph(agentUri,  agentDTO.getName(),  agentDTO.getIdProvider(), agentDTO.getAuthId());	  
 	    agentDTO.setGraph(graph);
@@ -431,6 +433,12 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	    	RMapUri uri = inactivateEvent.getInactivatedObjectId();
 			String type = WebappUtils.getRMapType(new URI(uri.toString()));
 			resourcesAffected.put(uri.toString(), "Inactivated " + type);	  
+	    }
+	    else if (eventType == RMapEventType.REPLACE)	{
+	    	RMapEventUpdateWithReplace replaceEvent = (RMapEventUpdateWithReplace) event;	    
+	    	RMapUri uri = replaceEvent.getUpdatedObjectId();
+			String type = WebappUtils.getRMapType(new URI(uri.toString()));
+			resourcesAffected.put(uri.toString(), "Replaced " + type);	  
 	    }
 	    
 	    return resourcesAffected;
