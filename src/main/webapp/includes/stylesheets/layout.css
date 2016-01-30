@@ -35,7 +35,7 @@ h1 a { text-indent: -9999px; }
 .current { font-weight: bold !important; color: #444 !important; border-bottom: 3px solid #0000C1 !important; }
 
 #main-nav ul li ul.dropdown-menu{
-       min-width: 140px; /* Set width of the dropdown */
+       min-width: 155px; /* Set width of the dropdown */
        max-width: 180px; /* Set width of the dropdown */
        background: #f2f2f2;
        display: none;

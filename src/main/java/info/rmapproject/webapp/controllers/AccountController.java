@@ -1,7 +1,7 @@
 package info.rmapproject.webapp.controllers;
 
-import info.rmapproject.auth.exception.RMapAuthException;
 import info.rmapproject.auth.model.User;
+import info.rmapproject.webapp.auth.LoginRequired;
 import info.rmapproject.webapp.service.UserMgtService;
 
 import javax.servlet.http.HttpSession;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.support.SessionStatus;
  *
  */
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user","accesstoken"})
 public class AccountController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -73,62 +73,14 @@ public class AccountController {
 	 * 		Web pages
 	 * 
 	 ***************************/
-	
-	/**
-	 * Get the Sign In page
-	 * @return Sign In page
-	 */
-	@RequestMapping(value="/user/login", method=RequestMethod.GET)
-	public String loginPage(Model model, HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		if (user != null && user.getUserId()>0){
-			return "redirect:/user/welcome";
-		}
-		model.addAttribute("user", new User());
-		return "/user/login";
-	}
-	
-	/**
-	 * Receives the POSTed Sign In form to be processed. Returns any form errors.
-	 * @param user
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/user/login", method=RequestMethod.POST)
-	public String loginUser(@ModelAttribute("user") User user, BindingResult result, HttpSession session, Model model) throws Exception {
-        //TODO: temporary just to test user... need to incorporate OAUTH stuff.
-		User fulluserdets = null;
-		if (result.hasErrors()) {
-            return "user/login";
-        }
-        try {
-        	int userid = user.getUserId();
-        	if (userid==0){
-        		return "user/login";
-        	}
-        	fulluserdets = this.userMgtService.getUserById(userid); //refresh record
-        }
-        catch (RMapAuthException ex) {
-            return "user/login";
-        }
-        model.addAttribute("user", fulluserdets); //store it in the session
-        
-		return "redirect:/user/welcome";			
-	}	
-	
 
 	/**
 	 * Get the welcome page after sign in
 	 * @return Welcome page
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/welcome", method=RequestMethod.GET)
 	public String welcomePage(Model model, HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		if (user == null || user.getUserId()==0){ //no user logged in
-			return "redirect:/home";
-		}
 		return "/user/welcome";
 	}
 	
@@ -137,13 +89,14 @@ public class AccountController {
 	 * @param model
 	 * @return the Sign Up Form page
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
 	public String signupForm(Model model, HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		if (user != null && user.getUserId()>0){
 			return "redirect:/user/welcome";
 		}
-		model.addAttribute("user", new User());
+		model.addAttribute("user", user);
 		return "/user/signup";
 	}
 	
@@ -155,6 +108,7 @@ public class AccountController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/signup", method=RequestMethod.POST)
 	public String addUser(@Valid User user, BindingResult result, HttpSession session, Model model) throws Exception {
         if (result.hasErrors()) {
@@ -162,7 +116,7 @@ public class AccountController {
         }
 		int userId = this.userMgtService.addUser(user);
 		user = this.userMgtService.getUserById(userId); //refresh record
-		model.addAttribute("user", user); //save latest user details to sesson
+		session.setAttribute("user", user); //save latest user details to session
 		return "redirect:/user/welcome"; 		
 	}	
 	
@@ -172,6 +126,7 @@ public class AccountController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/settings", method=RequestMethod.GET)
 	public String settingsForm(HttpSession session, Model model) {
 		User user = (User) session.getAttribute("user");
@@ -180,7 +135,7 @@ public class AccountController {
 		}
 		user = this.userMgtService.getUserById(user.getUserId()); //refresh record to make sure editing latest
 		model.addAttribute("user",user);
-        return "/user/settings";	
+        return "user/settings";	
 	}
 	
 	/**
@@ -191,6 +146,7 @@ public class AccountController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/settings", method=RequestMethod.POST)
 	public String updateUserSettings(@ModelAttribute("user") User user, BindingResult result, ModelMap model) throws Exception {
         if (result.hasErrors()) {
@@ -199,24 +155,8 @@ public class AccountController {
 		this.userMgtService.updateUserSettings(user);
 		user = this.userMgtService.getUserById(user.getUserId()); //refresh record
 		model.addAttribute("user", user); //save latest user details to session
-		return "/user/settings"; 		
+		return "user/settings"; 		
 	}
-
-	/**
-	 * Get the Agent Creation confirmation form
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/user/createagent", method=RequestMethod.GET)
-	public String createAgent(HttpSession session) {
-		User user = (User) session.getAttribute("user");
-		if (user == null || user.getUserId()==0){
-			return "redirect:/home";
-		}
-        return "/user/createagent";	
-	}
-	
 
 	/**
 	 * Logs out the user by completing the session.
@@ -231,17 +171,6 @@ public class AccountController {
 		status.setComplete();
 		return "redirect:/home"; 		
 	}		
-	
-
-	/**
-	 * Cancels sign in, purges session data
-	 * @return home page
-	 */
-	@RequestMapping(value="/user/logincancel", method=RequestMethod.GET)
-	public String cancelLogin(SessionStatus status) {
-		status.setComplete();
-		return "redirect:/home";
-	}	
 
 	
 	

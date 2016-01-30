@@ -2,6 +2,7 @@ package info.rmapproject.webapp.service;
 
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
+import info.rmapproject.auth.oauth.OAuthProviderAccount;
 import info.rmapproject.auth.service.RMapAuthService;
 import info.rmapproject.auth.service.RMapAuthServiceFactory;
 
@@ -55,8 +56,6 @@ public class UserMgtServiceImpl implements UserMgtService {
 	
 	@Override
 	public int addUser(User user) {
-		//TODO:replace this with a real value!!
-		user.setPrimaryIdProvider("http://www.google.com");
 		return rMapAuthService.addUser(user);
 	}
 	
@@ -72,6 +71,12 @@ public class UserMgtServiceImpl implements UserMgtService {
 	@Override
 	public User getUserById(int userId) {
 		return rMapAuthService.getUserById(userId);
+	}
+	
+	@Override
+	public User getUserByProviderAccount(OAuthProviderAccount account){
+		return rMapAuthService.getUserByProviderAccount(account);
+		
 	}
 	
 }

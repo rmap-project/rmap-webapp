@@ -6,23 +6,15 @@
 </head>
 <body>
 <%@include file="/includes/bodystart.inc" %> 
-<h1>Sign in</h1>
+<h1>Login</h1>
 <br/>
-<form:form method="POST" modelAttribute="user">
-	<fieldset>
-	<legend>Enter a valid User ID</legend>
-	<form:label path="userId">User ID *</form:label> 
-	<form:errors path="userId" cssClass="validationErrors"/>
-	<form:input path="userId" style="width:500px;"/>
-	</fieldset>
-	<div id="formButtons">
-		<a href="<c:url value='/user/logincancel' />">Cancel</a>&nbsp;&nbsp;
-		<input type="submit" value="Login"/>
-	</div>	
-</form:form>
-
-
-
+<fieldset>
+<ul>
+<li><a href="<c:url value='/user/login/google'/>">Login with Google</a></li>
+<li><a href="<c:url value='/user/login/twitter'/>">Login with Twitter</a></li>
+<li><a href="<c:url value='/user/login/orcid'/>">Login with ORCiD</a></li>
+</ul>
+</fieldset>
 <br/>
 <br/>
 

@@ -14,8 +14,8 @@ public final class Constants  {
 	
     /**Default value by which to increment the node weight*/
     public static final int NODE_WEIGHT_INCREMENT=10;
-	    
-    
+	
+   
     /*public static final List<String> list = Collections.unmodifiableList(
     	    new ArrayList<String>() {{
     	        add("foo");

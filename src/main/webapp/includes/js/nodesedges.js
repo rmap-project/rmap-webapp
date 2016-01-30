@@ -51,7 +51,9 @@ function drawgraph(){
 	        stabilizationIterations: 3500,
 	        zoomExtentOnStabilize: true,
 	        navigation: true,
-	        keyboard: true,
+			interaction: {
+				  keyboard: true
+				},
 	        groups: {
 	            LITERAL: {
 	              shape: 'dot',
@@ -116,36 +118,9 @@ function drawgraph(){
 		setTimeout(function () {document.getElementById('loadbar').style.display = 'none';}, 320);
 	});
 }
- 
-function toggleLiterals()
-	{
-	var toggleButton = document.getElementById('toggleLiterals');
-	var toggleText = toggleButton.innerHTML;
-				
-	if (toggleText=="Hide literals") 
-		{		
-		nodes.forEach(function(node) {
-		    if (node.group == 'LITERAL')	{
-				nodes.remove({id: node.id}); 		    	
-		    };
-		});
-		edges.forEach(function(edge) {
-		    if (edge.targetgroup == 'LITERAL')	{
-		    	edges.remove({id: edge.id}); 		    	
-		    };
-		});
-		toggleButton.innerHTML="Show literals";
-		}
-	else 
-		{
-		drawgraph();
-		toggleButton.innerHTML="Hide literals";
-		}   
-	}
-
 
 function toggle(type)
-	{
+	{	
 	var toggleTypeBtn = document.getElementById('toggleTypes');
 	var toggleTypeText = toggleTypeBtn.innerHTML;
 	
@@ -155,28 +130,51 @@ function toggle(type)
 	if ((type=="TYPE" && toggleTypeText=="Hide types") 
 			|| (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
 		{		
-		nodes.forEach(function(node) {
-		    if (node.group == type)	{
-				nodes.remove({id: node.id}); 		    	
-		    };
-		});
-		edges.forEach(function(edge) {
-		    if (edge.targetgroup == type)	{
-		    	edges.remove({id: edge.id}); 		    	
-		    };
-		});
-		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Reset graph";}
-		if (type=="TYPE") {toggleTypeBtn.innerHTML="Reset graph";}
+		removeNodeType(type);
+		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Show literals";}
+		if (type=="TYPE") {toggleTypeBtn.innerHTML="Show types";}
 		}
 	else 
 		{
-		document.getElementById('loadbar').style.opacity = 100;
-		setTimeout(function () {document.getElementById('loadbar').style.display = 'inline';}, 320);
-		drawgraph();
-		toggleTypeBtn.innerHTML="Hide types";
-		toggleLiteralBtn.innerHTML="Hide literals";
-		}   
-	}
+		addNodeType(type);
+		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Hide literals";}
+		if (type=="TYPE") {toggleTypeBtn.innerHTML="Hide types";}
+	}   
+}
+//store and edges and nodes that have been removed
+var removedNodes= new vis.DataSet([]);
+var removedEdges = new vis.DataSet([]);
+
+function removeNodeType(type){
+	nodes.forEach(function(node) {
+		if (node.group == type)	{
+			nodes.remove({id: node.id});
+			removedNodes.add(node);
+		};
+	});
+	edges.forEach(function(edge) {
+		if (edge.targetgroup == type)	{
+			edges.remove({id: edge.id}); 	
+			removedEdges.add(edge);	    	
+		};
+	});
+}
+
+function addNodeType(type){
+	removedNodes.forEach(function(node) {
+		if (node.group == type)	{
+			nodes.add({id: node.id,title: node.title, label: node.label, value:node.value, group:node.group}); 		
+			removedNodes.remove({id: node.id});
+			
+		};
+	});
+	removedEdges.forEach(function(edge) {
+		if (edge.targetgroup == type)	{
+			edges.add({from: edge.from, to: edge.to, label:edge.label, arrows:edge.arrows, targetgroup:edge.targetgroup}); 		   
+			removedEdges.remove({id: edge.id}); 	
+		};
+	});
+}
 
 
 </script>

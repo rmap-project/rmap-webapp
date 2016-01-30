@@ -22,7 +22,7 @@
 	<form:input path="email" style="width:500px;"/>
 	</fieldset>
 	<div id="formButtons">
-		<a href="<c:url value='/user/signincancel' />">Cancel</a>&nbsp;&nbsp;
+		<a href="<c:url value='/user/logout' />">Cancel</a>&nbsp;&nbsp;
 		<input type="submit" value="Sign Up"/>
 	</div>	
 </form:form>

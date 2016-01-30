@@ -2,6 +2,7 @@ package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
+import info.rmapproject.webapp.auth.LoginRequired;
 import info.rmapproject.webapp.domain.KeyStatus;
 import info.rmapproject.webapp.service.UserMgtService;
 
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  */
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user","accesstoken"})
 public class ApiKeyController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -43,14 +44,15 @@ public class ApiKeyController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/keys", method=RequestMethod.GET)
 	public String showKeyList(Model model, HttpSession session) throws Exception {
 		User user = (User) session.getAttribute("user"); //retrieve logged in user
-		if (user == null || user.getUserId()==0){//no user
+		/*if (user == null || user.getUserId()==0){//no user
 			return "redirect:/home";
-		}
+		}*/
         model.addAttribute("apiKeyList", this.userMgtService.listApiKeyByUser(user.getUserId()));
-        return "/user/keys";	
+        return "user/keys";	
 	}
 	
 	/**
@@ -59,17 +61,18 @@ public class ApiKeyController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/key/new", method=RequestMethod.GET)
 	public String newKey(Model model, HttpSession session) throws Exception {
-		User user = (User) session.getAttribute("user"); //retrieve logged in user
+		/*User user = (User) session.getAttribute("user"); //retrieve logged in user
 		if (user == null || user.getUserId()==0){//no user
 			return "redirect:/home";
-		}
+		}*/
 		ApiKey apiKey = new ApiKey();
 		model.addAttribute("apiKey", apiKey);
 		model.addAttribute("keyStatuses", KeyStatus.values());
 		model.addAttribute("targetPage", "keynew");
-	    return "/user/key";        
+	    return "user/key";        
 	}
 	
 	/**
@@ -80,14 +83,15 @@ public class ApiKeyController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/key/new", method=RequestMethod.POST)
 	public String createKey(@Valid ApiKey apiKey, BindingResult result, ModelMap model, HttpSession session) throws Exception {
 		User user = (User) session.getAttribute("user"); //retrieve logged in user
-		if (user == null || user.getUserId()==0){//no user
+		/*if (user == null || user.getUserId()==0){//no user
 			return "redirect:/home";
-		}
+		}*/
         if (result.hasErrors()) {
-            return "/user/key";
+            return "user/key";
         }
 		apiKey.setUserId(user.getUserId());
 		this.userMgtService.addApiKey(apiKey);
@@ -102,12 +106,13 @@ public class ApiKeyController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.GET)
 	public String showKeyForm(@RequestParam("keyid") Integer keyId, Model model, HttpSession session) throws Exception {
 		User user = (User) session.getAttribute("user"); //retrieve logged in user
-		if (user == null || user.getUserId()==0){//no user
+		/*if (user == null || user.getUserId()==0){//no user
 			return "redirect:/home";
-		}
+		}*/
 		ApiKey apiKey = this.userMgtService.getApiKeyById(keyId);
 		if (apiKey.getUserId()==user.getUserId())	{
 			model.addAttribute("apiKey", this.userMgtService.getApiKeyById(keyId));
@@ -125,10 +130,11 @@ public class ApiKeyController {
 	 * @return
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.POST)
 	public String updateUser(@Valid ApiKey apiKey, BindingResult result, ModelMap model) throws Exception {
         if (result.hasErrors()) {
-            return "/user/key";
+            return "user/key";
         }
 		this.userMgtService.updateApiKey(apiKey);		
 		return "redirect:/user/keys"; 
@@ -140,6 +146,7 @@ public class ApiKeyController {
 	 * @param response
 	 * @throws Exception
 	 */
+	@LoginRequired
 	@RequestMapping(value="/user/key/download", method=RequestMethod.GET)
 	public @ResponseBody void downloadKey(@RequestParam("keyid") Integer keyId, 
 				HttpServletResponse response, HttpSession session) throws Exception {

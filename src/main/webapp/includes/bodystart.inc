@@ -9,7 +9,7 @@
 	<c:set var="uid" value="0"/>
 </c:if>
 <c:if test="${user.getName()==null||user.getName().length()==0}">
-	<c:set var="uname" value="[oh nameless one]"/>
+	<c:set var="uname" value=""/>
 </c:if>
 <c:if test="${user.getName()!=null&&user.getName().length()>0}">
 	<c:set var="uname" value="${user.getName()}"/>
@@ -46,11 +46,23 @@
 				</ul>
 			</li>
 			</c:if>
-			<c:if test="${uid==0}">
+			
+			<c:if test="${uid==0&&uname.length()>0}">
+			<li id="menu-item-4">
+				<a href="<c:url value='/user/settings'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
+				<ul class="dropdown-menu">
+					<li><a href="<c:url value='/user/logout'/>">Logout</a></li>
+				</ul>
+			</li>			
+			</c:if>
+			
+			<c:if test="${uid==0&&uname.length()==0}">
 			<li id="menu-item-4">
 				<a href="<c:url value='/user/login'/>">Login</a>
 				<ul class="dropdown-menu">
-					<li><a href="<c:url value='/user/signup'/>">Sign Up&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+					<li><a href="<c:url value='/user/login/google'/>">Log in with Google</a></li>
+					<li><a href="<c:url value='/user/login/twitter'/>">Log in with Twitter</a></li>
+					<li><a href="<c:url value='/user/login/orcid'/>">Log in with Orcid</a></li>
 				</ul>
 			</li>			
 			</c:if>
@@ -60,6 +72,5 @@
 </header>
 
 <div class="container">
-
 
 

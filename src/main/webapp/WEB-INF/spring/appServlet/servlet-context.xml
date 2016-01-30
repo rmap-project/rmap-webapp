@@ -34,11 +34,44 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!--<beans:bean id="rmapAuthService" class="info.rmapproject.auth.service.RMapAuthServiceFactory" factory-method="createService"/>-->
-    <beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>
+	<beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>
 	<beans:bean id="dataDisplayService" class="info.rmapproject.webapp.service.DataDisplayServiceImpl"/>
+			
+	<!-- twitter oauth config -->	
+	<beans:bean id="twitterOAuthConfig" class="info.rmapproject.auth.oauth.OAuthProviderConfig">
+		<beans:constructor-arg value="TWITTER"/>
+		<beans:constructor-arg value="twittercode" />
+		<beans:constructor-arg value="twittersecret"/>
+		<beans:constructor-arg value="https://dev.rmap-project.org/appdev/user/twittercallback"/>
+		<beans:constructor-arg value="com.github.scribejava.apis.TwitterApi"/>
+		<beans:constructor-arg value="https://api.twitter.com/1.1/account/verify_credentials.json"/>
+	</beans:bean>	  
+	<beans:bean id="oAuthProviderTwitter" class="info.rmapproject.auth.oauth.OAuthProviderTwitter">
+		<beans:property name="config" ref="twitterOAuthConfig"/>	
+	</beans:bean>
+	
+	<!-- google oauth config -->			
+	<beans:bean id="googleOAuthConfig" class="info.rmapproject.auth.oauth.OAuthProviderConfig">
+		<beans:constructor-arg value="GOOGLE"/>
+		<beans:constructor-arg value="googlecode" />
+		<beans:constructor-arg value="googlesecret"/>
+		<beans:constructor-arg value="http://dev.rmap-project.org/appdev/user/googlecallback"/>
+		<beans:constructor-arg value="com.github.scribejava.apis.GoogleApi20"/>
+		<beans:constructor-arg value="email"/>
+		<beans:constructor-arg value="https://www.googleapis.com/plus/v1/people/me"/>
+	</beans:bean>	
+	<beans:bean id="oAuthProviderGoogle" class="info.rmapproject.auth.oauth.OAuthProviderGoogle">
+		<beans:property name="config" ref="googleOAuthConfig"/>	
+	</beans:bean>
+		
+	<interceptors>
+		<interceptor>
+			<mapping path="/user/**"/>
+			<beans:bean class="info.rmapproject.webapp.auth.AuthenticationInterceptor" />
+		</interceptor>
+	</interceptors>
 							
-	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<aop:aspectj-autoproxy proxy-target-class="true"/>  
 	
 	
 </beans:beans>

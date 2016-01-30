@@ -14,7 +14,7 @@ Active work on RMap project began in April 2014.</p>
 <p>For a short introduction to the RMap Project, watch this video:</p>
 <br/>
 <p align="center">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/R0xCjScWbJs" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" style="border:1px;" src="https://www.youtube.com/embed/R0xCjScWbJs" allowfullscreen></iframe>
 </p>
 <br/>
 <br/>

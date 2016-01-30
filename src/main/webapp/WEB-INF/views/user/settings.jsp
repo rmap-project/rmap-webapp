@@ -55,7 +55,7 @@
 		</c:if>
 		</fieldset>	
 		<div id="formButtons">
-			<a href="/user/welcome">Cancel</a>&nbsp;&nbsp;
+			<a href="<c:url value='/user/welcome'/>">Cancel</a>&nbsp;&nbsp;
 			<input type="submit" value="Save Changes"/>
 		</div>	
 		
