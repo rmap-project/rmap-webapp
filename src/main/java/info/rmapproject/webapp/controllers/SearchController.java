@@ -3,6 +3,7 @@ package info.rmapproject.webapp.controllers;
 import info.rmapproject.webapp.domain.SearchCommand;
 
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,9 @@ public class SearchController {
 		redirectAttributes.addFlashAttribute("search", search);
 
 		String resourceUri = search.getSearch();
+		//may or may not be encoded, so to make sure decode first then encode again
 		resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
-		return "redirect:resources?uri=" + resourceUri; 		
+		return "redirect:/resources/" + URLEncoder.encode(resourceUri, "UTF-8");
 	}
 	
 }

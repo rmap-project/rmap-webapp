@@ -25,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
  */
 @Controller
 @SessionAttributes({"user","accesstoken"})
+
 public class AccountController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -172,6 +173,18 @@ public class AccountController {
 		return "redirect:/home"; 		
 	}		
 
+	/**
+	 * Page to create disco (placeholder)
+	 * @param user
+	 * @param result
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/user/disco", method=RequestMethod.GET)
+	public String createdisco(SessionStatus status) throws Exception {
+		return "user/disco"; 		
+	}		
 	
 	
 }

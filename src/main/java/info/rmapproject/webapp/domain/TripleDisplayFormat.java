@@ -4,7 +4,10 @@ import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.RMapUri;
 import info.rmapproject.core.model.RMapValue;
+import info.rmapproject.webapp.utils.Constants;
 import info.rmapproject.webapp.utils.WebappUtils;
+
+import java.net.URLEncoder;
 
 public class TripleDisplayFormat {
 
@@ -23,11 +26,11 @@ public class TripleDisplayFormat {
 	
 	public TripleDisplayFormat() {}
 
-	public TripleDisplayFormat(RMapTriple rmapTriple) {
+	public TripleDisplayFormat(RMapTriple rmapTriple) throws Exception {
 		
 		RMapResource subj = rmapTriple.getSubject();
 		String subjDisplay = subj.toString();
-		String subjLink = "resources?uri=" + subj.toString();
+		String subjLink = Constants.RESOURCE_PATH_PREFIX + URLEncoder.encode(subj.toString(), "UTF-8");
 		
 		RMapUri pred = rmapTriple.getPredicate();
 		String predDisplay = WebappUtils.replaceNamespace(pred.toString());
@@ -43,7 +46,7 @@ public class TripleDisplayFormat {
 		else {
 			//no link it the object is a literal or bnode.
 			if (obj instanceof RMapUri)	{
-				objLink = "resources?uri=" + obj.toString();
+				objLink = Constants.RESOURCE_PATH_PREFIX + URLEncoder.encode(obj.toString(), "UTF-8");
 			}
 		}
 		

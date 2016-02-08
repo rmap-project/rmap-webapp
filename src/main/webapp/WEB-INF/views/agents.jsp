@@ -1,24 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="my" uri="/WEB-INF/tld/rmapTagLibrary.tld" %>
 <c:set var="pageTitle" value="RMap Agent Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
 <%@include file="/includes/headstart.inc" %>
 <%@include file="/includes/js/nodesedges.js" %> 
 </head>       
 <body onload="drawgraph();">
-<%@include file="/includes/bodystart.inc" %>       
+<%@include file="/includes/bodystart.inc" %> 
+
+<c:set var="agentUri" value="${AGENT.getUri().toString()}"/>      
 <article class="twelve columns main-content">
 	<h1>RMap Agent Summary</h1>
-	<h2>About: <a href="agents?uri=${AGENT.getUri()}">${AGENT.getUri()}</a></h2>
-		
-	<c:if test="${AGENT.getName().length()>0}">
-		<h2>Name: <em>${AGENT.getName()}</em></h2>
-	</c:if>
-	<img src="includes/images/graphlegend.png" class="graphlegend" />
-	<div id="wrapper">
+	<h2>URI: <a href="<c:url value='/agents/${my:httpEncode(agentUri)}'/>">${agentUri}</a></h2>
+
+	<img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" />
+	<div id="visualWrapperSmall">
 		<div id="mynetwork" class="cysmall"></div>
-		<div id="loadbar">
-			<div class="outerBorder">
+		<div id="loadbar" class="loadbarSmall">
+			<div class="loadbarOuterBorder">
 				<div id="loadbarText">0%</div>
 				<div id="loadbarBorder">
 					<div id="loadbarBar"></div>
@@ -26,18 +26,38 @@
 			</div>
 		</div>
 	</div>
-	<a href="agents?uri=${AGENT.getUri()}&visualize=1">View larger visualization</a> | 
+
+	<a href="<c:url value='/agents/${my:httpEncode(agentUri)}?visualize=1'/>">View larger visualization</a> | 
 	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
 	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	
-	<h2>ID Provider</h2>
-	<p><a href="resources?uri=${AGENT.getIdProvider()}">${AGENT.getIdProvider()}</a></p>
 	
-	<h2>User Authentication ID</h2>
-	<p><a href="resources?uri=${AGENT.getAuthId()}">${AGENT.getAuthId()}</a></p>
-	
-	
+	<h2>Agent details</h2>
+	<div class="CSSTableGenerator">
+		<table>
+			<tr>
+				<td colspan="2">Agent Details</td>
+			</tr>		
+					
+		<c:if test="${AGENT.getName().length()>0}">
+			<tr>
+				<td>Name</td>
+				<td>${AGENT.getName()}</td>
+			</tr>
+		</c:if>	
+		<tr>
+			<td>ID Provider</td>
+			<td><a href="<c:url value='/resources/${my:httpEncode(AGENT.getIdProvider())}'/>">${AGENT.getIdProvider()}</a></td>
+		</tr>	
+		<tr>
+			<td>User Authentication ID</td>
+			<td><a href="<c:url value='/resources/${my:httpEncode(AGENT.getAuthId())}'/>">${AGENT.getAuthId()}</a></td>
+		</tr>	
+		
+		</table>
+	</div>
+
 	<c:set var="discos" value="${AGENT.getDiscos()}"/>
 	<c:set var="numdiscos" value="${AGENT.getNumDiscos()}"/>
 	<c:if test="${numdiscos>50}">
@@ -54,10 +74,10 @@
 			</tr>		
 			
 			<c:if test="${numdiscos>0}">			
-				<c:forEach var="disco" items="${discos}" begin="0" end="49">
+				<c:forEach var="discoId" items="${discos}" begin="0" end="49">
 					<tr>
 						<td>
-							<a href="discos?uri=${disco.toString()}">${disco.toString()}</a>
+							<a href="<c:url value='/discos/${my:httpEncodeUri(discoId)}'/>">${discoId}</a>
 						</td>
 					</tr>
 				</c:forEach>	
@@ -82,8 +102,8 @@
 			<em>(Displaying <strong>20</strong> out of <strong>${AGENT.getNumEvents()})</strong></em><br/><br/>
 		</c:if>
 		<ul>
-			<c:forEach var="event" items="${AGENT.getEvents()}" begin="0" end="19">
-				<li><a href="events?uri=${event.toString()}">${event.toString()}</a></li>
+			<c:forEach var="eventId" items="${AGENT.getEvents()}" begin="0" end="19">
+				<li><a href="<c:url value='/events/${my:httpEncodeUri(eventId)}'/>">${eventId}</a></li>
 			</c:forEach>
 		</ul>
 	</div>

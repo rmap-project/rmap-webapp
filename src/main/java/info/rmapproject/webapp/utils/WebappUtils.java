@@ -147,11 +147,7 @@ public class WebappUtils {
 		return allRdfTypes;
 	}
 	
-	
-	
-	
-
-	
+		
 	
 	
 }

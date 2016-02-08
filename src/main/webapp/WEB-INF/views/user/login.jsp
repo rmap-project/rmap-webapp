@@ -10,9 +10,9 @@
 <br/>
 <fieldset>
 <ul>
-<li><a href="<c:url value='/user/login/google'/>">Login with Google</a></li>
-<li><a href="<c:url value='/user/login/twitter'/>">Login with Twitter</a></li>
-<li><a href="<c:url value='/user/login/orcid'/>">Login with ORCiD</a></li>
+<li><a href="<c:url value='/user/login/google'/>"><nobr>Login with Google</nobr></a></li>
+<li><a href="<c:url value='/user/login/twitter'/>"><nobr>Login with Twitter</nobr></a></li>
+<li><a href="<c:url value='/user/login/orcid'/>"><nobr>Login with ORCID</nobr></a></li>
 </ul>
 </fieldset>
 <br/>

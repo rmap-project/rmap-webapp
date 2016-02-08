@@ -251,6 +251,9 @@ acronym { border-bottom:1px dotted #ccc; }
 }
 
 /*VISUALIZATION style*/
+
+.largecontainer {position: relative; width: 98%; margin: 0 auto; padding: 0; }
+
 #loadbar {
 	position:absolute;
 	top:0px;

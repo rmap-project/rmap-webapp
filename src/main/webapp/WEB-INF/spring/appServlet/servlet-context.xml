@@ -38,32 +38,76 @@
 	<beans:bean id="dataDisplayService" class="info.rmapproject.webapp.service.DataDisplayServiceImpl"/>
 			
 	<!-- twitter oauth config -->	
-	<beans:bean id="twitterOAuthConfig" class="info.rmapproject.auth.oauth.OAuthProviderConfig">
+	<beans:bean id="twitterOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
 		<beans:constructor-arg value="TWITTER"/>
-		<beans:constructor-arg value="twittercode" />
-		<beans:constructor-arg value="twittersecret"/>
+		<!-- dev -->
+		<beans:constructor-arg value="######################" />
+		<beans:constructor-arg value="#################################################"/>
 		<beans:constructor-arg value="https://dev.rmap-project.org/appdev/user/twittercallback"/>
-		<beans:constructor-arg value="com.github.scribejava.apis.TwitterApi"/>
+		
+		 <!-- demo
+		<beans:constructor-arg value="######################" />
+		<beans:constructor-arg value="#################################################"/>
+		<beans:constructor-arg value="https://demo.rmap-project.org/app/user/twittercallback"/>
+		 -->
+		<!-- test
+		<beans:constructor-arg value="######################" />
+		<beans:constructor-arg value="#################################################"/>
+		<beans:constructor-arg value="https://test.rmap-project.org/apptest/user/twittercallback"/>
+		 -->
+		<beans:constructor-arg value="com.github.scribejava.apis.TwitterApi.Authenticate"/>
 		<beans:constructor-arg value="https://api.twitter.com/1.1/account/verify_credentials.json"/>
 	</beans:bean>	  
-	<beans:bean id="oAuthProviderTwitter" class="info.rmapproject.auth.oauth.OAuthProviderTwitter">
+	<beans:bean id="oAuthProviderTwitter" class="info.rmapproject.webapp.auth.twitter.OAuthProviderTwitter">
 		<beans:property name="config" ref="twitterOAuthConfig"/>	
 	</beans:bean>
 	
 	<!-- google oauth config -->			
-	<beans:bean id="googleOAuthConfig" class="info.rmapproject.auth.oauth.OAuthProviderConfig">
+	<beans:bean id="googleOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
 		<beans:constructor-arg value="GOOGLE"/>
-		<beans:constructor-arg value="googlecode" />
-		<beans:constructor-arg value="googlesecret"/>
-		<beans:constructor-arg value="http://dev.rmap-project.org/appdev/user/googlecallback"/>
+		<beans:constructor-arg value="#########-######################.apps.googleusercontent.com" />
+		<beans:constructor-arg value="####-################"/>
+		<!-- dev-->
+		<beans:constructor-arg value="http://dev.rmap-project.org/appdev/user/googlecallback"/> 
+		<!-- test 
+		<beans:constructor-arg value="http://test.rmap-project.org/apptest/user/googlecallback"/>-->
+		<!-- demo
+		<beans:constructor-arg value="http://demo.rmap-project.org/app/user/googlecallback"/> -->
 		<beans:constructor-arg value="com.github.scribejava.apis.GoogleApi20"/>
 		<beans:constructor-arg value="email"/>
 		<beans:constructor-arg value="https://www.googleapis.com/plus/v1/people/me"/>
 	</beans:bean>	
-	<beans:bean id="oAuthProviderGoogle" class="info.rmapproject.auth.oauth.OAuthProviderGoogle">
+	<beans:bean id="oAuthProviderGoogle" class="info.rmapproject.webapp.auth.google.OAuthProviderGoogle">
 		<beans:property name="config" ref="googleOAuthConfig"/>	
 	</beans:bean>
-		
+	
+	<!-- orcid oauth config -->	
+	<beans:bean id="orcidOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
+		<beans:constructor-arg value="ORCID"/>
+		<beans:constructor-arg value="APP-#############" />
+		<beans:constructor-arg value="######-####-####-#####-############"/>
+		<!-- dev-->
+		<beans:constructor-arg value="https://dev.rmap-project.org/appdev/user/orcidcallback"/> 
+		<!-- test 
+		<beans:constructor-arg value="https://test.rmap-project.org/apptest/user/orcidcallback"/>-->
+		<!-- demo 
+		<beans:constructor-arg value="https://demo.rmap-project.org/app/user/orcidcallback"/>-->
+		<beans:constructor-arg value="info.rmapproject.webapp.auth.orcid.OrcidApi20"/>
+		<beans:constructor-arg value="/authenticate"/>
+		<beans:constructor-arg value="https://pub.orcid.org/v1.2/"/>
+	</beans:bean>	  
+	<beans:bean id="oAuthProviderOrcid" class="info.rmapproject.webapp.auth.orcid.OAuthProviderOrcid">
+		<beans:property name="config" ref="orcidOAuthConfig"/>	
+	</beans:bean>
+
+	<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+	  <beans:property name="order" value="-1"></beans:property>
+      <beans:property name="useSuffixPatternMatch" value="false"/>
+	  <beans:property name="urlPathHelper">
+	    <beans:bean class="info.rmapproject.webapp.utils.UrlPathHelperNonDecoding"/>
+	  </beans:property>
+	</beans:bean>
+
 	<interceptors>
 		<interceptor>
 			<mapping path="/user/**"/>

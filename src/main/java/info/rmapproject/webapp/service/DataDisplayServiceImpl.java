@@ -79,6 +79,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
     	
 		discoDTO.setDescription(disco.getDescription());
 		discoDTO.setCreator(disco.getCreator());
+		discoDTO.setProvGeneratedBy(disco.getProvGeneratedBy());
 		
 		discoDTO.setAgentVersions(rmapService.getDiSCOAllAgentVersions(discoUri));
 		discoDTO.setAllVersions(rmapService.getDiSCOAllVersions(discoUri));
@@ -201,13 +202,13 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	}
 	
 	@SuppressWarnings("unused")
-	private List<ResourceDescription> getResourceDescriptions(URI keyResource, List<RMapTriple> triples) {
+	private List<ResourceDescription> getResourceDescriptions(URI keyResource, List<RMapTriple> triples) throws Exception  {
 		List<URI> keyResources = new ArrayList<URI>();
 		keyResources.add(keyResource);
 		return getResourceDescriptions(keyResources, triples);		
 	}
 
-	private List<ResourceDescription> getResourceDescriptions(List<URI> keyResources, List<RMapTriple> triples) {
+	private List<ResourceDescription> getResourceDescriptions(List<URI> keyResources, List<RMapTriple> triples) throws Exception {
 		
 	    List<ResourceDescription> resourceDescriptions = new ArrayList<ResourceDescription>();
 

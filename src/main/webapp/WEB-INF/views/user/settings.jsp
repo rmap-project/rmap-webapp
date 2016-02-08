@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="/WEB-INF/tld/rmapTagLibrary.tld" prefix="my"  %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <c:set var="pageTitle" value="Settings | RMap Project"/>
 <c:set var="currPage" value="home"/>
@@ -71,7 +72,7 @@
     	<div class="boxedsidebar">
 			<h3>Your Agent ID is</h3><br/>
 			<c:if test="${user.hasRMapAgent()}">
-				<h3><a href="<c:url value='/agents?uri=${user.rmapAgentUri}'/>">&lt;${user.rmapAgentUri}&gt;</a></h3>
+				<h3><a href="<c:url value='/agents/${my:httpEncode(user.rmapAgentUri)}'/>">&lt;${user.rmapAgentUri}&gt;</a></h3>
 			</c:if>
 			<c:if test="${not user.hasRMapAgent()}">
 				<h3>&lt;none created&gt;</h3><br/>
@@ -84,12 +85,12 @@
     	<div class="boxedsidebar">
 			<h3>Your Agent's DiSCO ID is</h3><br/>
 			<c:if test="${user.hasRMapDiSCO()}">
-				<a href="<c:url value='/discos?uri=${user.rmapDiSCOUri}'/>">&lt;${user.rmapDiSCOUri}&gt;</a><br/><br/>
-				<em>(<a href="<c:url value='/user/createdisco'/>" >Update your DiSCO</a>)</em>
+				<a href="<c:url value='/discos/${my:httpEncode(user.rmapDiSCOUri)}'/>">&lt;${user.rmapDiSCOUri}&gt;</a><br/><br/>
+				<em>(<a href="<c:url value='/user/disco'/>" >Update your DiSCO</a>)</em>
 			</c:if>
 			<c:if test="${not user.hasRMapDiSCO()}">
 				<h3>&lt;none created&gt;</h3><br/>
-				<em><a href="<c:url value='/user/createdisco'/>">Create a DiSCO</a> to add details about your Agent</em>
+				<em><a href="<c:url value='/user/disco'/>">Create a DiSCO</a> to add details about your Agent</em>
 			</c:if>
 		</div>
 	</div>

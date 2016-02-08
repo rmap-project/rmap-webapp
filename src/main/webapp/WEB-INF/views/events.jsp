@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="my" uri="/WEB-INF/tld/rmapTagLibrary.tld" %>
 <c:set var="pageTitle" value="RMap Event Summary | RMap Project"/>
 <c:set var="currPage" value="search"/>
 <%@include file="/includes/headstart.inc" %>       
@@ -8,13 +9,15 @@
 <%@include file="/includes/bodystart.inc" %> 
 
 <h1>RMap Event Summary</h1>
-<h2>About: <a href="events?uri=${EVENT.getUri()}">${EVENT.getUri()}</a></h2>
-
-<h3><em>Event initiated by <a href="resources?uri=${EVENT.getAssociatedAgent()}">${EVENT.getAssociatedAgent()}</a></em></h3>
+<h2>URI: <a href="<c:url value='/events/${my:httpEncodeUri(EVENT.getUri())}'/>">${EVENT.getUri()}</a></h2>
 <div class="CSSTableGenerator">
 <table>
 	<tr>
 		<td colspan="2">Event details</td>
+	</tr>
+	<tr>
+		<td>Initiating Agent</td>
+		<td><a href="<c:url value='/agents/${my:httpEncode(EVENT.getAssociatedAgent())}'/>">${EVENT.getAssociatedAgent()}</a></td>
 	</tr>
 	<tr>
 		<td>Start time</td><td>${EVENT.getStartTime().toString()}</td>
@@ -45,7 +48,7 @@
 		</tr>
 		<c:forEach var="affected_resource" items="${EVENT.getResourcesAffected()}">
 			<tr>
-				<td><a href="resources?uri=${affected_resource.getKey()}&objpage=1">${affected_resource.getKey()}</a></td>
+				<td><a href="<c:url value='/resources/${my:httpEncode(affected_resource.getKey())}'/>">${affected_resource.getKey()}</a></td>
 				<td>${affected_resource.getValue()}</td>
 			</tr>
 		</c:forEach>

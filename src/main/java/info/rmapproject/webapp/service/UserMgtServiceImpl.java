@@ -2,7 +2,6 @@ package info.rmapproject.webapp.service;
 
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
-import info.rmapproject.auth.oauth.OAuthProviderAccount;
 import info.rmapproject.auth.service.RMapAuthService;
 import info.rmapproject.auth.service.RMapAuthServiceFactory;
 
@@ -74,8 +73,8 @@ public class UserMgtServiceImpl implements UserMgtService {
 	}
 	
 	@Override
-	public User getUserByProviderAccount(OAuthProviderAccount account){
-		return rMapAuthService.getUserByProviderAccount(account);
+	public User getUserByProviderAccount(String idProvider, String idProviderId){
+		return rMapAuthService.getUserByProviderAccount(idProvider,idProviderId);
 		
 	}
 	

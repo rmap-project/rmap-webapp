@@ -22,6 +22,7 @@ public class DiSCODTOImpl implements DiSCODTO {
 	private URI uri;
 	private String description;
 	private String creator;
+	private String provGeneratedBy;
 	private List <URI> agentVersions;
 	private List <URI> allVersions;
 	private RMapStatus status;
@@ -64,6 +65,23 @@ public class DiSCODTOImpl implements DiSCODTO {
 			this.creator="";
 		}
 	}
+
+	public String getProvGeneratedBy() {
+		return provGeneratedBy;
+	}
+	public void setProvGeneratedBy(String provGeneratedBy) {
+		this.provGeneratedBy = provGeneratedBy;
+	}
+	public void setProvGeneratedBy(RMapUri provGeneratedBy) {
+		if (provGeneratedBy!=null){
+			this.provGeneratedBy=provGeneratedBy.toString();
+		}
+		else {
+			this.provGeneratedBy="";
+		}
+	}
+	
+	
 	public List<URI> getAgentVersions() {
 		return agentVersions;
 	}
@@ -114,6 +132,8 @@ public class DiSCODTOImpl implements DiSCODTO {
 	public void setStatus(RMapStatus status) {
 		this.status = status;
 	}
+	
+
 	public List<URI> getEvents() {
 		return events;
 	}

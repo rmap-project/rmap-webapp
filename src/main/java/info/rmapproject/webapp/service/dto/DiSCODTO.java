@@ -23,4 +23,5 @@ public interface DiSCODTO {
 	public List<URI> getAggregatedResources();
 	public List<ResourceDescription> getResourceDescriptions();
 	public Graph getGraph();		
+	public String getProvGeneratedBy();
 }

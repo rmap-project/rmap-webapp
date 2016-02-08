@@ -10,7 +10,7 @@
 <h1>Resource Deleted</h1>
 
 <p>The requested resource has been deleted.</p>
-<p><a href="search">Goto Search page</a></p>
+<p><a href="<c:url value='/search'/>">Goto Search page</a></p>
 
 <br/>
 <br/>

@@ -1,10 +1,11 @@
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.User;
-import info.rmapproject.auth.oauth.OAuthProviderAccount;
-import info.rmapproject.auth.oauth.OAuthProviderGoogle;
-import info.rmapproject.auth.oauth.OAuthProviderName;
-import info.rmapproject.auth.oauth.OAuthProviderTwitter;
+import info.rmapproject.webapp.auth.OAuthProviderAccount;
+import info.rmapproject.webapp.auth.OAuthProviderName;
+import info.rmapproject.webapp.auth.google.OAuthProviderGoogle;
+import info.rmapproject.webapp.auth.orcid.OAuthProviderOrcid;
+import info.rmapproject.webapp.auth.twitter.OAuthProviderTwitter;
 import info.rmapproject.webapp.service.UserMgtService;
 
 import javax.servlet.http.HttpSession;
@@ -40,6 +41,11 @@ public class LoginController {
 	@Autowired
 	@Qualifier("oAuthProviderTwitter")
 	private OAuthProviderTwitter oAuthProviderTwitter;
+
+	@Autowired
+	@Qualifier("oAuthProviderOrcid")
+	private OAuthProviderOrcid oAuthProviderOrcid;
+	
 		
 	@RequestMapping(value={"/user/login/google"}, method = RequestMethod.GET)
 	public String logingoogle(HttpSession session) {
@@ -64,10 +70,15 @@ public class LoginController {
 		//load profile from request to service
 		OAuthProviderAccount account = 
 				oAuthProviderGoogle.loadOAuthProviderAccount(accessToken, idProvider);
+
+		String name = account.getDisplayName();	
+		String email = account.getAccountId();
+		String idProviderUrl = account.getProviderName().getIdProviderUrl();
+		String idProviderId = account.getAccountId();	
+		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
 				
-		User user = userMgtService.getUserByProviderAccount(account);
 		if (user==null){
-			session.setAttribute("user", new User(account));
+			session.setAttribute("user", new User(name, email, idProviderUrl, idProviderId));
 			return "redirect:/user/signup";
 		}
 		else {
@@ -75,6 +86,47 @@ public class LoginController {
 			return "redirect:/user/welcome";
 		}
 	}
+	
+
+	@RequestMapping(value={"/user/login/orcid"}, method = RequestMethod.GET)
+	public String loginorcid(HttpSession session) {
+		//see if we are already logged in
+		Token accessToken = (Token) session.getAttribute("accesstoken");
+		if(accessToken == null) {
+			//not logged in create service and redirect to orcid login
+			return "redirect:" + oAuthProviderOrcid.getAuthorizationUrl(null);
+		}
+		//already logged in goto welcome page
+		return "redirect:/user/welcome";
+	}
+	
+	@RequestMapping(value={"/user/orcidcallback"}, method = RequestMethod.GET)
+	public String orcidcallback(@RequestParam(value="code", required=false) String oauthVerifier, HttpSession session, Model model) {
+		
+		OAuthProviderName idProvider = OAuthProviderName.ORCID;
+		Token accessToken = oAuthProviderOrcid.createAccessToken(null, oauthVerifier);
+		// store access token as a session attribute
+		session.setAttribute("accesstoken", accessToken);
+		
+		//load profile from request to service
+		OAuthProviderAccount account = 
+				oAuthProviderOrcid.loadOAuthProviderAccount(accessToken, idProvider);
+
+		String name = account.getDisplayName();	
+		String idProviderUrl = account.getProviderName().getIdProviderUrl();
+		String idProviderId = account.getAccountId();	
+		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
+				
+		if (user==null){
+			session.setAttribute("user", new User(name, idProviderUrl, idProviderId));
+			return "redirect:/user/signup";
+		}
+		else {
+			session.setAttribute("user", user);		
+			return "redirect:/user/welcome";
+		}
+	}
+	
 
 	@RequestMapping(value={"/user/login/twitter"}, method = RequestMethod.GET)
 	public String logintwitter(HttpSession session) {
@@ -104,14 +156,17 @@ public class LoginController {
 				oAuthProviderTwitter.createAccessToken(requestToken,oauthVerifier);
 		// store access token as a session attribute
 		session.setAttribute("accesstoken", accessToken);
-		
 		//load profile from request to service
 		OAuthProviderAccount account = 
 				oAuthProviderTwitter.loadOAuthProviderAccount(accessToken, idProvider);
 				
-		User user = userMgtService.getUserByProviderAccount(account);
+		String name = account.getDisplayName();	
+		String idProviderUrl = account.getProviderName().getIdProviderUrl();
+		String idProviderId = account.getAccountId();	
+		
+		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
 		if (user==null){
-			session.setAttribute("user", new User(account));
+			session.setAttribute("user", new User(name, idProviderUrl, idProviderId));
 			return "redirect:/user/signup";
 		}
 		else {

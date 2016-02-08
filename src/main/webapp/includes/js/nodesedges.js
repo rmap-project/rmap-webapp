@@ -91,11 +91,10 @@ function drawgraph(){
 	};
 
 	network = new vis.Network(container, data, options);
-
 	network.on("click", function (params) {
 		nodes.forEach(function (node) {
 		  if (node.id==params.nodes && node.group!='LITERAL' && node.group!='TYPE'){
-			location.href="resources?uri=" + node.title;
+			location.href="../resources/" + encodeURIComponent(node.title);
 		    }
 		});
 	  });

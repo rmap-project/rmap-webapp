@@ -20,7 +20,7 @@
 	<div id="header-inner" class="container sixteen columns over">
 	<hgroup class="one-third column alpha">
 		<h1 id="site-title" class="site-title">
-			<a href="/home" id="logo"><img src="<c:url value='/includes/images/rmap_logo_small.png'/>" alt="RMap logo" height="80" width="160" /></a>
+			<a href="<c:url value='/home'/>" id="logo"><img src="<c:url value='/includes/images/rmap_logo_small.png'/>" alt="RMap logo" height="80" width="160" /></a>
 		</h1>
 	</hgroup>
 	<nav id="main-nav" class="two thirds column omega">
@@ -37,7 +37,7 @@
 			
 			<c:if test="${uid>0}">
 			<li id="menu-item-4">
-				<a href="<c:url value='/user/settings'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
+				<a href="<c:url value='/user/welcome'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
 				<ul class="dropdown-menu">
 					<li><a href="<c:url value='/user/keys'/>">Manage API keys</a></li>
 					<li><a href="<c:url value='/user/reports'/>">View API activity</a></li>
@@ -62,7 +62,7 @@
 				<ul class="dropdown-menu">
 					<li><a href="<c:url value='/user/login/google'/>">Log in with Google</a></li>
 					<li><a href="<c:url value='/user/login/twitter'/>">Log in with Twitter</a></li>
-					<li><a href="<c:url value='/user/login/orcid'/>">Log in with Orcid</a></li>
+					<li><a href="<c:url value='/user/login/orcid'/>">Log in with ORCID</a></li>
 				</ul>
 			</li>			
 			</c:if>

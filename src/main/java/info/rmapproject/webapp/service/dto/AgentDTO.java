@@ -16,6 +16,7 @@ public interface AgentDTO {
 	public List<URI> getEvents();
 	public List<URI> getDiscos();
 	public String getIdProvider();
+	public String getAuthId();
 	public Graph getGraph();
 	public int getNumEvents();
 	public int getNumDiscos();
