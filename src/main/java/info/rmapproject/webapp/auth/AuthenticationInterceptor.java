@@ -12,8 +12,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.scribejava.core.model.Token;
-
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
 //	private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
@@ -25,8 +23,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     	
     	if(method.getDeclaringClass().isAnnotationPresent(Controller.class)){ 
     		if(method.isAnnotationPresent(LoginRequired.class)) { 
-    	        Token accessToken = (Token) request.getSession().getAttribute("accesstoken");
-	    		if(accessToken == null) {
+    	        OAuthProviderAccount account = (OAuthProviderAccount) request.getSession().getAttribute("account");
+	    		if(account == null) {
 	    			response.sendRedirect(request.getContextPath() + "/user/login");
 	    			return false;
 	    		}   

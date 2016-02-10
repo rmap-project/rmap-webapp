@@ -2,6 +2,7 @@ package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.User;
 import info.rmapproject.webapp.auth.LoginRequired;
+import info.rmapproject.webapp.auth.OAuthProviderAccount;
 import info.rmapproject.webapp.service.UserMgtService;
 
 import javax.servlet.http.HttpSession;
@@ -24,8 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
  *
  */
 @Controller
-@SessionAttributes({"user","accesstoken"})
-
+@SessionAttributes({"user","account"})
 public class AccountController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -117,6 +117,11 @@ public class AccountController {
         }
 		int userId = this.userMgtService.addUser(user);
 		user = this.userMgtService.getUserById(userId); //refresh record
+		
+		OAuthProviderAccount account = (OAuthProviderAccount) session.getAttribute("account");	
+		//create identity provider that is associated with the account
+		this.userMgtService.addUserIdentityProvider(userId, account);
+		
 		session.setAttribute("user", user); //save latest user details to session
 		return "redirect:/user/welcome"; 		
 	}	

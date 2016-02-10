@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  */
 @ControllerAdvice
-@SessionAttributes("user")
+@SessionAttributes({"user","account"})
 public class ExceptionHandlingController {
 
 	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);

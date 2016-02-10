@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user","account"})
 public class DataDisplayController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);

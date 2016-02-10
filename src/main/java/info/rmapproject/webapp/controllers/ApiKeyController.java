@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  *
  */
 @Controller
-@SessionAttributes({"user","accesstoken"})
+@SessionAttributes({"user","account"})
 public class ApiKeyController {
 	
 	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);

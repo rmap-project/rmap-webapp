@@ -22,7 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  *
  */
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user","account"})
 @RequestMapping(value="/search")
 public class SearchController {
 

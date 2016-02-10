@@ -2,6 +2,7 @@ package info.rmapproject.webapp.service;
 
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
+import info.rmapproject.webapp.auth.OAuthProviderAccount;
 
 import java.util.List;
 /**
@@ -17,5 +18,6 @@ public interface UserMgtService {
 	public int addUser(User user);
 	public void updateUserSettings(User user);
 	public User getUserById(int userId);
-	public User getUserByProviderAccount(String idProvider, String idProviderId);
+	public User loadUserFromOAuthAccount(OAuthProviderAccount account);
+	public int addUserIdentityProvider(int userId, OAuthProviderAccount account);
 }

@@ -1,7 +1,7 @@
 package info.rmapproject.webapp.auth;
 
 public enum OAuthProviderName {
-	GOOGLE ("http://www.google.com"),
+	GOOGLE ("https://www.google.com"),
 	ORCID ("http://orcid.org"),
 	TWITTER ("https://twitter.com/");
 	

@@ -8,7 +8,6 @@ import com.github.scribejava.core.model.OAuthConstants;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.utils.OAuthEncoder;
 
-
 public class OrcidApi20 extends DefaultApi20  {
 
     private static final String AUTH_URL = "https://www.orcid.org/oauth/authorize/";
@@ -37,6 +36,5 @@ public class OrcidApi20 extends DefaultApi20  {
         return new JsonTokenExtractor();
     }
 
-	
 
 }

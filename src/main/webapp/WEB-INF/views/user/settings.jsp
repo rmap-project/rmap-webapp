@@ -40,7 +40,7 @@
 				</c:if>
 				&nbsp;&nbsp;&nbsp;&nbsp;rdf:type &lt;rmap:Agent&gt;<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;foaf:name "${user.name}"<br/>
-				&nbsp;&nbsp;&nbsp;&nbsp;rmap:identityProvider &lt;${user.primaryIdProvider}&gt;<br/>
+				&nbsp;&nbsp;&nbsp;&nbsp;rmap:identityProvider &lt;${account.getProviderUrl()}&gt;<br/>
 				&nbsp;&nbsp;&nbsp;&nbsp;rmap:userAuthId &lt;${user.authKeyUri}&gt;<br/>
 			</p>	
 		</c:if>

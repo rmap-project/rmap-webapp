@@ -2,9 +2,12 @@ package info.rmapproject.webapp.service;
 
 import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
+import info.rmapproject.auth.model.UserIdentityProvider;
 import info.rmapproject.auth.service.RMapAuthService;
 import info.rmapproject.auth.service.RMapAuthServiceFactory;
+import info.rmapproject.webapp.auth.OAuthProviderAccount;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -73,9 +76,42 @@ public class UserMgtServiceImpl implements UserMgtService {
 	}
 	
 	@Override
-	public User getUserByProviderAccount(String idProvider, String idProviderId){
-		return rMapAuthService.getUserByProviderAccount(idProvider,idProviderId);
+	public User loadUserFromOAuthAccount(OAuthProviderAccount account){
+		String idProviderUrl = account.getProviderName().getIdProviderUrl();
+		String idProviderId = account.getAccountId();	
+
+		//first attempt to load id provider
+		UserIdentityProvider userIdProvider = rMapAuthService.getUserIdProvider(idProviderUrl, idProviderId);
+		
+		if (userIdProvider == null) {
+			return null;
+		}		
+
+		userIdProvider.setLastAuthenticatedDate(new Date());
+		rMapAuthService.updateUserIdProvider(userIdProvider);
+		//TODO: need to throw exception if no user found.
+		
+		User user = rMapAuthService.getUserById(userIdProvider.getUserId());
+		user.setLastAccessedDate(new Date());
+		rMapAuthService.updateUser(user);
+		return user;
 		
 	}
+	
+	@Override
+	public int addUserIdentityProvider(int userId, OAuthProviderAccount account) {
+		UserIdentityProvider newAccount = new UserIdentityProvider();
+		
+		newAccount.setUserId(userId);
+		newAccount.setIdentityProviderId(account.getProviderName().getIdProviderUrl());
+		newAccount.setProviderAccountPublicId(account.getAccountPublicId());
+		newAccount.setProviderAccountInternalId(account.getAccountId());
+		newAccount.setProviderAccountDisplayName(account.getDisplayName());
+		newAccount.setCreatedDate(new Date());
+		newAccount.setLastAuthenticatedDate(new Date());
+				
+		return rMapAuthService.addUserIdProvider(newAccount);		
+	}
+	
 	
 }

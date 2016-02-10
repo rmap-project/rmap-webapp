@@ -1,7 +1,5 @@
 package info.rmapproject.webapp.auth;
 
-import info.rmapproject.webapp.auth.google.OAuthProviderGoogle;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +10,7 @@ import com.github.scribejava.core.oauth.OAuthService;
 
 public abstract class OAuthProvider {
 
-	protected static final Logger logger = LoggerFactory.getLogger(OAuthProviderGoogle.class);
+	protected static final Logger logger = LoggerFactory.getLogger(OAuthProvider.class);
 
 	protected OAuthProviderConfig config;
 	protected OAuthService service = null;
@@ -22,6 +20,10 @@ public abstract class OAuthProvider {
 	}
 	
 	public OAuthProvider(OAuthProviderConfig config) {
+		this.config = config;
+	}
+
+	public void setConfig(OAuthProviderConfig config){
 		this.config = config;
 	}
 	

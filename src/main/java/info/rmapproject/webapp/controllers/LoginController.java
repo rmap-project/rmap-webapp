@@ -27,7 +27,7 @@ import com.github.scribejava.core.model.Token;
  *
  */
 @Controller
-@SessionAttributes({"user","accesstoken"})
+@SessionAttributes({"user","account"})
 public class LoginController {
 
 	/**Service for user management*/
@@ -50,8 +50,8 @@ public class LoginController {
 	@RequestMapping(value={"/user/login/google"}, method = RequestMethod.GET)
 	public String logingoogle(HttpSession session) {
 		//see if we are already logged in
-		Token accessToken = (Token) session.getAttribute("accesstoken");
-		if(accessToken == null) {
+		OAuthProviderAccount account = (OAuthProviderAccount) session.getAttribute("account");
+		if(account == null) {
 			//not logged in create service and redirect to google login
 			return "redirect:" + oAuthProviderGoogle.getAuthorizationUrl(null);
 		}
@@ -64,21 +64,20 @@ public class LoginController {
 				
 		OAuthProviderName idProvider = OAuthProviderName.GOOGLE;
 		Token accessToken = oAuthProviderGoogle.createAccessToken(null, oauthVerifier);
-		// store access token as a session attribute
-		session.setAttribute("accesstoken", accessToken);
-		
+
 		//load profile from request to service
 		OAuthProviderAccount account = 
 				oAuthProviderGoogle.loadOAuthProviderAccount(accessToken, idProvider);
-
-		String name = account.getDisplayName();	
-		String email = account.getAccountId();
-		String idProviderUrl = account.getProviderName().getIdProviderUrl();
-		String idProviderId = account.getAccountId();	
-		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
+		
+		// store access token as a session attribute
+		session.setAttribute("account", account);
+		
+		User user = userMgtService.loadUserFromOAuthAccount(account);
 				
 		if (user==null){
-			session.setAttribute("user", new User(name, email, idProviderUrl, idProviderId));
+			String name = account.getDisplayName();	
+			String email = account.getAccountPublicId();
+			session.setAttribute("user", new User(name, email));
 			return "redirect:/user/signup";
 		}
 		else {
@@ -91,8 +90,8 @@ public class LoginController {
 	@RequestMapping(value={"/user/login/orcid"}, method = RequestMethod.GET)
 	public String loginorcid(HttpSession session) {
 		//see if we are already logged in
-		Token accessToken = (Token) session.getAttribute("accesstoken");
-		if(accessToken == null) {
+		OAuthProviderAccount account = (OAuthProviderAccount) session.getAttribute("account");
+		if(account == null) {
 			//not logged in create service and redirect to orcid login
 			return "redirect:" + oAuthProviderOrcid.getAuthorizationUrl(null);
 		}
@@ -104,21 +103,18 @@ public class LoginController {
 	public String orcidcallback(@RequestParam(value="code", required=false) String oauthVerifier, HttpSession session, Model model) {
 		
 		OAuthProviderName idProvider = OAuthProviderName.ORCID;
-		Token accessToken = oAuthProviderOrcid.createAccessToken(null, oauthVerifier);
-		// store access token as a session attribute
-		session.setAttribute("accesstoken", accessToken);
 		
+		Token accessToken = oAuthProviderOrcid.createAccessToken(null, oauthVerifier);
+
 		//load profile from request to service
 		OAuthProviderAccount account = 
 				oAuthProviderOrcid.loadOAuthProviderAccount(accessToken, idProvider);
-
-		String name = account.getDisplayName();	
-		String idProviderUrl = account.getProviderName().getIdProviderUrl();
-		String idProviderId = account.getAccountId();	
-		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
-				
+		// store account as a session attribute
+		session.setAttribute("account", account);
+		
+		User user = userMgtService.loadUserFromOAuthAccount(account);
 		if (user==null){
-			session.setAttribute("user", new User(name, idProviderUrl, idProviderId));
+			session.setAttribute("user", new User(account.getDisplayName()));
 			return "redirect:/user/signup";
 		}
 		else {
@@ -131,8 +127,8 @@ public class LoginController {
 	@RequestMapping(value={"/user/login/twitter"}, method = RequestMethod.GET)
 	public String logintwitter(HttpSession session) {
 		//see if we are already logged in
-		Token accessToken = (Token) session.getAttribute("accesstoken");
-		if(accessToken == null) {
+		OAuthProviderAccount account = (OAuthProviderAccount) session.getAttribute("account");
+		if(account == null) {
 			Token requestToken = oAuthProviderTwitter.createRequestToken();
 			session.setAttribute("requesttoken", requestToken);
 			//not logged in create service and redirect to twitter login
@@ -154,19 +150,18 @@ public class LoginController {
 		OAuthProviderName idProvider = OAuthProviderName.TWITTER;
 		Token accessToken = 
 				oAuthProviderTwitter.createAccessToken(requestToken,oauthVerifier);
-		// store access token as a session attribute
-		session.setAttribute("accesstoken", accessToken);
+
 		//load profile from request to service
 		OAuthProviderAccount account = 
 				oAuthProviderTwitter.loadOAuthProviderAccount(accessToken, idProvider);
-				
-		String name = account.getDisplayName();	
-		String idProviderUrl = account.getProviderName().getIdProviderUrl();
-		String idProviderId = account.getAccountId();	
 		
-		User user = userMgtService.getUserByProviderAccount(idProviderUrl, idProviderId);
+		// store access token as a session attribute
+		session.setAttribute("account", account);
+				
+		User user = userMgtService.loadUserFromOAuthAccount(account);
+		
 		if (user==null){
-			session.setAttribute("user", new User(name, idProviderUrl, idProviderId));
+			session.setAttribute("user", new User(account.getDisplayName()));
 			return "redirect:/user/signup";
 		}
 		else {
