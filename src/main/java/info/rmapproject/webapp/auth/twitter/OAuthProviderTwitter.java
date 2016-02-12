@@ -33,7 +33,7 @@ public class OAuthProviderTwitter extends OAuthProvider{
 		String jsonString = oauthResponse.getBody();
 		JSONObject root = new JSONObject(jsonString);
 
-		String accountId = root.getString("id"); 
+		String accountId = String.valueOf(root.getInt("id")); 
 		String displayName = root.getString("name");
 		String publicId = root.getString("screen_name"); 
 		String profilePath = provider.getIdProviderUrl() + "/" + publicId; 

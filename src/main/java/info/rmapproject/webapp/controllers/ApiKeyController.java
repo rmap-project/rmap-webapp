@@ -1,9 +1,9 @@
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.ApiKey;
+import info.rmapproject.auth.model.KeyStatus;
 import info.rmapproject.auth.model.User;
 import info.rmapproject.webapp.auth.LoginRequired;
-import info.rmapproject.webapp.domain.KeyStatus;
 import info.rmapproject.webapp.service.UserMgtService;
 
 import java.io.OutputStream;

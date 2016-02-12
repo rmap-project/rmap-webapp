@@ -23,7 +23,7 @@
 		<form:errors path="email" cssClass="validationErrors"/>
 		<form:input path="email"/>
 
-		<br/><br/>
+		<br/>
 						
 		<c:if test="${not user.hasRMapAgent()}">
 			<form:label path="doRMapAgentSync">Generate RMap:Agent</form:label>

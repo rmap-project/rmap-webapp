@@ -453,6 +453,7 @@ legend {
 }
 
 
+label{padding-top:15px;}
 select {padding: 5px; border: 1px solid #ccc; margin: 5px 0; width:507px;}
 input[type=text] {padding: 5px; width:500px;border: 1px solid #ccc; margin: 5px 0;}
 textarea {width:500px;padding: 5px; margin: 5px 0; resize: vertical;}

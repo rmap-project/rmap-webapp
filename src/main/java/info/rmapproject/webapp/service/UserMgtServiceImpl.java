@@ -87,10 +87,17 @@ public class UserMgtServiceImpl implements UserMgtService {
 			return null;
 		}		
 
+		//update any details that may have changed since last login, and update last auth date
+		userIdProvider.setLastAuthenticatedDate(new Date());
+		userIdProvider.setProviderAccountPublicId(account.getAccountPublicId());
+		userIdProvider.setProviderAccountDisplayName(account.getDisplayName());
+		userIdProvider.setProviderAccountProfileUrl(account.getProfilePath());
 		userIdProvider.setLastAuthenticatedDate(new Date());
 		rMapAuthService.updateUserIdProvider(userIdProvider);
+		
 		//TODO: need to throw exception if no user found.
 		
+		//get the user associated with the idprovider login and update the accessed date for the user
 		User user = rMapAuthService.getUserById(userIdProvider.getUserId());
 		user.setLastAccessedDate(new Date());
 		rMapAuthService.updateUser(user);
@@ -105,8 +112,9 @@ public class UserMgtServiceImpl implements UserMgtService {
 		newAccount.setUserId(userId);
 		newAccount.setIdentityProviderId(account.getProviderName().getIdProviderUrl());
 		newAccount.setProviderAccountPublicId(account.getAccountPublicId());
-		newAccount.setProviderAccountInternalId(account.getAccountId());
+		newAccount.setProviderAccountId(account.getAccountId());
 		newAccount.setProviderAccountDisplayName(account.getDisplayName());
+		newAccount.setProviderAccountProfileUrl(account.getProfilePath());
 		newAccount.setCreatedDate(new Date());
 		newAccount.setLastAuthenticatedDate(new Date());
 				
