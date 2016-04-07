@@ -108,7 +108,7 @@ public class Graph {
 		targetKey = targetKey.replaceAll("[ ]+", " ");
 		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey), sourceNodeType);
 		Integer target = addNode(WebappUtils.replaceNamespace(targetKey), targetNodeType);
-		edge.setLabel(WebappUtils.replaceNamespace(label));
+		edge.setLabel(label);
 		edge.setSource(source);
 		edge.setTarget(target);
 		edge.setTargetNodeType(targetNodeType);

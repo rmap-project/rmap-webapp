@@ -32,6 +32,12 @@
 		<td>Event type</td><td>${EVENT.getType()}</td>
 	</tr>		
 	
+<c:if test="${EVENT.getAssociatedKey().length()>0}">
+	<tr>
+		<td>Event description</td><td>${EVENT.getAssociatedKey()}</td>
+	</tr>	
+</c:if>
+
 <c:if test="${EVENT.getDescription().length()>0}">
 	<tr>
 		<td>Event description</td><td>${EVENT.getDescription()}</td>

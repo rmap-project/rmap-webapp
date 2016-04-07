@@ -392,6 +392,7 @@ div.loadbarOuterBorder {
 
 
 fieldset { 
+	background-color:white;
     display: block;
     margin-left: 2px;
     margin-right: 2px;

@@ -1,7 +1,7 @@
 package info.rmapproject.webapp.utils;
 
 public final class Constants  {
-	//TODO:read these in from properties file
+	//TODO:read configurable constants in from properties file
 	
 	/**File path for error message text*/
 	public static final String ERROR_MSGS_PROPS_FILEPATH = "/error_msgs.properties";
@@ -17,14 +17,12 @@ public final class Constants  {
 
     /**Prefix for resource path*/
     public static final String RESOURCE_PATH_PREFIX="/resources/";
-   
-    /*public static final List<String> list = Collections.unmodifiableList(
-    	    new ArrayList<String>() {{
-    	        add("foo");
-    	        add("bar");
-    	        // etc
-    	    }});*/
     
+    /**Default maximum number of records returned from triple store in one go*/
+    public static final int QUERY_LIMIT=200;
+    /**Default offset for triple store queries*/
+    public static final int QUERY_OFFSET=0;
+       
     
 	private Constants(){
 		    //this prevents even the native class from calling this ctor as well :

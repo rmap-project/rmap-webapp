@@ -17,7 +17,7 @@
 		<dependency>
 			<groupId>info.rmapproject</groupId>
 			<artifactId>rmap-core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>info.rmapproject</groupId>

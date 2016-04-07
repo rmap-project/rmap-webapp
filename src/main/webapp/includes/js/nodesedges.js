@@ -10,7 +10,7 @@ function drawgraph(){
 			 ]);
 	edges = new vis.DataSet([
 			 <c:forEach var="edge" items="${OBJECT_EDGES}" varStatus="loop">
-			 {from: ${edge.getSource()}, to: ${edge.getTarget()}, label:'${edge.getLabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
+			 {from: ${edge.getSource()}, to: ${edge.getTarget()}, title:'${edge.getLabel()}', label:'${edge.getShortlabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
 			 </c:forEach>
 			 ]);
 			
@@ -54,40 +54,44 @@ function drawgraph(){
 			interaction: {
 				  keyboard: true
 				},
-	        groups: {
-	            LITERAL: {
-	              shape: 'dot',
-	              color: '#C0C0C0' // grey
-	            },
-	            DISCO: {
-	              shape: 'square',
-	              color: "#91CC00" // rmap green
-	            },
-	            DATASET: {
-	              shape: 'dot',
-	              color: "#0000FF" // blue
-	            },
-	            TEXT: {
-	              shape: 'dot',
-	              color: "#4F4FCD" // rmap purple
-	            },
-	            CODE: {
+		        groups: {
+		            LITERAL: {
 		              shape: 'dot',
-		              color: "#FF9900" // orange
+		              color: '#C0C0C0' // grey
 		            },
-	            AGENT: {
-	            	shape: 'dot',
-	            	color: '#C5000B' // red
-	            },
-	            TYPE: {
-	            	shape: 'dot',
-	            	color: '#FFFF00' // yellow
-	            },
-	            UNDEFINED: {
+		            DISCO: {
+		              shape: 'square',
+		              color: "#91CC00" // rmap green
+		            },
+		            DATASET: {
 		              shape: 'dot',
-		              color: "#87CEFA" // light blue
-		            }
-	          }
+		              color: "#C392E9" // pinkish purple
+		            },
+		            TEXT: {
+		              shape: 'dot',
+		              color: "#4F4FCD" // rmap purple
+		            },
+		            PHYSICALOBJECT: {
+		              shape: 'dot',
+		              color: "#996600" // brown
+		            },
+		            CODE: {
+			              shape: 'dot',
+			              color: "#FF9900" // orange
+			            },
+		            AGENT: {
+		            	shape: 'dot',
+		            	color: '#C5000B' // red
+		            },
+		            TYPE: {
+		            	shape: 'dot',
+		            	color: '#FFFF00' // yellow
+		            },
+		            UNDEFINED: {
+			              shape: 'dot',
+			              color: "#87CEFA" // light blue
+			            }
+		          }
 	};
 
 	network = new vis.Network(container, data, options);

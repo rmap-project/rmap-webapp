@@ -1,16 +1,8 @@
 package info.rmapproject.webapp.utils;
 
-import info.rmapproject.core.model.RMapStatus;
-import info.rmapproject.core.rmapservice.RMapService;
-import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
-import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.ORE;
-import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.PROV;
-import info.rmapproject.core.rmapservice.impl.openrdf.vocabulary.RMAP;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import info.rmapproject.core.vocabulary.impl.openrdf.ORE;
+import info.rmapproject.core.vocabulary.impl.openrdf.PROV;
+import info.rmapproject.core.vocabulary.impl.openrdf.RMAP;
 
 import org.openrdf.model.vocabulary.DC;
 import org.openrdf.model.vocabulary.DCTERMS;
@@ -60,6 +52,9 @@ public class WebappUtils {
 		else if (url.contains("http://purl.org/spar/pso/")) {
 			return url.replace("http://purl.org/spar/pso/",  "pso:");		
 		}
+		else if (url.contains("http://purl.org/spar/pro/")) {
+			return url.replace("http://purl.org/spar/pro/",  "pro:");		
+		}
 		else if (url.contains("http://purl.org/vocab/frbr/core#")) {
 			return url.replace("http://purl.org/vocab/frbr/core#",  "frbr:");		
 		}
@@ -75,6 +70,9 @@ public class WebappUtils {
 		else if (url.contains("http://purl.org/spar/fabio/")) {
 			return url.replace("http://purl.org/spar/fabio/","fabio:");						
 		}
+		else if (url.contains("http://www.w3.org/2006/vcard/ns#")) {
+			return url.replace("http://www.w3.org/2006/vcard/ns#","vcard:");						
+		}
 		else if (url.contains("http://prismstandard.org/namespaces/basic/2.0/")) {
 			return url.replace("http://prismstandard.org/namespaces/basic/2.0/", "prism:");
 		}
@@ -85,69 +83,6 @@ public class WebappUtils {
 			return url;
 		}
 	}
-	
-	/**
-	 * Determine whether the URI provided is an RMap object, or just a regular resource.
-	 * @param uriResourceUri
-	 * @return
-	 * @throws Exception
-	 */
-	public static String getRMapType(URI uriResourceUri) throws Exception{
-
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
-		rmapService.closeConnection();
 		
-		if (types != null) {
-			for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
-				Set<URI> contexttypes = type.getValue();
-				for (URI contexttype : contexttypes) {
-					if (contexttype.toString().equals(RMAP.DISCO.toString())) {
-						return "disco";
-					}
-					else if (contexttype.toString().equals(RMAP.AGENT.toString())) {
-						return "agent";
-					}
-					else if (contexttype.toString().equals(RMAP.EVENT.toString())) {
-						return "event";
-					}
-				}
-			}
-		}
-		//otherwise
-		return "";
-	}
-		
-		
-	/**
-	 * Get a list of links for all RDF types associated with the resource
-	 * @param uriResourceUri
-	 * @return
-	 * @throws Exception
-	 * (NOT CURRENTLY USED, LEAVING IT HERE IN CASE WE DECIDE TO USE IT ANYWHERE)
-	 */
-	public static Map<URI,String> getAllRdfTypes(URI uriResourceUri) throws Exception{
-	
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(uriResourceUri, RMapStatus.ACTIVE);
-		rmapService.closeConnection();
-		
-		Map <URI, String> allRdfTypes = new HashMap<URI, String>();
-	
-		for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
-			Set<URI> contexttypes = type.getValue();
-			for (URI contexttype : contexttypes) {
-				if (contexttype!=null && !allRdfTypes.containsKey(contexttype)) {
-					String link = "<a href=\"" + contexttype.toString() + "\">" 
-									+ replaceNamespace(contexttype.toString()) + "</a>";
-					allRdfTypes.put(contexttype, link);
-				}
-			}
-		}
-		return allRdfTypes;
-	}
-	
-		
-	
 	
 }

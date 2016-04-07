@@ -4,14 +4,13 @@ import info.rmapproject.auth.model.ApiKey;
 import info.rmapproject.auth.model.User;
 import info.rmapproject.auth.model.UserIdentityProvider;
 import info.rmapproject.auth.service.RMapAuthService;
-import info.rmapproject.auth.service.RMapAuthServiceFactory;
+import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.webapp.auth.OAuthProviderAccount;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,52 +26,49 @@ public class UserMgtServiceImpl implements UserMgtService {
 
 //private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 	
-	private static RMapAuthService rMapAuthService;
+	@Autowired 
+	private RMapService rmapService;
 	
-	@PostConstruct
-	private void init() {
-		if (rMapAuthService ==null) {
-			rMapAuthService = RMapAuthServiceFactory.createService();			
-		}
-	}
+	@Autowired
+	private RMapAuthService rmapAuthService;
 
 	@Override
 	public void addApiKey(ApiKey apiKey) {
-		rMapAuthService.addApiKey(apiKey);
+		rmapAuthService.addApiKey(apiKey);
 	}
 	
 	@Override
 	public void updateApiKey(ApiKey apiKey) {
-		rMapAuthService.updateApiKey(apiKey);
+		rmapAuthService.updateApiKey(apiKey);
 	}
 	
 	@Override
 	public ApiKey getApiKeyById(int apiKeyId) {
-		return rMapAuthService.getApiKeyById(apiKeyId);
+		return rmapAuthService.getApiKeyById(apiKeyId);
 	}
 	
 	@Override
 	public List<ApiKey> listApiKeyByUser(int userId) {
-		return rMapAuthService.listApiKeyByUser(userId);
+		return rmapAuthService.listApiKeyByUser(userId);
 	}
 	
 	@Override
 	public int addUser(User user) {
-		return rMapAuthService.addUser(user);
+		return rmapAuthService.addUser(user);
 	}
 	
 	@Override
 	public void updateUserSettings(User user) {
-		rMapAuthService.updateUserSettings(user);
+		rmapAuthService.updateUserSettings(user);
 		if (user.hasRMapAgent() && user.isDoRMapAgentSync()){
 			// update the RMap Agent
-			rMapAuthService.createOrUpdateAgentFromUser(user);
+			rmapAuthService.createOrUpdateAgentFromUser(user.getUserId());
 		}
 	}
 	
 	@Override
 	public User getUserById(int userId) {
-		return rMapAuthService.getUserById(userId);
+		return rmapAuthService.getUserById(userId);
 	}
 	
 	@Override
@@ -81,7 +77,7 @@ public class UserMgtServiceImpl implements UserMgtService {
 		String idProviderId = account.getAccountId();	
 
 		//first attempt to load id provider
-		UserIdentityProvider userIdProvider = rMapAuthService.getUserIdProvider(idProviderUrl, idProviderId);
+		UserIdentityProvider userIdProvider = rmapAuthService.getUserIdProvider(idProviderUrl, idProviderId);
 		
 		if (userIdProvider == null) {
 			return null;
@@ -93,14 +89,14 @@ public class UserMgtServiceImpl implements UserMgtService {
 		userIdProvider.setProviderAccountDisplayName(account.getDisplayName());
 		userIdProvider.setProviderAccountProfileUrl(account.getProfilePath());
 		userIdProvider.setLastAuthenticatedDate(new Date());
-		rMapAuthService.updateUserIdProvider(userIdProvider);
+		rmapAuthService.updateUserIdProvider(userIdProvider);
 		
 		//TODO: need to throw exception if no user found.
 		
 		//get the user associated with the idprovider login and update the accessed date for the user
-		User user = rMapAuthService.getUserById(userIdProvider.getUserId());
+		User user = rmapAuthService.getUserById(userIdProvider.getUserId());
 		user.setLastAccessedDate(new Date());
-		rMapAuthService.updateUser(user);
+		rmapAuthService.updateUser(user);
 		return user;
 		
 	}
@@ -118,7 +114,7 @@ public class UserMgtServiceImpl implements UserMgtService {
 		newAccount.setCreatedDate(new Date());
 		newAccount.setLastAuthenticatedDate(new Date());
 				
-		return rMapAuthService.addUserIdProvider(newAccount);		
+		return rmapAuthService.addUserIdProvider(newAccount);		
 	}
 	
 	

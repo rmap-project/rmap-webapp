@@ -5,7 +5,6 @@ import info.rmapproject.webapp.service.dto.AgentDTO;
 import info.rmapproject.webapp.service.dto.DiSCODTO;
 import info.rmapproject.webapp.service.dto.EventDTO;
 import info.rmapproject.webapp.service.dto.ResourceDTO;
-import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -61,7 +60,24 @@ public class DataDisplayController {
 	    
 		return "discos";
 	}	
+
+	@RequestMapping(value="/discos/{uri}/edit", method = RequestMethod.GET)
+	public String discoeditable(@PathVariable(value="uri") String discoUri, Model model) throws Exception {
 	
+		DiSCODTO discoDTO = dataDisplayService.getDiSCODTO(discoUri);
+
+	    model.addAttribute("DISCO",discoDTO);	    
+	    model.addAttribute("OBJECT_NODES", discoDTO.getGraph().getNodes());
+	    model.addAttribute("OBJECT_EDGES", discoDTO.getGraph().getEdges());
+    
+		return "discoedit";
+	}	
+
+	@RequestMapping(value="/discos/new", method = RequestMethod.GET)
+	public String disconew(Model model) throws Exception {
+	    model.addAttribute("NEWDISCO",true);	        
+		return "disconew";
+	}		
 	
 
 	/**
@@ -126,9 +142,8 @@ public class DataDisplayController {
 			//decode http first
 			resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
 			//TODO: need to handle exception properly
-			String rmapType = WebappUtils.getRMapType(new URI(resourceUri));
+			String rmapType = dataDisplayService.getRMapTypeDisplayName(new URI(resourceUri));
 			if (rmapType.length()>0){
-
 				return "redirect:/" + rmapType + "s/" + URLEncoder.encode(resourceUri, "UTF-8");
 			}
 		}

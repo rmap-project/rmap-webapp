@@ -1,11 +1,11 @@
 package info.rmapproject.webapp.service;
 
 import info.rmapproject.core.exception.RMapObjectNotFoundException;
+import info.rmapproject.core.model.RMapIri;
 import info.rmapproject.core.model.RMapLiteral;
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
-import info.rmapproject.core.model.RMapUri;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.model.agent.RMapAgent;
 import info.rmapproject.core.model.disco.RMapDiSCO;
@@ -18,21 +18,17 @@ import info.rmapproject.core.model.event.RMapEventTombstone;
 import info.rmapproject.core.model.event.RMapEventType;
 import info.rmapproject.core.model.event.RMapEventUpdate;
 import info.rmapproject.core.model.event.RMapEventUpdateWithReplace;
+import info.rmapproject.core.model.request.RMapSearchParams;
 import info.rmapproject.core.rmapservice.RMapService;
-import info.rmapproject.core.rmapservice.RMapServiceFactoryIOC;
+import info.rmapproject.core.utils.Terms;
 import info.rmapproject.webapp.domain.Graph;
 import info.rmapproject.webapp.domain.NodeType;
 import info.rmapproject.webapp.domain.ResourceDescription;
 import info.rmapproject.webapp.domain.TripleDisplayFormat;
 import info.rmapproject.webapp.service.dto.AgentDTO;
-import info.rmapproject.webapp.service.dto.AgentDTOImpl;
 import info.rmapproject.webapp.service.dto.DiSCODTO;
-import info.rmapproject.webapp.service.dto.DiSCODTOImpl;
 import info.rmapproject.webapp.service.dto.EventDTO;
-import info.rmapproject.webapp.service.dto.EventDTOImpl;
 import info.rmapproject.webapp.service.dto.ResourceDTO;
-import info.rmapproject.webapp.service.dto.ResourceDTOImpl;
-import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -46,6 +42,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.openrdf.model.vocabulary.RDF;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,18 +56,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class DataDisplayServiceImpl implements DataDisplayService {
 
-//private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
 	//private static final Logger logger = LoggerFactory.getLogger(DiSCOServiceImpl.class);
+
+	RMapService rmapService;
 	
+	@Autowired 
+	public DataDisplayServiceImpl(RMapService rmapService){
+		this.rmapService = rmapService;
+	}
+		
 	@Override
 	public DiSCODTO getDiSCODTO(String sDiscoUri) throws Exception {
-		
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		
-		DiSCODTOImpl discoDTO = new DiSCODTOImpl();
+				
+		DiSCODTO discoDTO = new DiSCODTO();
 		
 		sDiscoUri = URLDecoder.decode(sDiscoUri, "UTF-8");
+		
 		URI discoUri = new URI(sDiscoUri);	
 		discoDTO.setUri(discoUri);
 		
@@ -104,10 +105,8 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 
 	@Override
 	public AgentDTO getAgentDTO(String sAgentUri) throws Exception {
-		
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		
-		AgentDTOImpl agentDTO = new AgentDTOImpl();
+				
+		AgentDTO agentDTO = new AgentDTO();
 		
 		sAgentUri = URLDecoder.decode(sAgentUri, "UTF-8");
 		URI agentUri = new URI(sAgentUri);	
@@ -119,7 +118,10 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		agentDTO.setEvents(rmapService.getAgentEvents(agentUri));
 		agentDTO.setIdProvider(agent.getIdProvider().getStringValue());
 		agentDTO.setAuthId(agent.getAuthId().getStringValue());
-		agentDTO.setDiscos(rmapService.getAgentDiSCOs(agentUri, RMapStatus.ACTIVE));
+		
+		RMapSearchParams params = new RMapSearchParams();
+		params.setStatusCode(RMapStatus.ACTIVE);
+		agentDTO.setDiscos(rmapService.getAgentDiSCOs(agentUri, params));
 		
 	    Graph graph = createAgentGraph(agentUri,  agentDTO.getName(),  agentDTO.getIdProvider(), agentDTO.getAuthId());	  
 	    agentDTO.setGraph(graph);
@@ -130,18 +132,20 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	}
 
 	public EventDTO getEventDTO(String sEventUri) throws Exception {
-	
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		
-		EventDTOImpl eventDTO = new EventDTOImpl();
+			
+		EventDTO eventDTO = new EventDTO();
 
 		sEventUri = URLDecoder.decode(sEventUri, "UTF-8");
 		URI eventUri = new URI(sEventUri);
 		eventDTO.setUri(eventUri);
 		
 		RMapEvent event = rmapService.readEvent(eventUri);
-		eventDTO.setDescription(event.getDescription());
+		RMapValue description = event.getDescription();
+		if (description!=null) {
+			eventDTO.setDescription(description);
+		}	
 		eventDTO.setAssociatedAgent(event.getAssociatedAgent());
+		eventDTO.setAssociatedKey(event.getAssociatedKey());
 		eventDTO.setTargetType(event.getEventTargetType());
 		eventDTO.setStartTime(event.getStartTime());
 		eventDTO.setEndTime(event.getEndTime());
@@ -157,14 +161,17 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	}
 	
 	public ResourceDTO getResourceDTO(String sResourceUri) throws Exception{
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		ResourceDTOImpl resourceDTO = new ResourceDTOImpl();
+		ResourceDTO resourceDTO = new ResourceDTO();
 
 		sResourceUri = URLDecoder.decode(sResourceUri, "UTF-8");
+
 		URI resourceUri = new URI(sResourceUri);
 		resourceDTO.setUri(resourceUri);
 
-		List<RMapTriple> rmapTriples = rmapService.getResourceRelatedTriples(resourceUri, RMapStatus.ACTIVE);
+		RMapSearchParams params = new RMapSearchParams();
+		params.setStatusCode(RMapStatus.ACTIVE);
+		
+		List<RMapTriple> rmapTriples = rmapService.getResourceRelatedTriples(resourceUri, params);
     	
 		//if there are no triples, don't load an empty screen, show a not found error.
     	if (rmapTriples.size()==0)	{
@@ -187,8 +194,8 @@ public class DataDisplayServiceImpl implements DataDisplayService {
     	}
     	    		
 	    resourceDTO.setResourceDescription(resourceDescription);
-
-	    List <URI> relatedDiSCOs = rmapService.getResourceRelatedDiSCOs(resourceUri, RMapStatus.ACTIVE);
+	    
+	    List <URI> relatedDiSCOs = rmapService.getResourceRelatedDiSCOs(resourceUri, params);
 	    resourceDTO.setRelatedDiSCOs(relatedDiSCOs);
 	    
 	    //used to create visual graph
@@ -257,8 +264,6 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 			List<RMapTriple> triples) throws Exception {
 		Graph graph = new Graph();
 		String sDiscoUri = discoUri.toString();
-
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
 		
 		graph.addEdge(sDiscoUri,"rmap:DiSCO","rdf:type", NodeType.DISCO, NodeType.TYPE);
 		
@@ -268,9 +273,12 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		if (discoCreator.length()>0) {
 		graph.addEdge(sDiscoUri, discoCreator,"dcterms:creator", NodeType.DISCO, NodeType.AGENT);
 		}
+
+		RMapSearchParams params = new RMapSearchParams();
+		params.setStatusCode(RMapStatus.ACTIVE);
 		
 		for (URI aggregate : aggregatedResources) {
-			Set <URI> rdfTypes = rmapService.getResourceRdfTypes(aggregate, discoUri);
+			Set <URI> rdfTypes = rmapService.getResourceRdfTypesInDiSCO(aggregate, discoUri);
 			NodeType targetNodeType = NodeType.getNodeType(rdfTypes);
 			graph.addEdge(sDiscoUri, aggregate.toString(),"ore:aggregates", NodeType.DISCO, targetNodeType);
 		}
@@ -330,7 +338,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 				sourceRdfTypes = getResourceRDFTypes(subject, contextUri);
 				sourceNodeType = NodeType.getNodeType(sourceRdfTypes);
 			}
-			if (object instanceof RMapUri && targetNodeType==null){
+			if (object instanceof RMapIri && targetNodeType==null){
 				targetRdfTypes = getResourceRDFTypes(new URI(object.toString()), contextUri);		
 				targetNodeType = NodeType.getNodeType(targetRdfTypes);			
 			}
@@ -348,18 +356,19 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		if (contextUri==null){
 			return getResourceRDFTypes(resourceUri);
 		}
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
-		Set<URI> rdfTypes = rmapService.getResourceRdfTypes(resourceUri, contextUri);
+		Set<URI> rdfTypes = rmapService.getResourceRdfTypesInDiSCO(resourceUri, contextUri);
 		rmapService.closeConnection();
 		return rdfTypes;
 	}
 	
 	
 	private Set<URI> getResourceRDFTypes(URI resource) throws Exception{
-		RMapService rmapService = RMapServiceFactoryIOC.getFactory().createService();
 		Set<URI> rdfTypes = new HashSet<URI>();
 		
-		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resource, RMapStatus.ACTIVE);
+		RMapSearchParams params=new RMapSearchParams();
+		params.setStatusCode(RMapStatus.ACTIVE);
+
+		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resource, params);
 		
 		if (types!=null){
 			for (Map.Entry<URI, Set<URI>> type : types.entrySet()){
@@ -383,68 +392,93 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 	
 	    if (eventType == RMapEventType.CREATION){
 	    	RMapEventCreation creationEvent = (RMapEventCreation) event;
-	    	List<RMapUri> uris = creationEvent.getCreatedObjectIds();
-	    	for (RMapUri uri : uris){
-	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	List<RMapIri> uris = creationEvent.getCreatedObjectIds();
+	    	for (RMapIri uri : uris){
+	    		rmapService.isDiSCOId(new java.net.URI(uri.toString()));
+	    		String type = getRMapTypeDisplayName(uri);
 	    		resourcesAffected.put(uri.toString(), "Created " + type);
 	    	}
 	    }
 	    else if (eventType == RMapEventType.DELETION)	{
 	    	RMapEventDeletion deletionEvent = (RMapEventDeletion) event;
-	    	List<RMapUri> uris = deletionEvent.getDeletedObjectIds();
-	    	for (RMapUri uri : uris){
-	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	List<RMapIri> uris = deletionEvent.getDeletedObjectIds();
+	    	for (RMapIri uri : uris){
+	    		String type = getRMapTypeDisplayName(uri);
 	    		resourcesAffected.put(uri.toString(), "Deleted " + type);
 	    	}
 	    }
 	    else if (eventType == RMapEventType.TOMBSTONE)	{
 	    	RMapEventTombstone tombstoneEvent = (RMapEventTombstone) event;
-	    	RMapUri uri = tombstoneEvent.getTombstonedResourceId();
-			String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	RMapIri uri = tombstoneEvent.getTombstonedResourceId();
+			String type = getRMapTypeDisplayName(uri);
 			resourcesAffected.put(uri.toString(), "Tombstoned " + type);
 	    }
 	    else if (eventType == RMapEventType.DERIVATION)	{
 	    	RMapEventDerivation derivationEvent = (RMapEventDerivation) event;
-	    	List<RMapUri> createdUris = derivationEvent.getCreatedObjectIds();
-	    	for (RMapUri uri : createdUris){
-	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	List<RMapIri> createdUris = derivationEvent.getCreatedObjectIds();
+	    	for (RMapIri uri : createdUris){
+	    		String type = getRMapTypeDisplayName(uri);
 	    		resourcesAffected.put(uri.toString(), "Created " + type);
 	    	}
-	    	RMapUri derivedUri = derivationEvent.getDerivedObjectId();
-			String type = WebappUtils.getRMapType(new URI(derivedUri.toString()));
-			resourcesAffected.put(derivedUri.toString(), "Derived " + type);	    	
+	    	RMapIri derivedUri = derivationEvent.getDerivedObjectId();
+			String type = getRMapTypeDisplayName(derivedUri);
+			resourcesAffected.put(derivedUri.toString(), "Derived " + type);	
+			
+	    	RMapIri sourceObjectUri = derivationEvent.getSourceObjectId();
+	    	type = getRMapTypeDisplayName(sourceObjectUri);
+			resourcesAffected.put(sourceObjectUri.toString(), "Source " + type);	    	
 	    }
 	    else if (eventType == RMapEventType.UPDATE)	{
 	    	RMapEventUpdate updateEvent = (RMapEventUpdate) event;	   
-	    	List<RMapUri> createdUris = updateEvent.getCreatedObjectIds();
-	    	for (RMapUri uri : createdUris){
-	    		String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	List<RMapIri> createdUris = updateEvent.getCreatedObjectIds();
+	    	for (RMapIri uri : createdUris){
+	    		String type = getRMapTypeDisplayName(uri);
 	    		resourcesAffected.put(uri.toString(), "Created " + type);
 	    	}
-	    	RMapUri derivedUri = updateEvent.getDerivedObjectId();
-			String type = WebappUtils.getRMapType(new URI(derivedUri.toString()));
+	    	RMapIri derivedUri = updateEvent.getDerivedObjectId();
+			String type = getRMapTypeDisplayName(derivedUri);
 			resourcesAffected.put(derivedUri.toString(), "Derived " + type);	
 			
-	    	RMapUri inactivatedUri = updateEvent.getInactivatedObjectId();
-	    	type = WebappUtils.getRMapType(new URI(inactivatedUri.toString()));
+	    	RMapIri inactivatedUri = updateEvent.getInactivatedObjectId();
+	    	type = getRMapTypeDisplayName(inactivatedUri);
 			resourcesAffected.put(inactivatedUri.toString(), "Inactivated " + type);	  	    			    	
 	    }
 	    else if (eventType == RMapEventType.INACTIVATION)	{
 	    	RMapEventInactivation inactivateEvent = (RMapEventInactivation) event;	    
-	    	RMapUri uri = inactivateEvent.getInactivatedObjectId();
-			String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	RMapIri uri = inactivateEvent.getInactivatedObjectId();
+			String type = getRMapTypeDisplayName(uri);
 			resourcesAffected.put(uri.toString(), "Inactivated " + type);	  
 	    }
 	    else if (eventType == RMapEventType.REPLACE)	{
 	    	RMapEventUpdateWithReplace replaceEvent = (RMapEventUpdateWithReplace) event;	    
-	    	RMapUri uri = replaceEvent.getUpdatedObjectId();
-			String type = WebappUtils.getRMapType(new URI(uri.toString()));
+	    	RMapIri uri = replaceEvent.getUpdatedObjectId();
+			String type = getRMapTypeDisplayName(uri);
 			resourcesAffected.put(uri.toString(), "Replaced " + type);	  
 	    }
 	    
 	    return resourcesAffected;
 	}
+
+	private String getRMapTypeDisplayName(RMapIri resourceUri) throws Exception {
+		URI uriResourceUri = new URI(resourceUri.toString());
+		return getRMapTypeDisplayName(uriResourceUri);
+	}
 	
-	
+	@Override
+	public String getRMapTypeDisplayName(URI resourceUri) throws Exception {
+
+		if (rmapService.isDiSCOId(resourceUri)) {
+			return Terms.RMAP_DISCO;			
+		}
+		if (rmapService.isAgentId(resourceUri)) {
+			return Terms.RMAP_AGENT;			
+		}
+		if (rmapService.isEventId(resourceUri)) {
+			return Terms.RMAP_EVENT;			
+		}
+		//otherwise
+		return "";
+	}
+			
 		
 }

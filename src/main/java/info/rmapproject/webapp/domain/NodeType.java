@@ -8,17 +8,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 public enum NodeType {
 	DISCO("rmap:DiSCO"), 
 	DATASET("fabio:Dataset"), 
 	AGENT("foaf:Agent", "foaf:Person", "foaf:Organization", "rmap:Agent", "dcterms:Agent"), 
 	TEXT("dcmitype:Text", "fabio:ConferencePaper", "fabio:JournalArticle"), 
 	CODE("dcmitype:Software", "fabio:Algorithm"), 
+	PHYSICALOBJECT("dcmitype:PhysicalObject"), 
 	LITERAL, 
 	UNDEFINED, 
 	TYPE;
 
 	//TODO:move namespace and type configurations to a properties file
+	//TODO:consider other categories - Still image, Moving image, Audio, Physical Object
 	
 	private final List<String> values;
 

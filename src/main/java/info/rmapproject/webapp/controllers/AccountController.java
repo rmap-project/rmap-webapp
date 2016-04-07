@@ -33,41 +33,7 @@ public class AccountController {
 	/**Service for user management*/
 	@Autowired
 	private UserMgtService userMgtService;
-	
-	
-
-//	/**
-//	 * NOT CURRENTLY USED - MAY DELETE IF NOT ADDED BACK IN
-//	 * Converts String result from form fields to their relevant object types and binds the field to the model.
-//	 * Specifically String to UserAgentUri object and String to UserAgentType object
-//	 * @param request
-//	 * @param binder
-//	 * @throws Exception
-//	 */
-//	@InitBinder("user") 
-//	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-//		
-//		binder.registerCustomEditor(Set.class, "userAgentUris", new CustomCollectionEditor(Set.class) {
-//			@Override
-//			protected Object convertElement(Object element) {
-//				String uri = (String) element;
-//				UserAgentUri userAgentUri = new UserAgentUri();
-//				userAgentUri.setUri(uri);
-//				return userAgentUri;
-//			}
-//			});
-//		
-//		binder.registerCustomEditor(Set.class, "userAgentTypes", new CustomCollectionEditor(Set.class) {
-//			@Override
-//			protected Object convertElement(Object element) {
-//			String uri = (String) element;
-//			UserAgentType userAgentType = new UserAgentType();
-//			userAgentType.setUri(uri);
-//			return userAgentType;
-//			}
-//			});
-//	}	
-	
+		
 	
 	/***************************
 	 * 

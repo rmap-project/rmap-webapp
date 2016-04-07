@@ -22,25 +22,21 @@
 	<beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>
 	<beans:bean id="dataDisplayService" class="info.rmapproject.webapp.service.DataDisplayServiceImpl"/>
 
-	<!-- Handles HTTP GET requests for /includes/** by efficiently serving up static resources in the ${webappRoot}/includes directory -->
-	<resources mapping="/includes/**" location="/includes/" />
-
-	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
-	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<beans:property name="prefix" value="/WEB-INF/views/" />
-		<beans:property name="suffix" value=".jsp" />
-	</beans:bean>
-
+	<!-- can set these, or let core take care of these.
+    <bean id="rmapService" class="info.rmapproject.core.rmapservice.impl.openrdf.ORMapService"/>
+    <bean id="rmapIdService" class="info.rmapproject.core.idservice.ArkIdService"/>
+    <bean id="rdfHandler" class="info.rmapproject.core.rdfhandler.impl.openrdf.RioRDFHandler"/> 
+	<beans:bean id="triplestore" class="info.rmapproject.core.rmapservice.impl.openrdf.triplestore.SesameSailMemoryTriplestore"/>
+-->
 
 	<!-- OAUTH Configuration -->		
 	<!-- twitter oauth config -->	
 	<beans:bean id="twitterOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
 		<beans:constructor-arg value="TWITTER"/>
 		<!-- dev -->
-		<beans:constructor-arg value="##################" />
-		<beans:constructor-arg value="##################################################"/>
+		<beans:constructor-arg value="###################" />
+		<beans:constructor-arg value="##################################"/>
 		<beans:constructor-arg value="https://dev.rmap-project.org/appdev/user/twittercallback"/>
-				 
 		<beans:constructor-arg value="com.github.scribejava.apis.TwitterApi.Authenticate"/>
 		<beans:constructor-arg value="https://api.twitter.com/1.1/account/verify_credentials.json"/>
 	</beans:bean>	  
@@ -51,8 +47,8 @@
 	<!-- google oauth config -->			
 	<beans:bean id="googleOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
 		<beans:constructor-arg value="GOOGLE"/>
-		<beans:constructor-arg value="#############################.apps.googleusercontent.com" />
-		<beans:constructor-arg value="########################"/>
+		<beans:constructor-arg value="###################################.apps.googleusercontent.com" />
+		<beans:constructor-arg value="###############################"/>
 		<!-- dev -->
 		<beans:constructor-arg value="http://dev.rmap-project.org/appdev/user/googlecallback"/>
 		<beans:constructor-arg value="com.github.scribejava.apis.GoogleApi20"/>
@@ -66,8 +62,8 @@
 	<!-- orcid oauth config -->	
 	<beans:bean id="orcidOAuthConfig" class="info.rmapproject.webapp.auth.OAuthProviderConfig">
 		<beans:constructor-arg value="ORCID"/>
-		<beans:constructor-arg value="##############" />
-		<beans:constructor-arg value="#############################"/>
+		<beans:constructor-arg value="######################" />
+		<beans:constructor-arg value="##########################################"/>
 		<!-- dev -->
 		<beans:constructor-arg value="https://dev.rmap-project.org/appdev/user/orcidcallback"/>
 		<beans:constructor-arg value="info.rmapproject.webapp.auth.orcid.OrcidApi20"/>
@@ -77,20 +73,5 @@
 	<beans:bean id="oAuthProviderOrcid" class="info.rmapproject.webapp.auth.orcid.OAuthProviderOrcid">
 		<beans:property name="config" ref="orcidOAuthConfig"/>	
 	</beans:bean>
-
-	<beans:bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-	  <beans:property name="order" value="-1"></beans:property>
-      <beans:property name="useSuffixPatternMatch" value="false"/>
-	  <beans:property name="urlPathHelper">
-	    <beans:bean class="info.rmapproject.webapp.utils.UrlPathHelperNonDecoding"/>
-	  </beans:property>
-	</beans:bean>
-
-	<interceptors>
-		<interceptor>
-			<mapping path="/user/**"/>
-			<beans:bean class="info.rmapproject.webapp.auth.AuthenticationInterceptor" />
-		</interceptor>
-	</interceptors>	
 	
 </beans:beans>

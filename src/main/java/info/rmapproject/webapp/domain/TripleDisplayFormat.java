@@ -2,7 +2,7 @@ package info.rmapproject.webapp.domain;
 
 import info.rmapproject.core.model.RMapResource;
 import info.rmapproject.core.model.RMapTriple;
-import info.rmapproject.core.model.RMapUri;
+import info.rmapproject.core.model.RMapIri;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.webapp.utils.Constants;
 import info.rmapproject.webapp.utils.WebappUtils;
@@ -15,7 +15,7 @@ public class TripleDisplayFormat {
 	private String subjectDisplay;
 	private String subjectLink;
 	
-	private RMapUri predicate;
+	private RMapIri predicate;
 	private String predicateDisplay;
 	private String predicateLink;
 	
@@ -32,7 +32,7 @@ public class TripleDisplayFormat {
 		String subjDisplay = subj.toString();
 		String subjLink = Constants.RESOURCE_PATH_PREFIX + URLEncoder.encode(subj.toString(), "UTF-8");
 		
-		RMapUri pred = rmapTriple.getPredicate();
+		RMapIri pred = rmapTriple.getPredicate();
 		String predDisplay = WebappUtils.replaceNamespace(pred.toString());
 		String predLink = pred.toString();
 		
@@ -45,7 +45,7 @@ public class TripleDisplayFormat {
 		}
 		else {
 			//no link it the object is a literal or bnode.
-			if (obj instanceof RMapUri)	{
+			if (obj instanceof RMapIri)	{
 				objLink = Constants.RESOURCE_PATH_PREFIX + URLEncoder.encode(obj.toString(), "UTF-8");
 			}
 		}
@@ -63,8 +63,8 @@ public class TripleDisplayFormat {
 		this.objectLink=objLink;		
 	}	
 
-	public TripleDisplayFormat(RMapUri subject, String subjectDisplay, String subjectLink, 
-								RMapUri predicate, String predicateDisplay, String predicateLink, 
+	public TripleDisplayFormat(RMapIri subject, String subjectDisplay, String subjectLink, 
+								RMapIri predicate, String predicateDisplay, String predicateLink, 
 								RMapValue object, String objectDisplay, String objectLink) {
 		this.subject=subject;
 		this.subjectDisplay=subjectDisplay;
@@ -101,10 +101,10 @@ public class TripleDisplayFormat {
 		this.subjectLink = subjectLink;
 	}		
 	
-	public RMapUri getPredicate() {
+	public RMapIri getPredicate() {
 		return predicate;
 	}
-	public void setPredicate(RMapUri predicate) {
+	public void setPredicate(RMapIri predicate) {
 		this.predicate = predicate;
 	}
 	public String getPredicateDisplay() {

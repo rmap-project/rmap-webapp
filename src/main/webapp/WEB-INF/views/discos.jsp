@@ -84,7 +84,7 @@
 								<td>
 									<c:set var="objectLink" value="${property.getValue().getObjectLink()}"/>
 									<c:if test="${objectLink.length()>0}">
-										<a href="${objectLink}">
+										<a href="<c:url value='${objectLink}'/>">
 									</c:if>
 									${property.getValue().getObjectDisplay()}
 									<c:if test="${objectLink.length()>0}">

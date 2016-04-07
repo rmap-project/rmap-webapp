@@ -1,6 +1,7 @@
 package info.rmapproject.webapp.domain;
 
 import info.rmapproject.webapp.utils.Constants;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.io.Serializable;
 
@@ -45,7 +46,9 @@ public class GraphEdge implements Serializable {
 	
 	public void setLabel(String label) {
 		this.label = label;
-		setShortlabel(shortenLabel(label)); //update short label based on new label assignment
+		if (label != null){
+			setShortlabel(shortenLabel(label)); //update short label based on new label assignment	
+		}
 	}
 
 	public NodeType getTargetNodeType() {
@@ -57,6 +60,9 @@ public class GraphEdge implements Serializable {
 	}
 
 	public String getShortlabel() {
+		if (shortlabel==null && label != null){
+			setShortlabel(shortenLabel(label)); //update short label based on new label assignment			
+		}
 		return shortlabel;
 	}
 	
@@ -75,17 +81,15 @@ public class GraphEdge implements Serializable {
 	public String shortenLabel(String label) {
 		//TODO:improve this to display the namespace prefix e.g. rmap:DiSCO
 		if (label != null){
-			if (label.contains(":")){
-				label=label.substring(label.lastIndexOf(":")+1);
-			}
+			label = WebappUtils.replaceNamespace(label);
 			if (label.contains("/")){
-				label=label.substring(label.lastIndexOf("/")+1);
+				label="x:" + label.substring(label.lastIndexOf("/")+1);
 			}
 			if (label.contains("#")){
-				label=label.substring(label.lastIndexOf("#")+1);
+				label="x:" + label.substring(label.lastIndexOf("#")+1);
 			}
-			if (label.length() > Constants.MAX_EDGETEXT_LENGTH) {
-				setShortlabel(label.substring(0, Constants.MAX_EDGETEXT_LENGTH-3) + "...");
+			if (!label.contains(":") && label.length() > Constants.MAX_EDGETEXT_LENGTH) {
+				setShortlabel(label.substring(label.length() - Constants.MAX_EDGETEXT_LENGTH) + "...");
 			}
 		}
 		return label;
