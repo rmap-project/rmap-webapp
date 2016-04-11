@@ -144,7 +144,7 @@ public class DataDisplayController {
 			//TODO: need to handle exception properly
 			String rmapType = dataDisplayService.getRMapTypeDisplayName(new URI(resourceUri));
 			if (rmapType.length()>0){
-				return "redirect:/" + rmapType + "s/" + URLEncoder.encode(resourceUri, "UTF-8");
+				return "redirect:/" + rmapType.toLowerCase() + "s/" + URLEncoder.encode(resourceUri, "UTF-8");
 			}
 		}
 
