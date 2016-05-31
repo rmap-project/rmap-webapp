@@ -1,19 +1,14 @@
-package info.rmapproject.webapp.auth.orcid;
-
-import info.rmapproject.webapp.auth.OAuthProvider;
-import info.rmapproject.webapp.auth.OAuthProviderAccount;
-import info.rmapproject.webapp.auth.OAuthProviderConfig;
-import info.rmapproject.webapp.auth.OAuthProviderName;
+package info.rmapproject.webapp.auth;
 
 import org.json.JSONObject;
 
 import com.github.scribejava.core.model.Token;
 
-public class OAuthProviderOrcid extends OAuthProvider {
+public class OrcidOAuthProvider extends OAuthProvider {
 	
-	public OAuthProviderOrcid(){}
+	public OrcidOAuthProvider(){}
 	
-	public OAuthProviderOrcid(OAuthProviderConfig config){
+	public OrcidOAuthProvider(OAuthProviderConfig config){
 		super(config);
 	}
 

@@ -1,6 +1,7 @@
 package info.rmapproject.webapp.domain;
 
 import info.rmapproject.webapp.utils.Constants;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.io.Serializable;
 
@@ -25,13 +26,13 @@ public class GraphNode implements Serializable{
 	/**Node weight*/
 	private Integer weight;
 	/**Node type**/
-	private NodeType type;
+	private String type;
 	
-	public GraphNode(Integer id, String name, Integer weight, NodeType type){
+	public GraphNode(Integer id, String name, Integer weight, String type){
 		setId(id);
+		setType(type);
 		setName(name);
 		setWeight(weight);
-		setType(type);
 	}
 
 	public Integer getId() {
@@ -50,11 +51,16 @@ public class GraphNode implements Serializable{
 		name=name.replace("\\", "\\\\");
 		name=name.replace("'", "\\'");
 		this.name = name;
-		if (name.length() > Constants.MAX_NODETEXT_LENGTH) {
-			setShortname(name.substring(0, Constants.MAX_NODETEXT_LENGTH-3) + "...");
+		String shortname = name;
+		if (this.type!=null && this.type.equals(Constants.NODETYPE_TYPE)){
+			//for types see if we can do a short name
+			shortname=WebappUtils.replaceNamespace(shortname);
+		}
+		if (shortname.length() > Constants.MAX_NODETEXT_LENGTH) {
+			setShortname(shortname.substring(0, Constants.MAX_NODETEXT_LENGTH-3) + "...");
 		}
 		else {
-			setShortname(name);			
+			setShortname(shortname);			
 		}
 		
 	}
@@ -67,11 +73,11 @@ public class GraphNode implements Serializable{
 		this.weight = weight;
 	}
 
-	public NodeType getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setType(NodeType type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 

@@ -44,8 +44,8 @@
 		<h2>${DISCO.getUri()}</h2>
 	</div>
 	<a href="<c:url value='/discos/${my:httpEncodeUri(DISCO.getUri())}'/>">Return to summary</a> | 
-	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
-	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
+	<div id="toggleLiterals" class="toggle" onclick="toggle('Literal');">Hide literals</div> | 
+	<div id="toggleTypes" class="toggle" onclick="toggle('Type');">Hide types</div>
 	<br/>
 	<!-- <img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" /> -->
 	<div id="network-popUp">

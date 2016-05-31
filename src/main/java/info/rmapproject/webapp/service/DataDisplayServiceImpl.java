@@ -4,7 +4,6 @@ import info.rmapproject.core.exception.RMapObjectNotFoundException;
 import info.rmapproject.core.model.RMapIri;
 import info.rmapproject.core.model.RMapLiteral;
 import info.rmapproject.core.model.RMapResource;
-import info.rmapproject.core.model.RMapStatus;
 import info.rmapproject.core.model.RMapTriple;
 import info.rmapproject.core.model.RMapValue;
 import info.rmapproject.core.model.agent.RMapAgent;
@@ -19,16 +18,18 @@ import info.rmapproject.core.model.event.RMapEventType;
 import info.rmapproject.core.model.event.RMapEventUpdate;
 import info.rmapproject.core.model.event.RMapEventUpdateWithReplace;
 import info.rmapproject.core.model.request.RMapSearchParams;
+import info.rmapproject.core.model.request.RMapStatusFilter;
 import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.core.utils.Terms;
 import info.rmapproject.webapp.domain.Graph;
-import info.rmapproject.webapp.domain.NodeType;
 import info.rmapproject.webapp.domain.ResourceDescription;
 import info.rmapproject.webapp.domain.TripleDisplayFormat;
 import info.rmapproject.webapp.service.dto.AgentDTO;
 import info.rmapproject.webapp.service.dto.DiSCODTO;
 import info.rmapproject.webapp.service.dto.EventDTO;
 import info.rmapproject.webapp.service.dto.ResourceDTO;
+import info.rmapproject.webapp.utils.Constants;
+import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.net.URI;
 import java.net.URLDecoder;
@@ -41,6 +42,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.openrdf.model.vocabulary.FOAF;
 import org.openrdf.model.vocabulary.RDF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,11 +60,23 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 
 	//private static final Logger logger = LoggerFactory.getLogger(DiSCOServiceImpl.class);
 
-	RMapService rmapService;
+	private RMapService rmapService;
+	private String discoNodeType;
+	private String agentNodeType;
 	
 	@Autowired 
 	public DataDisplayServiceImpl(RMapService rmapService){
 		this.rmapService = rmapService;
+		//this is to support customization of node types - support those who would like to categorize DiSCO and Agent 
+		//as something other than default.
+		try {
+			discoNodeType = WebappUtils.getNodeType(new URI(Terms.RMAP_DISCO_PATH));
+			agentNodeType = WebappUtils.getNodeType(new URI(Terms.RMAP_AGENT_PATH));
+		} catch (Exception e){
+			//set default
+			discoNodeType = "Undefined";
+			agentNodeType = "Undefined";
+		}
 	}
 		
 	@Override
@@ -120,7 +134,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		agentDTO.setAuthId(agent.getAuthId().getStringValue());
 		
 		RMapSearchParams params = new RMapSearchParams();
-		params.setStatusCode(RMapStatus.ACTIVE);
+		params.setStatusCode(RMapStatusFilter.ACTIVE);
 		agentDTO.setDiscos(rmapService.getAgentDiSCOs(agentUri, params));
 		
 	    Graph graph = createAgentGraph(agentUri,  agentDTO.getName(),  agentDTO.getIdProvider(), agentDTO.getAuthId());	  
@@ -169,7 +183,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		resourceDTO.setUri(resourceUri);
 
 		RMapSearchParams params = new RMapSearchParams();
-		params.setStatusCode(RMapStatus.ACTIVE);
+		params.setStatusCode(RMapStatusFilter.ACTIVE);
 		
 		List<RMapTriple> rmapTriples = rmapService.getResourceRelatedTriples(resourceUri, params);
     	
@@ -264,23 +278,23 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 			List<RMapTriple> triples) throws Exception {
 		Graph graph = new Graph();
 		String sDiscoUri = discoUri.toString();
-		
-		graph.addEdge(sDiscoUri,"rmap:DiSCO","rdf:type", NodeType.DISCO, NodeType.TYPE);
+				
+		graph.addEdge(sDiscoUri,"rmap:DiSCO","rdf:type", discoNodeType, Constants.NODETYPE_TYPE);
 		
 		if (discoDescription.length()>0) {
-		graph.addEdge(sDiscoUri, discoDescription,"dcterms:description", NodeType.DISCO, NodeType.LITERAL);
+		graph.addEdge(sDiscoUri, discoDescription,"dcterms:description", discoNodeType, Constants.NODETYPE_LITERAL);
 		}
 		if (discoCreator.length()>0) {
-		graph.addEdge(sDiscoUri, discoCreator,"dcterms:creator", NodeType.DISCO, NodeType.AGENT);
+			graph.addEdge(sDiscoUri, discoCreator,"dcterms:creator", discoNodeType, agentNodeType);
 		}
 
 		RMapSearchParams params = new RMapSearchParams();
-		params.setStatusCode(RMapStatus.ACTIVE);
+		params.setStatusCode(RMapStatusFilter.ACTIVE);
 		
 		for (URI aggregate : aggregatedResources) {
 			Set <URI> rdfTypes = rmapService.getResourceRdfTypesInDiSCO(aggregate, discoUri);
-			NodeType targetNodeType = NodeType.getNodeType(rdfTypes);
-			graph.addEdge(sDiscoUri, aggregate.toString(),"ore:aggregates", NodeType.DISCO, targetNodeType);
+			String targetNodeType = WebappUtils.getNodeType(rdfTypes);
+			graph.addEdge(sDiscoUri, aggregate.toString(),"ore:aggregates", discoNodeType, targetNodeType);
 		}
 
 		graph = addTriplesToGraph(graph, triples, discoUri);
@@ -297,10 +311,10 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		Graph graph = new Graph();
 		String sAgentUri = agentUri.toString();
 		
-		graph.addEdge(sAgentUri,"rmap:Agent","rdf:type", NodeType.AGENT, NodeType.TYPE);
-		graph.addEdge(sAgentUri, agentName,"foaf:name", NodeType.AGENT, NodeType.LITERAL);
-		graph.addEdge(sAgentUri, idProvider,"rmap:identityProvider", NodeType.AGENT, NodeType.AGENT);
-		graph.addEdge(sAgentUri, authId,"rmap:userAuthId", NodeType.AGENT, NodeType.UNDEFINED);
+		graph.addEdge(sAgentUri,Terms.RMAP_AGENT_PATH,RDF.TYPE.stringValue(), agentNodeType, Constants.NODETYPE_TYPE);
+		graph.addEdge(sAgentUri, agentName, FOAF.NAME.stringValue(), agentNodeType, Constants.NODETYPE_LITERAL);
+		graph.addEdge(sAgentUri, idProvider,Terms.RMAP_IDENTITYPROVIDER_PATH, agentNodeType, agentNodeType);
+		graph.addEdge(sAgentUri, authId,Terms.RMAP_USERAUTHID_PATH, agentNodeType, WebappUtils.getNodeType(new URI(Terms.RMAP_USERAUTHID_PATH)));
 					
 		return graph;
 		}	
@@ -311,16 +325,14 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 			
 	private Graph addTriplesToGraph(Graph graph, List<RMapTriple> triples, URI contextUri) throws Exception{
 		URI lastSubject = null;
-		NodeType lastSourceNodeType = null;
+		String lastSourceNodeType = null;
 		for (RMapTriple triple : triples) {
 			URI subject = new URI(triple.getSubject().toString());
 			URI predicate = new URI(triple.getPredicate().toString());
 			RMapValue object = triple.getObject();
-			Set <URI> sourceRdfTypes = new HashSet<URI>();
-			Set <URI> targetRdfTypes = new HashSet<URI>();
-			
-			NodeType sourceNodeType = null;
-			NodeType targetNodeType = null;
+
+			String sourceNodeType = null;
+			String targetNodeType = null;	
 
 			//don't call database again if the subject has not changed
 			if (lastSubject!=null && lastSubject.equals(subject)){
@@ -328,21 +340,20 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 			}
 			
 			if (object instanceof RMapLiteral) {
-				targetNodeType = NodeType.LITERAL;
+				targetNodeType = Constants.NODETYPE_LITERAL;
 			}
 			if (predicate.toString().equals(RDF.TYPE.toString())) {
-				targetNodeType = NodeType.TYPE;
+				targetNodeType = Constants.NODETYPE_TYPE;
 			}
-						
+
 			if (sourceNodeType==null){
-				sourceRdfTypes = getResourceRDFTypes(subject, contextUri);
-				sourceNodeType = NodeType.getNodeType(sourceRdfTypes);
+				Set <URI> sourceRdfTypes = getResourceRDFTypes(subject, contextUri);
+				sourceNodeType = WebappUtils.getNodeType(sourceRdfTypes);
 			}
 			if (object instanceof RMapIri && targetNodeType==null){
-				targetRdfTypes = getResourceRDFTypes(new URI(object.toString()), contextUri);		
-				targetNodeType = NodeType.getNodeType(targetRdfTypes);			
-			}
-						
+				Set <URI> targetRdfTypes = getResourceRDFTypes(new URI(object.toString()), contextUri);		
+				targetNodeType = WebappUtils.getNodeType(targetRdfTypes);			
+			}						
 			
 			graph.addEdge(subject.toString(), object.toString(), predicate.toString(), sourceNodeType, targetNodeType);
 			lastSubject = subject;
@@ -366,7 +377,7 @@ public class DataDisplayServiceImpl implements DataDisplayService {
 		Set<URI> rdfTypes = new HashSet<URI>();
 		
 		RMapSearchParams params=new RMapSearchParams();
-		params.setStatusCode(RMapStatus.ACTIVE);
+		params.setStatusCode(RMapStatusFilter.ACTIVE);
 
 		Map <URI, Set<URI>> types = rmapService.getResourceRdfTypesAllContexts(resource, params);
 		

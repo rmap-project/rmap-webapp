@@ -1,9 +1,4 @@
-package info.rmapproject.webapp.auth.google;
-
-import info.rmapproject.webapp.auth.OAuthProvider;
-import info.rmapproject.webapp.auth.OAuthProviderAccount;
-import info.rmapproject.webapp.auth.OAuthProviderConfig;
-import info.rmapproject.webapp.auth.OAuthProviderName;
+package info.rmapproject.webapp.auth;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,11 +9,11 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuthService;
 
-public class OAuthProviderGoogle extends OAuthProvider{
+public class GoogleOAuthProvider extends OAuthProvider{
 
-	public OAuthProviderGoogle(){}
+	public GoogleOAuthProvider(){}
 	
-	public OAuthProviderGoogle(OAuthProviderConfig config){
+	public GoogleOAuthProvider(OAuthProviderConfig config){
 		super(config);
 	}
 

@@ -54,51 +54,26 @@ function drawgraph(){
 			interaction: {
 				  keyboard: true
 				},
-		        groups: {
-		            LITERAL: {
-		              shape: 'dot',
-		              color: '#C0C0C0' // grey
-		            },
-		            DISCO: {
-		              shape: 'square',
-		              color: "#91CC00" // rmap green
-		            },
-		            DATASET: {
-		              shape: 'dot',
-		              color: "#C392E9" // pinkish purple
-		            },
-		            TEXT: {
-		              shape: 'dot',
-		              color: "#4F4FCD" // rmap purple
-		            },
-		            PHYSICALOBJECT: {
-		              shape: 'dot',
-		              color: "#996600" // brown
-		            },
-		            CODE: {
-			              shape: 'dot',
-			              color: "#FF9900" // orange
-			            },
-		            AGENT: {
-		            	shape: 'dot',
-		            	color: '#C5000B' // red
-		            },
-		            TYPE: {
-		            	shape: 'dot',
-		            	color: '#FFFF00' // yellow
-		            },
-		            UNDEFINED: {
-			              shape: 'dot',
-			              color: "#87CEFA" // light blue
-			            }
-		          }
+	        groups: {
+				 <c:forEach var="nodeType" items="${OBJECT_NODETYPES}" varStatus="loop">
+				 	${nodeType.getName()}: {
+			              shape: '${nodeType.getShape()}',
+			              color: '${nodeType.getColor()}' // grey
+			            }<c:if test="${!loop.last}">,</c:if>				 	
+				 </c:forEach>	
+	          }
 	};
 
 	network = new vis.Network(container, data, options);
 	network.on("click", function (params) {
 		nodes.forEach(function (node) {
-		  if (node.id==params.nodes && node.group!='LITERAL' && node.group!='TYPE'){
-			location.href="../resources/" + encodeURIComponent(node.title);
+		  if (node.id==params.nodes && node.group!='Literal' && node.group!='Type'){
+			  var url = window.location.href;
+			  if (url.indexOf("/widget")>0){ //if we are in the widget, go to another widget page!
+					location.href="<c:url value='/resources/'/>" + encodeURIComponent(node.title) + "/widget";				  
+			  } else {
+					location.href="<c:url value='/resources/'/>" + encodeURIComponent(node.title);						  
+			  }
 		    }
 		});
 	  });
@@ -122,28 +97,24 @@ function drawgraph(){
 	});
 }
 
-function toggle(type)
+function toggle(tag)
 	{	
-	var toggleTypeBtn = document.getElementById('toggleTypes');
-	var toggleTypeText = toggleTypeBtn.innerHTML;
-	
-	var toggleLiteralBtn = document.getElementById('toggleLiterals');
-	var toggleLiteralText = toggleLiteralBtn.innerHTML;
-				
-	if ((type=="TYPE" && toggleTypeText=="Hide types") 
-			|| (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
-		{		
+	var type = $(tag).attr("data-name");
+	var status = $(tag).attr("data-status");
+			
+	if (status=="on") {
 		removeNodeType(type);
-		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Show literals";}
-		if (type=="TYPE") {toggleTypeBtn.innerHTML="Show types";}
+		$(tag).attr("data-status","off");		
+		$('.label' + type).css('color','#d3d3d3');
 		}
 	else 
 		{
 		addNodeType(type);
-		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Hide literals";}
-		if (type=="TYPE") {toggleTypeBtn.innerHTML="Hide types";}
+		$(tag).attr("data-status","on");
+		$('.label' + type).css('color','#111111');
 	}   
 }
+
 //store and edges and nodes that have been removed
 var removedNodes= new vis.DataSet([]);
 var removedEdges = new vis.DataSet([]);
@@ -181,3 +152,11 @@ function addNodeType(type){
 
 
 </script>
+<style>
+
+<c:forEach var="nodeType" items="${OBJECT_NODETYPES}" varStatus="loop">
+	.legend${nodeType.getName()} {
+	      background: ${nodeType.getColor()};
+	    } 	
+</c:forEach>	
+</style>

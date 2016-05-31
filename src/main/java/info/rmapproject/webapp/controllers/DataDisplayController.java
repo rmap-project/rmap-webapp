@@ -30,114 +30,145 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Controller
 @SessionAttributes({"user","account"})
 public class DataDisplayController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);
+
 	/**Service for managing RMap data display*/
 	@Autowired
 	private DataDisplayService dataDisplayService;
+
+	private static final Logger log = LoggerFactory.getLogger(DataDisplayController.class);
+	
+	/** path parameter for large visualization view	 */
+	private static final String VISUAL_VIEW = "visual";
+	
+	/** path parameter for widget view	 */
+	private static final String WIDGET_VIEW = "widget";
+	
+	/**
+	 * path parameter for the edit view 
+	 * currently partially works for DiSCOs only... is part of proof of concept for DiSCO edit.
+	 */
+	private static final String EDIT_VIEW = "edit";
+	
+	
 	
 	/**
 	 * GET details of a DiSCO
+	 * @param discoUri
+	 * @param visualize
+	 * @param model
+	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value="/discos/{uri}", method = RequestMethod.GET)
-	public String disco(@PathVariable(value="uri") String discoUri, @RequestParam(value="visualize", required=false) 
-				Integer visualize, Model model) throws Exception {
-
-		logger.info("DiSCO requested");
-		if (visualize == null) {
-			visualize = 0;
-		}
-		
+	public String disco(@PathVariable(value="uri") String discoUri, 
+				Model model) throws Exception {
+		log.info("DiSCO requested: " + discoUri);
 		DiSCODTO discoDTO = dataDisplayService.getDiSCODTO(discoUri);
-
 	    model.addAttribute("DISCO",discoDTO);	    
 	    model.addAttribute("OBJECT_NODES", discoDTO.getGraph().getNodes());
 	    model.addAttribute("OBJECT_EDGES", discoDTO.getGraph().getEdges());
-	    
-		if (visualize==1)	{
-	    	return "discosvisual";
-	    }
-	    
+	    model.addAttribute("OBJECT_NODETYPES", discoDTO.getGraph().getNodeTypes());
 		return "discos";
 	}	
-
-	@RequestMapping(value="/discos/{uri}/edit", method = RequestMethod.GET)
-	public String discoeditable(@PathVariable(value="uri") String discoUri, Model model) throws Exception {
 	
+	/**
+	 * GET details of a DiSCO in non-default view
+	 * @param discoUri
+	 * @param view
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/discos/{uri}/{view}", method = RequestMethod.GET)
+	public String discoAltView(@PathVariable(value="uri") String discoUri, 
+			@PathVariable(value="view") String view, Model model) throws Exception {
+		log.info("DiSCO visualization requested: " + discoUri);
 		DiSCODTO discoDTO = dataDisplayService.getDiSCODTO(discoUri);
-
 	    model.addAttribute("DISCO",discoDTO);	    
 	    model.addAttribute("OBJECT_NODES", discoDTO.getGraph().getNodes());
 	    model.addAttribute("OBJECT_EDGES", discoDTO.getGraph().getEdges());
-    
-		return "discoedit";
+	    model.addAttribute("OBJECT_NODETYPES", discoDTO.getGraph().getNodeTypes());   
+	    if (view.equals(VISUAL_VIEW)){
+	    	return "discovisual";
+	    } else if (view.equals(WIDGET_VIEW)) {
+	    	return "discowidget";	    	
+	    } else if (view.equals(EDIT_VIEW)) {
+			return "discoedit";
+	    } else {
+	    	return "discos";
+	    }	    
 	}	
-
-	@RequestMapping(value="/discos/new", method = RequestMethod.GET)
-	public String disconew(Model model) throws Exception {
-	    model.addAttribute("NEWDISCO",true);	        
-		return "disconew";
-	}		
-	
 
 	/**
 	 * GET details of an Agent
+	 * @param agentUri
+	 * @param model
+	 * @return
+	 * @throws Exception
 	 */
 	@RequestMapping(value="/agents/{uri}", method = RequestMethod.GET)
-	public String agent(@PathVariable(value="uri") String agentUri, 
-			@RequestParam(value="visualize", required=false) Integer visualize, Model model) throws Exception {
-		logger.info("Agent requested");
-		
-		if (visualize == null) {
-			visualize = 0;
-		}
-		
+	public String agent(@PathVariable(value="uri") String agentUri, Model model) throws Exception {
+		log.info("Agent requested: " + agentUri);	
 		AgentDTO agentDTO = dataDisplayService.getAgentDTO(agentUri);
-
 	    model.addAttribute("AGENT",agentDTO);	    
 	    model.addAttribute("OBJECT_NODES", agentDTO.getGraph().getNodes());
 	    model.addAttribute("OBJECT_EDGES", agentDTO.getGraph().getEdges());
-	    
-		if (visualize==1)	{
-	    	return "agentsvisual";
-	    }
+	    model.addAttribute("OBJECT_NODETYPES", agentDTO.getGraph().getNodeTypes());
 	    
 		return "agents";
 	}	
 	
+	
+	/**
+	 * GET details of a Agent in non-default view
+	 * @param agentUri
+	 * @param view
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/agents/{uri}/{view}", method = RequestMethod.GET)
+	public String agentAltView(@PathVariable(value="uri") String agentUri, 
+			@PathVariable(value="view") String view, Model model) throws Exception {
+		log.info("Agent requested: " + agentUri);	
+		AgentDTO agentDTO = dataDisplayService.getAgentDTO(agentUri);
+	    model.addAttribute("AGENT",agentDTO);	    
+	    model.addAttribute("OBJECT_NODES", agentDTO.getGraph().getNodes());
+	    model.addAttribute("OBJECT_EDGES", agentDTO.getGraph().getEdges());
+	    model.addAttribute("OBJECT_NODETYPES", agentDTO.getGraph().getNodeTypes());
+	    
+	    if (view.equals(VISUAL_VIEW)){
+	    	return "agentvisual";
+	    } else if (view.equals(WIDGET_VIEW)) {
+	    	return "agentwidget";	
+	    } else {
+			return "agents";
+	    }	    
+	}
+	
+	
 	/**
 	 * GET details of a resource
 	 * @param resourceUri
-	 * @param visualize - if "1" the larger visualization page will be displayed
 	 * @param resview - This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
 	 * 					When resview==0, it will check for an RMap type, and where one is found the appropriate 
 	 * 					RMap object page will be displayed instead of the generic resources page. When resview==1, 
-	 * 					the /resources page will be displayed by default.
+	 * 					the /resources page will be displayed by default. Default is 0
 	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/resources/{uri}", method = RequestMethod.GET)
 	public String resource(@PathVariable(value="uri") String resourceUri, 
-				@RequestParam(value="visualize", required=false) Integer visualize, 
 				@RequestParam(value="resview", required=false) Integer resview, 
 				Model model) throws Exception {
-		logger.error("Resource requested" + resourceUri);
 		
-		if (visualize == null) {
-			visualize = 0;
-		}
+		log.info("Resource requested " + resourceUri);
+
 		if (resview == null) {
 			resview = 0;
 		}
 
-		/*
-		 * This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
-		 * When resview==0, it will check for an RMap type, and where one is found the appropriate 
-		 * RMap object page will be displayed instead of the generic resource page. When resview==1, 
-		 * the /resources page will be displayed by default.
-		 */
-		
 		if (resview==0) {
 			//decode http first
 			resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
@@ -147,20 +178,66 @@ public class DataDisplayController {
 				return "redirect:/" + rmapType.toLowerCase() + "s/" + URLEncoder.encode(resourceUri, "UTF-8");
 			}
 		}
-
 		ResourceDTO resourceDTO = dataDisplayService.getResourceDTO(resourceUri);
-
 	    model.addAttribute("RESOURCE",resourceDTO);	    
 	    model.addAttribute("OBJECT_NODES", resourceDTO.getGraph().getNodes());
 	    model.addAttribute("OBJECT_EDGES", resourceDTO.getGraph().getEdges());
-	    	    
-	    if (visualize==1)	{
-	    	return "resourcesvisual";
-	    }
+	    model.addAttribute("OBJECT_NODETYPES", resourceDTO.getGraph().getNodeTypes());
+	    
 		return "resources";
 	}
-		
 	
+
+	/**
+	 * GET details of a resource and return in specific view format
+	 * @param resourceUri
+	 * @param view - determines the kind of view that will be returned - widget or visualize
+	 * @param resview - This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
+	 * 					When resview==0, it will check for an RMap type, and where one is found the appropriate 
+	 * 					RMap object page will be displayed instead of the generic resources page. When resview==1, 
+	 * 					the /resources page will be displayed by default.
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/resources/{uri}/{view}", method = RequestMethod.GET)
+	public String resourceAltView(@PathVariable(value="uri") String resourceUri, 
+				@PathVariable(value="view") String view, 
+				@RequestParam(value="resview", required=false) Integer resview, 
+				Model model) throws Exception {
+		log.info("Resource requested " + resourceUri);
+
+		//by default the system will redirect to the object type 
+		//e.g. a disco uri will redirect to DiSCO view.
+		if (resview == null) {
+			resview = 0;
+		}
+
+		if (resview==0) {
+			//decode http first
+			resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
+			//TODO: need to handle exception properly
+			String rmapType = dataDisplayService.getRMapTypeDisplayName(new URI(resourceUri));
+			if (rmapType.length()>0){
+				return "redirect:/" + rmapType.toLowerCase() + "s/" + URLEncoder.encode(resourceUri, "UTF-8");
+			}
+		}
+		ResourceDTO resourceDTO = dataDisplayService.getResourceDTO(resourceUri);
+	    model.addAttribute("RESOURCE",resourceDTO);	    
+	    model.addAttribute("OBJECT_NODES", resourceDTO.getGraph().getNodes());
+	    model.addAttribute("OBJECT_EDGES", resourceDTO.getGraph().getEdges());
+	    model.addAttribute("OBJECT_NODETYPES", resourceDTO.getGraph().getNodeTypes());
+	    
+	    if (view.equals(WIDGET_VIEW)){
+			return "resourcewidget";	    	
+	    } else if (view.equals(VISUAL_VIEW)){
+	    	return "resourcevisual";
+	    } else {
+	    	return "resources";
+	    }
+	}
+	
+			
 	/**
 	 * GET details of an Event
 	 * @param eventUri
@@ -170,14 +247,26 @@ public class DataDisplayController {
 	 */
 	@RequestMapping(value="/events/{uri}", method = RequestMethod.GET)
 	public String event(@PathVariable(value="uri") String eventUri, Model model) throws Exception {
-		logger.info("Event requested");
+		log.info("Event requested " + eventUri);
 				
 		EventDTO eventDTO = dataDisplayService.getEventDTO(eventUri);
 		model.addAttribute("EVENT", eventDTO);
 		
 		return "events";
 	}	
-	
+
+	/**
+	 * Experiment for proof of concept - this doesn't allow you to save the DiSCOs you make.
+	 * @param discoUri
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/discos/new", method = RequestMethod.GET)
+	public String disconew(Model model) throws Exception {
+	    model.addAttribute("NEWDISCO",true);	        
+		return "disconew";
+	}		
 	
 	
 	

@@ -10,16 +10,16 @@ function drawgraph(){
  		edges = new vis.DataSet([]);
      </c:when>
      <c:otherwise>
- 		 nodes = new vis.DataSet([
-     	 <c:forEach var="node" items="${OBJECT_NODES}" varStatus="loop">
-		 {id: ${node.getId()}, title: '${node.getName()}', label: '${node.getShortname()}', value:${node.getWeight()}, group:'${node.getType().toString()}'}<c:if test="${!loop.last}">,</c:if>
-		 </c:forEach>
-		 ]);
- 		 edges = new vis.DataSet([
-		 <c:forEach var="edge" items="${OBJECT_EDGES}" varStatus="loop">
-		 {from: ${edge.getSource()}, to: ${edge.getTarget()}, label:'${edge.getLabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
-		 </c:forEach>
-		 ]);
+ 			nodes = new vis.DataSet([
+           			 <c:forEach var="node" items="${OBJECT_NODES}" varStatus="loop">
+           			 {id: ${node.getId()}, title: '${node.getName()}', label: '${node.getShortname()}', value:${node.getWeight()}, group:'${node.getType().toString()}'}<c:if test="${!loop.last}">,</c:if>
+           			 </c:forEach>
+           			 ]);
+           	edges = new vis.DataSet([
+           			 <c:forEach var="edge" items="${OBJECT_EDGES}" varStatus="loop">
+           			 {from: ${edge.getSource()}, to: ${edge.getTarget()}, title:'${edge.getLabel()}', label:'${edge.getShortlabel()}', arrows:'to', targetgroup:'${edge.getTargetNodeType().toString()}'}<c:if test="${!loop.last}">,</c:if>
+           			 </c:forEach>
+           			 ]);
      </c:otherwise>
    </c:choose> 
 	
@@ -64,7 +64,7 @@ function drawgraph(){
             document.getElementById('node-label').value = "http://doi.org/10.12334/kasjf92k";
 			//document.getElementById('node-label').value = data.title;	
 			document.getElementById('node-value').value = 30;
-			document.getElementById('node-group').value = "UNDEFINED";
+			document.getElementById('node-group').value = "Undefined";
             document.getElementById('saveButton').onclick = saveData.bind(this, data, callback);
             document.getElementById('cancelButton').onclick = clearPopUp.bind();
             document.getElementById('network-popUp').style.display = 'block';
@@ -114,42 +114,12 @@ function drawgraph(){
 				  keyboard: true
 				},
 		        groups: {
-		            LITERAL: {
-		              shape: 'dot',
-		              color: '#C0C0C0' // grey
-		            },
-		            DISCO: {
-		              shape: 'square',
-		              color: "#91CC00" // rmap green
-		            },
-		            DATASET: {
-		              shape: 'dot',
-		              color: "#C392E9" // pinkish purple
-		            },
-		            TEXT: {
-		              shape: 'dot',
-		              color: "#4F4FCD" // rmap purple
-		            },
-		            PHYSICALOBJECT: {
-		              shape: 'dot',
-		              color: "#996600" // brown
-		            },
-		            CODE: {
-			              shape: 'dot',
-			              color: "#FF9900" // orange
-			            },
-		            AGENT: {
-		            	shape: 'dot',
-		            	color: '#C5000B' // red
-		            },
-		            TYPE: {
-		            	shape: 'dot',
-		            	color: '#FFFF00' // yellow
-		            },
-		            UNDEFINED: {
-			              shape: 'dot',
-			              color: "#87CEFA" // light blue
-			            }
+					 <c:forEach var="nodeType" items="${OBJECT_NODETYPES}" varStatus="loop">
+					 	${nodeType.getName()}: {
+				              shape: '${nodeType.getShape()}',
+				              color: '${nodeType.getColor()}' // grey
+				            }<c:if test="${!loop.last}">,</c:if>				 	
+					 </c:forEach>	
 		          }
 	};
 
@@ -218,24 +188,16 @@ function drawgraph(){
         //add type automagically
 		var newNodeId = data.id + "1";
 		var label = "";
-		if (data.group=="CODE"){
-    	    label = "dcmitype:Software";
-			}
-		if (data.group=="DATASET"){	
-    	    label = "dcmitype:Dataset";	
-		}
-		if (data.group=="PHYSICALOBJECT"){	
-    	    label = "dcmitype:PhysicalObject";	
-		}
-		if (data.group=="TEXT"){		
-    	    label = "dcmitype:Text";	
-		}
-		if (data.group=="AGENT"){			
-    	    label = "foaf:Agent";	
-		}
+
+		 <c:forEach var="nodeType" items="${OBJECT_NODETYPES}" varStatus="loop">
+		 	if (data.group == "${nodeType.getName()}") {
+	    	    label = "rmaptype:${nodeType.getName()}";
+	            }			 	
+		 </c:forEach>	
+		
 		if (label.length>0) {
-    	    nodes.add({id: newNodeId,title: label, label: label, value:30, group:'TYPE'});
-    	    edges.add({from:data.id, to:newNodeId, arrows:'to', targetgroup:'TYPE', label:'rdf:type'});
+    	    nodes.add({id: newNodeId,title: label, label: label, value:30, group:'Type'});
+    	    edges.add({from:data.id, to:newNodeId, arrows:'to', targetgroup:'Type', label:'rdf:type'});
 			}
     }
 	
@@ -256,28 +218,24 @@ function drawgraph(){
      clearPopUp();
 	}
 
-function toggle(type)
-	{	
-	var toggleTypeBtn = document.getElementById('toggleTypes');
-	var toggleTypeText = toggleTypeBtn.innerHTML;
-	
-	var toggleLiteralBtn = document.getElementById('toggleLiterals');
-	var toggleLiteralText = toggleLiteralBtn.innerHTML;
+	function toggle(tag)
+		{	
+		var type = $(tag).attr("data-name");
+		var status = $(tag).attr("data-status");
 				
-	if ((type=="TYPE" && toggleTypeText=="Hide types") 
-			|| (type=="LITERAL" && toggleLiteralText=="Hide literals")) 
-		{		
-		removeNodeType(type);
-		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Show literals";}
-		if (type=="TYPE") {toggleTypeBtn.innerHTML="Show types";}
-		}
-	else 
-		{
-		addNodeType(type);
-		if (type=="LITERAL") {toggleLiteralBtn.innerHTML="Hide literals";}
-		if (type=="TYPE") {toggleTypeBtn.innerHTML="Hide types";}
-	}   
-}
+		if (status=="on") {
+			removeNodeType(type);
+			$(tag).attr("data-status","off");		
+			$('.label' + type).css('color','#d3d3d3');
+			}
+		else 
+			{
+			addNodeType(type);
+			$(tag).attr("data-status","on");
+			$('.label' + type).css('color','#111111');
+		}   
+	}
+	
 //store and edges and nodes that have been removed
 var removedNodes= new vis.DataSet([]);
 var removedEdges = new vis.DataSet([]);

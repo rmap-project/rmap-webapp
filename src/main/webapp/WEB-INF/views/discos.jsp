@@ -23,22 +23,11 @@
 	<c:if test="${DISCO.getDescription().length()>0}">
 		<p>${DISCO.getDescription()}</p>
 	</c:if>
+	
+	<a href="<c:url value='/discos/${my:httpEncodeUri(DISCO.getUri())}/visual'/>">View larger visualization</a>&nbsp;|&nbsp;
+	<a href="<c:url value='/resources/${my:httpEncodeUri(DISCO.getUri())}?resview=1'/>">View DiSCO as Resource</a><br/>
+	<%@include file="/includes/standardViewGraph.inc" %>
 
-	<img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" />
-	<div id="visualWrapperSmall">
-		<div id="mynetwork" class="cysmall"></div>
-		<div id="loadbar" class="loadbarSmall">
-			<div class="loadbarOuterBorder">
-				<div id="loadbarText">0%</div>
-				<div id="loadbarBorder">
-					<div id="loadbarBar"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<a href="<c:url value='/discos/${my:httpEncodeUri(DISCO.getUri())}?visualize=1'/>">View larger visualization</a> | 
-	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
-	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
 	<br/><br/>
 	<h2>Aggregated Resources</h2>
 	<ul>

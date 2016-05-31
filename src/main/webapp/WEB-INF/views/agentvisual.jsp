@@ -17,22 +17,9 @@
 		<h1>RMap Agent</h1>
 		<h2>${AGENT.getUri()}</h2>
 	</div>
-	<a href="<c:url value='/agents/${my:httpEncodeUri(AGENT.getUri())}'/>">Return to summary</a> | 
-	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
-	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
+	<a href="<c:url value='/agents/${my:httpEncodeUri(AGENT.getUri())}'/>">Return to summary</a>
 	<br/>
-	<img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" />
-	<div id="visualWrapperBig">
-	    <div id="mynetwork" class="cybig"></div>
-	    <div id="loadbar" class="loadbarBig">
-	        <div class="loadbarOuterBorder">
-	            <div id="loadbarText">0%</div>
-	            <div id="loadbarBorder">
-	                <div id="loadbarBar"></div>
-	            </div>
-	        </div>
-	    </div>
-	</div>
+	<%@include file="/includes/visualViewGraph.inc" %>
 </div>
 
 </body>

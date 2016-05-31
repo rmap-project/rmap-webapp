@@ -132,8 +132,7 @@ public class DiSCODTO {
 	public void setStatus(RMapStatus status) {
 		this.status = status;
 	}
-	
-
+		
 	public List<URI> getEvents() {
 		return events;
 	}

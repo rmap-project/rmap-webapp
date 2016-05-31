@@ -23,6 +23,18 @@ public final class Constants  {
     /**Default offset for triple store queries*/
     public static final int QUERY_OFFSET=0;
        
+    /**Label for node type "Type"  */
+    public static final String NODETYPE_TYPE = "Type";
+    /**Label for node type "Literal"  */
+    public static final String NODETYPE_LITERAL = "Literal";
+    /**Label for node type "Undefined"  */
+    public static final String NODETYPE_UNDEFINED = "Undefined";
+    
+    /**Default node color in case config fails**/
+    public static final String DEFAULT_NODE_COLOR = "#87CEFA";
+    /**Default node shape in case config fails**/
+    public static final String DEFAULT_NODE_SHAPE = "dot";
+    
     
 	private Constants(){
 		    //this prevents even the native class from calling this ctor as well :

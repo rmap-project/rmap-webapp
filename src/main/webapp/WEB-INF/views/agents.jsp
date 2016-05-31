@@ -14,24 +14,10 @@
 	<h1>RMap Agent Summary</h1>
 	<h2>URI: <a href="<c:url value='/agents/${my:httpEncode(agentUri)}'/>">${agentUri}</a></h2>
 
-	<img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" />
-	<div id="visualWrapperSmall">
-		<div id="mynetwork" class="cysmall"></div>
-		<div id="loadbar" class="loadbarSmall">
-			<div class="loadbarOuterBorder">
-				<div id="loadbarText">0%</div>
-				<div id="loadbarBorder">
-					<div id="loadbarBar"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<a href="<c:url value='/agents/${my:httpEncode(agentUri)}?visualize=1'/>">View larger visualization</a> | 
-	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
-	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
-	<br/><br/>
-	
+	<a href="<c:url value='/agents/${my:httpEncode(agentUri)}/visual'/>">View larger visualization</a>&nbsp;|&nbsp;
+	<a href="<c:url value='/resources/${my:httpEncodeUri(agentUri)}?resview=1'/>">View Agent as Resource</a> <br/>
+	<%@include file="/includes/standardViewGraph.inc" %>
+	<br/>	
 	
 	<h2>Agent details</h2>
 	<div class="CSSTableGenerator">

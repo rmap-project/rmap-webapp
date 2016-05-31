@@ -2,10 +2,10 @@ package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.User;
 import info.rmapproject.webapp.auth.OAuthProviderAccount;
+import info.rmapproject.webapp.auth.GoogleOAuthProvider;
 import info.rmapproject.webapp.auth.OAuthProviderName;
-import info.rmapproject.webapp.auth.google.OAuthProviderGoogle;
-import info.rmapproject.webapp.auth.orcid.OAuthProviderOrcid;
-import info.rmapproject.webapp.auth.twitter.OAuthProviderTwitter;
+import info.rmapproject.webapp.auth.TwitterOAuthProvider;
+import info.rmapproject.webapp.auth.OrcidOAuthProvider;
 import info.rmapproject.webapp.service.UserMgtService;
 
 import javax.servlet.http.HttpSession;
@@ -36,15 +36,15 @@ public class LoginController {
 		
 	@Autowired
 	@Qualifier("oAuthProviderGoogle")
-	private OAuthProviderGoogle oAuthProviderGoogle;
+	private GoogleOAuthProvider oAuthProviderGoogle;
 
 	@Autowired
 	@Qualifier("oAuthProviderTwitter")
-	private OAuthProviderTwitter oAuthProviderTwitter;
+	private TwitterOAuthProvider oAuthProviderTwitter;
 
 	@Autowired
 	@Qualifier("oAuthProviderOrcid")
-	private OAuthProviderOrcid oAuthProviderOrcid;
+	private OrcidOAuthProvider oAuthProviderOrcid;
 	
 		
 	@RequestMapping(value={"/user/login/google"}, method = RequestMethod.GET)

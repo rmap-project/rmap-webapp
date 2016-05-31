@@ -32,21 +32,8 @@
 	</h3>
 </c:if>
 <c:if test="${properties.size()>0 || resource_types.size()>0}">
-	<img src="<c:url value='/includes/images/graphlegend.png'/>" class="graphlegend" />
-	<div id="visualWrapperSmall">
-		<div id="mynetwork" class="cysmall"></div>
-		<div id="loadbar" class="loadbarSmall">
-			<div class="loadbarOuterBorder">
-				<div id="loadbarText">0%</div>
-				<div id="loadbarBorder">
-					<div id="loadbarBar"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<a href="<c:url value='/resources/${my:httpEncode(resourceUri)}?visualize=1&resview=1'/>">View larger visualization</a> | 
-	<div id="toggleLiterals" class="toggle" onclick="toggle('LITERAL');">Hide literals</div> | 
-	<div id="toggleTypes" class="toggle" onclick="toggle('TYPE');">Hide types</div>
+	<a href="<c:url value='/resources/${my:httpEncode(resourceUri)}/visual?resview=1'/>">View larger visualization</a><br/>
+	<%@include file="/includes/standardViewGraph.inc" %>
 </c:if>
 <br/>
 	<div class="CSSTableGenerator">

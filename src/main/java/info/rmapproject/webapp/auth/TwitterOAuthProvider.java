@@ -1,9 +1,4 @@
-package info.rmapproject.webapp.auth.twitter;
-
-import info.rmapproject.webapp.auth.OAuthProvider;
-import info.rmapproject.webapp.auth.OAuthProviderAccount;
-import info.rmapproject.webapp.auth.OAuthProviderConfig;
-import info.rmapproject.webapp.auth.OAuthProviderName;
+package info.rmapproject.webapp.auth;
 
 import org.json.JSONObject;
 
@@ -13,11 +8,11 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuthService;
 
-public class OAuthProviderTwitter extends OAuthProvider{
+public class TwitterOAuthProvider extends OAuthProvider{
 	
-	public OAuthProviderTwitter(){}
+	public TwitterOAuthProvider(){}
 	
-	public OAuthProviderTwitter(OAuthProviderConfig config){
+	public TwitterOAuthProvider(OAuthProviderConfig config){
 		super(config);
 	}
 

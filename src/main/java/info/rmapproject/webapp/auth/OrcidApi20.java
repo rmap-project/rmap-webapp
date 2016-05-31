@@ -1,4 +1,4 @@
-package info.rmapproject.webapp.auth.orcid;
+package info.rmapproject.webapp.auth;
 
 import com.github.scribejava.core.builder.api.DefaultApi20;
 import com.github.scribejava.core.extractors.AccessTokenExtractor;

@@ -1,7 +1,6 @@
 package info.rmapproject.webapp.domain;
 
 import info.rmapproject.webapp.utils.Constants;
-import info.rmapproject.webapp.utils.WebappUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,12 +20,25 @@ public class Graph {
     private List<GraphNode> nodes;
 	/** List of edges */
     private List<GraphEdge> edges;
+    
+    /**Unique list of node types to prevent duplicate types**/
+    private Set<String> uniqueNodeTypes;
+    
+	/** List of node types */
+    private List<GraphNodeType> nodeTypes;
         
     //Each node must be assigned a number that is unique within the context of the graph
     //The counter keeps track of an incrementing number that is assigned to each node as it is added to the graph
     private Integer counter = 0; 
 
-	public Graph(){}
+	public Graph(){
+		//initiate lists.
+		this.uniqueNodes = new HashSet<String>();
+		this.uniqueNodeTypes = new HashSet<String>();
+		this.nodes = new ArrayList<GraphNode>();
+		this.edges = new ArrayList<GraphEdge>();
+		this.nodeTypes = new ArrayList<GraphNodeType>();
+	}
 	
 	public List<GraphNode> getNodes() {
 		return nodes;
@@ -48,8 +60,8 @@ public class Graph {
 		return uniqueNodes;
 	}
 	
-	public void setUniqueNodes(Set<String> uniqueNodes) {
-		this.uniqueNodes = uniqueNodes;
+	public List<GraphNodeType> getNodeTypes() {
+		return nodeTypes;
 	}
 	
 	/**
@@ -59,19 +71,13 @@ public class Graph {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer addNode(String sNode, NodeType nodeType) throws Exception{
+	public Integer addNode(String sNode, String nodeType) throws Exception{
 		Integer id = 0;
-		if (this.uniqueNodes == null){
-			this.uniqueNodes = new HashSet<String>();
-		}		
-		if (this.nodes == null){
-			this.nodes = new ArrayList<GraphNode>();
-		}		
-		
 		if (!uniqueNodes.contains(sNode)) {
 			id = getNextId();
 			uniqueNodes.add(sNode);	
 			nodes.add(new GraphNode(id, sNode, Constants.NODE_WEIGHT_INCREMENT, nodeType));
+			addNodeType(nodeType); //only if it's a new value
 		}
 		else {
 			//find matching node, add to weight
@@ -86,9 +92,6 @@ public class Graph {
 	}
 	
 	public void addEdge(GraphEdge edge)	{
-		if (this.edges == null) {
-			this.edges = new ArrayList<GraphEdge>();
-		}
 		edges.add(edge);
 	}
 			
@@ -102,12 +105,12 @@ public class Graph {
 	 * @throws Exception
 	 */
 	public void addEdge(String sourceKey, String targetKey, String label, 
-							NodeType sourceNodeType, NodeType targetNodeType) throws Exception {
+							String sourceNodeType, String targetNodeType) throws Exception {
 		GraphEdge edge = new GraphEdge();
 		targetKey = targetKey.replaceAll("[\n\r]", "");
 		targetKey = targetKey.replaceAll("[ ]+", " ");
-		Integer source = addNode(WebappUtils.replaceNamespace(sourceKey), sourceNodeType);
-		Integer target = addNode(WebappUtils.replaceNamespace(targetKey), targetNodeType);
+		Integer source = addNode(sourceKey, sourceNodeType);
+		Integer target = addNode(targetKey, targetNodeType);
 		edge.setLabel(label);
 		edge.setSource(source);
 		edge.setTarget(target);
@@ -119,5 +122,18 @@ public class Graph {
 		this.counter = this.counter+1;
 		return this.counter;
 	}
-	
+
+	/**
+	 * Add type node to list, but only if it's not already in there
+	 * @param nodeType
+	 */
+	private void addNodeType(String sType) {
+		if (sType!=null && sType.length()>0
+				&& !uniqueNodeTypes.contains(sType)){
+			GraphNodeType type = new GraphNodeType(sType);
+			this.nodeTypes.add(type);
+			this.uniqueNodeTypes.add(sType);//for detecting duplicates
+		}
+	}
+
 }

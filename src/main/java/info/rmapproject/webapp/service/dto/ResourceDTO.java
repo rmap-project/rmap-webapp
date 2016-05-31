@@ -7,9 +7,8 @@ import java.net.URI;
 import java.util.List;
 
 /**
- * 
+ * Used to hold the information about a Resource needed to for representation on a webpage.
  * @author khanson
- * Used to hold the information about a DiSCO needed to for representation on a webpage.
  */
 public class ResourceDTO {
 

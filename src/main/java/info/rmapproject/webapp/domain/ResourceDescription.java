@@ -1,5 +1,6 @@
 package info.rmapproject.webapp.domain;
 
+import info.rmapproject.webapp.utils.WebappUtils;
 import info.rmapproject.webapps.exception.ErrorCode;
 import info.rmapproject.webapps.exception.RMapWebException;
 
@@ -81,6 +82,9 @@ public class ResourceDescription implements Serializable {
 	
 	public void addResourceType(TripleDisplayFormat tripleDF) throws RMapWebException {
 		if (tripleDF!=null) {
+			//this is the only time we want to format the triple's object
+			String objDisplay = WebappUtils.replaceNamespace(tripleDF.getObjectDisplay());
+			tripleDF.setObjectDisplay(objDisplay);
 			String listKey = tripleDF.getSubjectDisplay()+tripleDF.getPredicateDisplay()+tripleDF.getObjectDisplay();
 			this.resourceTypes.put(listKey, tripleDF);
 		}

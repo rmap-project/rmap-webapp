@@ -17,7 +17,7 @@ public class GraphEdge implements Serializable {
 	private Integer target;
 	private String label;
 	private String shortlabel;
-	private NodeType targetNodeType;
+	private String targetNodeType;
 	
 	public GraphEdge(){
 	}
@@ -51,11 +51,11 @@ public class GraphEdge implements Serializable {
 		}
 	}
 
-	public NodeType getTargetNodeType() {
+	public String getTargetNodeType() {
 		return targetNodeType;
 	}
 
-	public void setTargetNodeType(NodeType targetNodeType) {
+	public void setTargetNodeType(String targetNodeType) {
 		this.targetNodeType = targetNodeType;
 	}
 
@@ -79,16 +79,9 @@ public class GraphEdge implements Serializable {
 	 * @return
 	 */
 	public String shortenLabel(String label) {
-		//TODO:improve this to display the namespace prefix e.g. rmap:DiSCO
 		if (label != null){
 			label = WebappUtils.replaceNamespace(label);
-			if (label.contains("/")){
-				label="x:" + label.substring(label.lastIndexOf("/")+1);
-			}
-			if (label.contains("#")){
-				label="x:" + label.substring(label.lastIndexOf("#")+1);
-			}
-			if (!label.contains(":") && label.length() > Constants.MAX_EDGETEXT_LENGTH) {
+			if (label.length() > Constants.MAX_EDGETEXT_LENGTH) {
 				setShortlabel(label.substring(label.length() - Constants.MAX_EDGETEXT_LENGTH) + "...");
 			}
 		}

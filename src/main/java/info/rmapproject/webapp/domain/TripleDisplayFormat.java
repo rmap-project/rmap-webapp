@@ -37,7 +37,7 @@ public class TripleDisplayFormat {
 		String predLink = pred.toString();
 		
 		RMapValue obj = rmapTriple.getObject();
-		String objDisplay = WebappUtils.replaceNamespace(obj.toString());
+		String objDisplay = obj.toString();
 		String objLink = "";
 					    			
 		if (predDisplay.contains("rdf:type"))	{
