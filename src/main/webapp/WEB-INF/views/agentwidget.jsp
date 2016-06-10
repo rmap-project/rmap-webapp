@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" uri="/WEB-INF/tld/rmapTagLibrary.tld" %>
 <c:set var="pageTitle" value="Visualization | RMap Agent | RMap Project"/>
@@ -9,8 +9,8 @@
 <body onload="drawgraph();">
 
 	<div style="position:fixed; right:5px; bottom:5px; z-index:100">
-		<a href="<c:url value='/home'/>" id="logo">
-		<img src="<c:url value='/includes/images/rmap_logo_small.png'/>" alt="RMap logo" height="30" width="60" />
+		<a href="<c:url value='/home'/>" id="logo" target="_blank">
+		<img src="<c:url value='/includes/images/rmap_logo_transparent_small.png'/>" alt="RMap logo" height="40" width="80" />
 		</a>
 	</div>	
 	<%@include file="/includes/widgetViewGraph.inc" %>

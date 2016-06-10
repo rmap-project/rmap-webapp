@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author khanson
  *
  */
-
 @Service("userMgtService")
 @Transactional
 public class UserMgtServiceImpl implements UserMgtService {

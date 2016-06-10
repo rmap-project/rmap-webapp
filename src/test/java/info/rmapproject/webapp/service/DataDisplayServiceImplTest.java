@@ -25,7 +25,7 @@ public class DataDisplayServiceImplTest {
 	@SuppressWarnings("unused")
 	@Test
 	public void testGetDiSCODTO() {
-		String discoId = "ark:/22573/rmd18n8xfs";
+		String discoId = "ark:/27927/rmp1826xjn";
 		
 		//String discoId = "ark:/27927/rmp1825qnv";
 		try{

@@ -42,7 +42,7 @@
 					<li><a href="<c:url value='/user/keys'/>">Manage API keys</a></li>
 					<li><a href="<c:url value='/user/reports'/>">View API activity</a></li>
 					<li><a href="<c:url value='/user/settings'/>">Settings</a></li>
-					<li><a href="<c:url value='/user/logout'/>">Logout</a></li>
+					<li><a href="<c:url value='/user/logout'/>">Sign out</a></li>
 				</ul>
 			</li>
 			</c:if>
@@ -58,12 +58,12 @@
 			
 			<c:if test="${uid==0&&uname.length()==0}">
 			<li id="menu-item-4">
-				<a href="<c:url value='/user/login'/>">Login</a>
-				<ul class="dropdown-menu">
-					<li><a href="<c:url value='/user/login/google'/>">Log in with Google</a></li>
-					<li><a href="<c:url value='/user/login/twitter'/>">Log in with Twitter</a></li>
-					<li><a href="<c:url value='/user/login/orcid'/>">Log in with ORCID</a></li>
-				</ul>
+				<a href="<c:url value='/user/login'/>">Sign in</a>
+				<div class="signin-menu">
+					<a href="<c:url value='/user/login/google'/>"><img src="<c:url value='/includes/images/google-signin-button.png'/>" alt="Sign in with Google"/></a><br/>
+					<a href="<c:url value='/user/login/twitter'/>"><img src="<c:url value='/includes/images/twitter-signin-button.png'/>" alt="Sign in with Twitter" width="190px"/></a><br/>
+					<a href="<c:url value='/user/login/orcid'/>"><img src="<c:url value='/includes/images/orcid-signin-button.png'/>" alt="Sign in with ORCiD" width="190px"/></a><br/>
+				</div>
 			</li>			
 			</c:if>
 		</ul>

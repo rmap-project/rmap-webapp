@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="my" uri="/WEB-INF/tld/rmapTagLibrary.tld" %>
 <c:set var="pageTitle" value="RMap Agent Summary | RMap Project"/>
@@ -9,16 +9,17 @@
 <body onload="drawgraph();">
 <%@include file="/includes/bodystart.inc" %> 
 
-<c:set var="agentUri" value="${AGENT.getUri().toString()}"/>      
+<c:set var="agentUri" value="${AGENT.getUri().toString()}"/>     
+<c:set var="agentUriEncoded" value="${my:httpEncode(agentUri)}"/>       
 <article class="twelve columns main-content">
 	<h1>RMap Agent Summary</h1>
-	<h2>URI: <a href="<c:url value='/agents/${my:httpEncode(agentUri)}'/>">${agentUri}</a></h2>
+	<h2>URI: <a href="<c:url value='/agents/${agentUriEncoded}'/>">${agentUri}</a></h2>
 
-	<a href="<c:url value='/agents/${my:httpEncode(agentUri)}/visual'/>">View larger visualization</a>&nbsp;|&nbsp;
-	<a href="<c:url value='/resources/${my:httpEncodeUri(agentUri)}?resview=1'/>">View Agent as Resource</a> <br/>
-	<%@include file="/includes/standardViewGraph.inc" %>
-	<br/>	
+	<a href="<c:url value='/agents/${agentUriEncoded}/visual'/>">View larger visualization</a>&nbsp;|&nbsp;
+	<a href="<c:url value='/resources/${agentUriEncoded}?resview=1'/>">View Agent as Resource</a> <br/>
 	
+	<%@include file="/includes/standardViewGraph.inc" %>
+	<br/>
 	<h2>Agent details</h2>
 	<div class="CSSTableGenerator">
 		<table>
@@ -47,7 +48,7 @@
 	<c:set var="discos" value="${AGENT.getDiscos()}"/>
 	<c:set var="numdiscos" value="${AGENT.getNumDiscos()}"/>
 	<c:if test="${numdiscos>50}">
-		<h2>DiSCOs Created (Displaying 50 out of ${numdiscos})</h2>
+		<h2>DiSCOs Created (Displaying 50 out of ${numdiscos}+)</h2>
 	</c:if>
 	<c:if test="${numdiscos<=50}">
 		<h2>DiSCOs Created (${numdiscos})</h2>
