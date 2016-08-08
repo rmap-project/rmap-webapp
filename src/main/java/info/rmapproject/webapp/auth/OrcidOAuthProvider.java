@@ -1,9 +1,11 @@
 package info.rmapproject.webapp.auth;
 
 import org.json.JSONObject;
+import org.springframework.context.annotation.Scope;
 
 import com.github.scribejava.core.model.Token;
 
+@Scope("session")
 public class OrcidOAuthProvider extends OAuthProvider {
 	
 	public OrcidOAuthProvider(){}

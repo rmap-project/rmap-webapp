@@ -2,6 +2,7 @@ package info.rmapproject.webapp.auth;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.context.annotation.Scope;
 
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
@@ -9,8 +10,15 @@ import com.github.scribejava.core.model.Token;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuthService;
 
+@Scope("session")
 public class GoogleOAuthProvider extends OAuthProvider{
-
+	
+	private static final String GOOGLE_JSON_EMAILLIST_PROPERTY = "emails";
+	private static final String GOOGLE_JSON_ACCOUNTID_PROPERTY = "id";
+	private static final String GOOGLE_JSON_DISPLAYNAME_PROPERTY = "displayName";
+	private static final String GOOGLE_JSON_EMAIL_PROPERTY = "value";
+	private static final String GOOGLE_JSON_PROFILEPATH_PROPERTY = "url";
+	
 	public GoogleOAuthProvider(){}
 	
 	public GoogleOAuthProvider(OAuthProviderConfig config){
@@ -28,15 +36,15 @@ public class GoogleOAuthProvider extends OAuthProvider{
 		Response oauthResponse = oauthRequest.send();
 		String jsonString = oauthResponse.getBody();
 		JSONObject root = new JSONObject(jsonString);
-		JSONArray emailArray = root.getJSONArray("emails");
+		JSONArray emailArray = root.getJSONArray(GOOGLE_JSON_EMAILLIST_PROPERTY);
 		JSONObject firstEmail = emailArray.getJSONObject(0);
 
-		String accountId = root.getString("id"); 
-		String displayName = root.getString("displayName");
-		String publicId = firstEmail.getString("value"); 
+		String accountId = root.getString(GOOGLE_JSON_ACCOUNTID_PROPERTY); 
+		String displayName = root.getString(GOOGLE_JSON_DISPLAYNAME_PROPERTY);
+		String publicId = firstEmail.getString(GOOGLE_JSON_EMAIL_PROPERTY); 
 		String profilePath="";
-		if (root.has("url")){
-			profilePath = root.getString("url"); 
+		if (root.has(GOOGLE_JSON_PROFILEPATH_PROPERTY)){
+			profilePath = root.getString(GOOGLE_JSON_PROFILEPATH_PROPERTY); 
 		}
 		
 		OAuthProviderAccount profile = 

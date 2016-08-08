@@ -10,12 +10,13 @@ import com.github.scribejava.core.utils.OAuthEncoder;
 
 public class OrcidApi20 extends DefaultApi20  {
 
-    private static final String AUTH_URL = "https://www.orcid.org/oauth/authorize/";
-    private static final String TOKEN_URL = "https://pub.orcid.org/oauth/token";
+    private static final String AUTH_URL = "https://www.orcid.org/oauth/authorize/?client_id=%s&scope=%s&response_type=%s&redirect_uri=%s";
+    private static final String TOKEN_URL = "https://pub.orcid.org/oauth/token?grant_type=";
+    private static final String RESPONSE_TYPE_CODE = "code";
 
     @Override
     public String getAccessTokenEndpoint() {
-        return TOKEN_URL + "?grant_type=" + OAuthConstants.AUTHORIZATION_CODE;
+        return TOKEN_URL + OAuthConstants.AUTHORIZATION_CODE;
     }
 
     @Override
@@ -27,8 +28,8 @@ public class OrcidApi20 extends DefaultApi20  {
     public String getAuthorizationUrl(OAuthConfig oAuthConfig) {
         // #show_login skips showing the registration form, which is only
         // cluttersome.
-        return String.format(AUTH_URL + "?client_id=%s&scope=%s&response_type=%s&redirect_uri=%s",
-            oAuthConfig.getApiKey(), OAuthEncoder.encode(oAuthConfig.getScope()), "code", OAuthEncoder.encode(oAuthConfig.getCallback()));
+        return String.format(AUTH_URL, oAuthConfig.getApiKey(), OAuthEncoder.encode(oAuthConfig.getScope()), 
+        		RESPONSE_TYPE_CODE, OAuthEncoder.encode(oAuthConfig.getCallback()));
     }    
 
     @Override

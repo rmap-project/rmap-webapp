@@ -10,6 +10,10 @@ import com.github.scribejava.core.oauth.OAuthService;
 
 public class TwitterOAuthProvider extends OAuthProvider{
 	
+	private static final String TWITTER_ACCTID_PROPERTY = "id";
+	private static final String TWITTER_DISPLAYNAME_PROPERTY = "name";
+	private static final String TWITTER_SCREENNAME_PROPERTY = "screen_name";
+	
 	public TwitterOAuthProvider(){}
 	
 	public TwitterOAuthProvider(OAuthProviderConfig config){
@@ -28,9 +32,9 @@ public class TwitterOAuthProvider extends OAuthProvider{
 		String jsonString = oauthResponse.getBody();
 		JSONObject root = new JSONObject(jsonString);
 
-		String accountId = String.valueOf(root.getInt("id")); 
-		String displayName = root.getString("name");
-		String publicId = root.getString("screen_name"); 
+		String accountId = String.valueOf(root.getInt(TWITTER_ACCTID_PROPERTY)); 
+		String displayName = root.getString(TWITTER_DISPLAYNAME_PROPERTY);
+		String publicId = root.getString(TWITTER_SCREENNAME_PROPERTY); 
 		String profilePath = provider.getIdProviderUrl() + "/" + publicId; 
 		
 		OAuthProviderAccount profile = 

@@ -8,6 +8,8 @@ import info.rmapproject.core.exception.RMapException;
 import info.rmapproject.core.exception.RMapObjectNotFoundException;
 import info.rmapproject.core.exception.RMapTombstonedObjectException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +25,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes({"user","account"})
 public class ExceptionHandlingController {
 
+	/** path parameter for widget view	 */
+	private static final String WIDGET_VIEW = "widget";
+	
 	private static final Logger logger = LoggerFactory.getLogger(DataDisplayController.class);
 	/**
 	 * Handles object not found exceptions
@@ -31,9 +36,15 @@ public class ExceptionHandlingController {
 	 */
 	@ExceptionHandler({RMapDiSCONotFoundException.class, RMapAgentNotFoundException.class, RMapEventNotFoundException.class,
 		RMapObjectNotFoundException.class}) // 	RMapStatementNotFoundException.class,
-	 public String objectNotFoundError(Exception exception) {		
+	 public String objectNotFoundError(Exception exception, HttpServletRequest req) {		
 		logger.error(exception.getMessage(), exception);
-		return "objectnotfound";
+		if (req.getRequestURL().toString().contains("/" + WIDGET_VIEW)){
+			return "objectnotfoundwidget";
+		}
+		else {
+			return "objectnotfound";			
+		}
+		
 	  }
 	
 	/**

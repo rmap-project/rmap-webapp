@@ -1,6 +1,8 @@
 package info.rmapproject.webapp.auth;
-	
 
+import org.springframework.context.annotation.Scope;
+	
+@Scope("session")
 @SuppressWarnings("rawtypes")
 public class OAuthProviderConfig {
 	

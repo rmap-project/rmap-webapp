@@ -14,27 +14,34 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
+	private static final String USER_SESSION_ATTRIBUTE = "user";
+	private static final String ACCOUNT_SESSION_ATTRIBUTE = "account";
+	private static final String SIGNUPFORM_METHOD = "signupForm";
+	private static final String ADDUSER_METHOD = "addUser";
+	private static final String USER_LOGIN_PATH = "/user/login";
+	private static final String USER_SIGNUP_PATH = "/user/signup";
+	
 //	private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
+   	
     	HandlerMethod hm=(HandlerMethod)handler; 
     	Method method=hm.getMethod(); 
     	
     	if(method.getDeclaringClass().isAnnotationPresent(Controller.class)){ 
     		if(method.isAnnotationPresent(LoginRequired.class)) { 
-    	        OAuthProviderAccount account = (OAuthProviderAccount) request.getSession().getAttribute("account");
+    	        OAuthProviderAccount account = (OAuthProviderAccount) request.getSession().getAttribute(ACCOUNT_SESSION_ATTRIBUTE);
 	    		if(account == null) {
-	    			response.sendRedirect(request.getContextPath() + "/user/login");
+	    			response.sendRedirect(request.getContextPath() + USER_LOGIN_PATH);
 	    			return false;
 	    		}   
 	    		
-	    		User user = (User) request.getSession().getAttribute("user");
-	    		if((!method.getName().equals("signupForm")
-	    				&&!method.getName().equals("addUser")) 
+	    		User user = (User) request.getSession().getAttribute(USER_SESSION_ATTRIBUTE);
+	    		if((!method.getName().equals(SIGNUPFORM_METHOD)
+	    				&&!method.getName().equals(ADDUSER_METHOD)) 
 	    				&& (user == null || user.getUserId()==0)) {
 	    			//new user, get them signed up!
-	    			response.sendRedirect(request.getContextPath() + "/user/signup");
+	    			response.sendRedirect(request.getContextPath() + USER_SIGNUP_PATH);
 	    			return false;
 	    		}   
     	    }
