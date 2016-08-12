@@ -40,7 +40,7 @@
 				<a href="<c:url value='/user/welcome'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
 				<ul class="dropdown-menu">
 					<li><a href="<c:url value='/user/keys'/>">Manage API keys</a></li>
-					<li><a href="<c:url value='/user/reports'/>">View API activity</a></li>
+					<!--<li><a href="<c:url value='/user/reports'/>">View API activity</a></li>-->
 					<li><a href="<c:url value='/user/settings'/>">Settings</a></li>
 					<li><a href="<c:url value='/user/logout'/>">Sign out</a></li>
 				</ul>
@@ -51,14 +51,14 @@
 			<li id="menu-item-4">
 				<a href="<c:url value='/user/settings'/>" alt="${uname}"><div id="truncate">${uname}</div></a>
 				<ul class="dropdown-menu">
-					<li><a href="<c:url value='/user/logout'/>">Logout</a></li>
+					<li><a href="<c:url value='/user/logout'/>">Sign out</a></li>
 				</ul>
 			</li>			
 			</c:if>
 			
 			<c:if test="${uid==0&&uname.length()==0}">
 			<li id="menu-item-4">
-				<a href="<c:url value='/user/login'/>">Sign in</a>
+				<a href="<c:url value='/user/login'/>" title="Sign in to manage \nAPI access keys\nfor write access.">Sign in</a>
 				<div class="signin-menu">
 					<a href="<c:url value='/user/login/google'/>"><img src="<c:url value='/includes/images/google-signin-button.png'/>" alt="Sign in with Google"/></a><br/>
 					<a href="<c:url value='/user/login/twitter'/>"><img src="<c:url value='/includes/images/twitter-signin-button.png'/>" alt="Sign in with Twitter" width="190px"/></a><br/>

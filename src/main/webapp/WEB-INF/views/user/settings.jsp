@@ -82,6 +82,7 @@
 		</div>
 	</div>
 	<br/>
+	<!-- 
 	<div class="sidebar-widget">
     	<div class="boxedsidebar">
 			<h3>Your Agent's DiSCO ID is</h3><br/>
@@ -94,7 +95,8 @@
 				<em><a href="<c:url value='/user/disco'/>">Create a DiSCO</a> to add details about your Agent</em>
 			</c:if>
 		</div>
-	</div>
+	</div> 
+	-->
 	
 </aside>
 <!-- End Right Sidebar -->
