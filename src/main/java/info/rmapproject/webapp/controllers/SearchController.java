@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.webapp.domain.SearchCommand;
@@ -17,21 +36,23 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Handles display of the search page 
- * @author khanson
+ * Handles display of the search page .
  *
+ * @author khanson
  */
 @Controller
 @SessionAttributes({"user","account"})
 @RequestMapping(value="/search")
 public class SearchController {
 
+	/** The log. */
 	private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
 	
 	/**
-	 * GETs the search form
-	 * @param model
-	 * @return
+	 * GETs the search form.
+	 *
+	 * @param model the Spring model
+	 * @return the search page
 	 */
 	@RequestMapping(method = RequestMethod.GET)
 	public String searchForm(Model model) {
@@ -42,9 +63,13 @@ public class SearchController {
 	}
 	
 	/**
-	 * Processes the POSTed search form
-	 * @param model
-	 * @return
+	 * Processes the POSTed search form.
+	 *
+	 * @param search the search command
+	 * @param result the form results
+	 * @param redirectAttributes the redirect attributes
+	 * @return the resource page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(method=RequestMethod.POST)
 	public String searchResults(@ModelAttribute("search") SearchCommand search,
@@ -55,7 +80,7 @@ public class SearchController {
 		}
 		redirectAttributes.addFlashAttribute("search", search);
 
-		String resourceUri = search.getSearch();
+		String resourceUri = search.getSearch().trim();
 		//may or may not be encoded, so to make sure decode first then encode again
 		resourceUri = URLDecoder.decode(resourceUri, "UTF-8");
 		return "redirect:/resources/" + URLEncoder.encode(resourceUri, "UTF-8");

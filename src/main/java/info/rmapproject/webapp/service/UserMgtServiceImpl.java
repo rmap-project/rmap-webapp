@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.service;
 
 import info.rmapproject.auth.model.ApiKey;
@@ -15,47 +34,67 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 
- * @author khanson
+ * Implements the User Management Services interface
  *
+ * @author khanson
  */
 @Service("userMgtService")
 @Transactional
 public class UserMgtServiceImpl implements UserMgtService {
 
-//private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+//private static final Logger logger = LoggerFactory.getLogger(UserMgtServiceImpl.class);
 	
+	/** The RMap Service. */
 	@Autowired 
 	private RMapService rmapService;
 	
+	/** The RMap Auth service. */
 	@Autowired
 	private RMapAuthService rmapAuthService;
 
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#addApiKey(info.rmapproject.auth.model.ApiKey)
+	 */
 	@Override
 	public void addApiKey(ApiKey apiKey) {
 		rmapAuthService.addApiKey(apiKey);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#updateApiKey(info.rmapproject.auth.model.ApiKey)
+	 */
 	@Override
 	public void updateApiKey(ApiKey apiKey) {
 		rmapAuthService.updateApiKey(apiKey);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#getApiKeyById(int)
+	 */
 	@Override
 	public ApiKey getApiKeyById(int apiKeyId) {
 		return rmapAuthService.getApiKeyById(apiKeyId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#listApiKeyByUser(int)
+	 */
 	@Override
 	public List<ApiKey> listApiKeyByUser(int userId) {
 		return rmapAuthService.listApiKeyByUser(userId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#addUser(info.rmapproject.auth.model.User)
+	 */
 	@Override
 	public int addUser(User user) {
 		return rmapAuthService.addUser(user);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#updateUserSettings(info.rmapproject.auth.model.User)
+	 */
 	@Override
 	public void updateUserSettings(User user) {
 		rmapAuthService.updateUserSettings(user);
@@ -65,11 +104,17 @@ public class UserMgtServiceImpl implements UserMgtService {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#getUserById(int)
+	 */
 	@Override
 	public User getUserById(int userId) {
 		return rmapAuthService.getUserById(userId);
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#loadUserFromOAuthAccount(info.rmapproject.webapp.auth.OAuthProviderAccount)
+	 */
 	@Override
 	public User loadUserFromOAuthAccount(OAuthProviderAccount account){
 		String idProviderUrl = account.getProviderName().getIdProviderUrl();
@@ -100,6 +145,9 @@ public class UserMgtServiceImpl implements UserMgtService {
 		
 	}
 	
+	/* (non-Javadoc)
+	 * @see info.rmapproject.webapp.service.UserMgtService#addUserIdentityProvider(int, info.rmapproject.webapp.auth.OAuthProviderAccount)
+	 */
 	@Override
 	public int addUserIdentityProvider(int userId, OAuthProviderAccount account) {
 		UserIdentityProvider newAccount = new UserIdentityProvider();

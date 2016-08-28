@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.utils;
 
 import java.net.URI;
@@ -6,18 +25,28 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * WebApp helper utilities
+ */
 public class WebappUtils {
 
+	/** Property file name for ontology prefixes */
 	private static final String PREFIX_PROPFILE = "ontologyprefixes";
+
+	/** Property file name for type mappings */
 	private static final String TYPEMAPPINGS_PROPFILE = "typemappings";
 
+	/** The prefixes list. */
 	private static Map<String, String> prefixes = ConfigUtils.getPropertyValues(PREFIX_PROPFILE);
+	
+	/** The type mappings list. */
 	private static Map<String, String> typeMappings = ConfigUtils.getPropertyValues(TYPEMAPPINGS_PROPFILE);
 	
 	/**
-	 * Replace the namespace URL with something more readable
-	 * @param url
-	 * @return
+	 * Replace the namespace URL with something more readable.
+	 *
+	 * @param url the url
+	 * @return the shortened term that uses the prefix.
 	 */
 	public static String replaceNamespace(String url) {
 		try{
@@ -52,8 +81,9 @@ public class WebappUtils {
 	/**
 	 * Retrieve the node type based on URI provided.  The graph visualization is colored based on 
 	 * node type.  Node types also appear in the legend.
-	 * @param type
-	 * @return
+	 *
+	 * @param type the RDF type
+	 * @return the Node type
 	 */
 	public static String getNodeType(URI type){
 		if (type==null){return Constants.NODETYPE_UNDEFINED;}
@@ -69,8 +99,9 @@ public class WebappUtils {
 	/**
 	 * Based on the list of URIs provided, select the most common.  The graph visualization is colored based on 
 	 * node type.  Node types also appear in the legend.
-	 * @param type
-	 * @return
+	 *
+	 * @param types the RDF types
+	 * @return the Node type
 	 */
 	public static String getNodeType(Set<URI> types){
 		if (types==null || types.size()==0){

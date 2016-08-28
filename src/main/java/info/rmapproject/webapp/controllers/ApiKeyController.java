@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.ApiKey;
@@ -25,24 +44,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Handles requests related to creation and management of API keys
- * @author khanson
+ * Handles requests related to creation and management of API keys.
  *
+ * @author khanson
  */
 @Controller
 @SessionAttributes({"user","account"})
 public class ApiKeyController {
 	
-	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	/**Service for user management*/
+	//private static final Logger logger = LoggerFactory.getLogger(ApiKeyController.class);
+	/** Service for user management. */
 	@Autowired
 	private UserMgtService userMgtService;
 	
 	/**
-	 * GET the list of API keys for the current user
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET the list of API keys for the current user.
+	 *
+	 * @param model the Spring model
+	 * @param session the HTTP session
+	 * @return the user keys page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/keys", method=RequestMethod.GET)
@@ -56,10 +77,12 @@ public class ApiKeyController {
 	}
 	
 	/**
-	 * GET the form to create a new key
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET the form to create a new key.
+	 *
+	 * @param model the Spring model
+	 * @param session the HTTP session
+	 * @return the user key page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/new", method=RequestMethod.GET)
@@ -77,11 +100,13 @@ public class ApiKeyController {
 	
 	/**
 	 * Receives the POSTed New API Key form to be processed. Returns any form errors.
-	 * @param apiKey
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param apiKey the API Key object
+	 * @param result the form result
+	 * @param model the Spring model
+	 * @param session the HTTP session
+	 * @return the user key page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/new", method=RequestMethod.POST)
@@ -100,11 +125,12 @@ public class ApiKeyController {
 	
 	/**
 	 * Receives the POSTed New API Key form to be processed. Returns any form errors.
-	 * @param apiKey
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param keyId the Key ID parameter
+	 * @param model the Spring model
+	 * @param session the HTTP session
+	 * @return the user keys page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.GET)
@@ -124,11 +150,12 @@ public class ApiKeyController {
 	
 	/**
 	 * Receives the POSTed Edit API Key form to be processed. Returns any form errors.
-	 * @param apiKey
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param apiKey the API Key object
+	 * @param result the form result
+	 * @param model the Spring model
+	 * @return the user key page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.POST)
@@ -141,10 +168,12 @@ public class ApiKeyController {
 	}
 	
 	/**
-	 * GET API Key file containing AccessKey and Secret that can be used for API requests
-	 * @param keyId
-	 * @param response
-	 * @throws Exception
+	 * GET API Key file containing AccessKey and Secret that can be used for API requests.
+	 *
+	 * @param keyId the key id
+	 * @param response the HTTP Response
+	 * @param session the HTTP session
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/download", method=RequestMethod.GET)

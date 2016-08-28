@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.User;
@@ -22,31 +41,40 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.github.scribejava.core.model.Token;
 
 /**
- * Handles requests related to user management and sign in
- * @author khanson
+ * Handles requests related to user management and sign in.
  *
+ * @author khanson
  */
 @Controller
 @SessionAttributes({"user","account"})
 public class LoginController {
 
-	/**Service for user management*/
+	/** Service for user management. */
 	@Autowired
 	private UserMgtService userMgtService;
 		
+	/** The OAuth provider google. */
 	@Autowired
 	@Qualifier("oAuthProviderGoogle")
 	private GoogleOAuthProvider oAuthProviderGoogle;
 
+	/** The OAuth provider twitter. */
 	@Autowired
 	@Qualifier("oAuthProviderTwitter")
 	private TwitterOAuthProvider oAuthProviderTwitter;
 
+	/** The OAuth provider orcid. */
 	@Autowired
 	@Qualifier("oAuthProviderOrcid")
 	private OrcidOAuthProvider oAuthProviderOrcid;
 	
 		
+	/**
+	 * Login using Google.
+	 *
+	 * @param session the HTTP session
+	 * @return the welcome page
+	 */
 	@RequestMapping(value={"/user/login/google"}, method = RequestMethod.GET)
 	public String logingoogle(HttpSession session) {
 		//see if we are already logged in
@@ -59,6 +87,14 @@ public class LoginController {
 		return "redirect:/user/welcome";
 	}
 	
+	/**
+	 * Googlecallback.
+	 *
+	 * @param oauthVerifier the oauth verifier
+	 * @param session the HTTP session
+	 * @param model the Spring model
+	 * @return the signup or welcome page depending on whether account exists.
+	 */
 	@RequestMapping(value={"/user/googlecallback"}, method = RequestMethod.GET)
 	public String googlecallback(@RequestParam(value="code", required=false) String oauthVerifier, HttpSession session, Model model) {
 				
@@ -87,6 +123,12 @@ public class LoginController {
 	}
 	
 
+	/**
+	 * Login using ORCID.
+	 *
+	 * @param session the HTTP session
+	 * @return the user welcome page
+	 */
 	@RequestMapping(value={"/user/login/orcid"}, method = RequestMethod.GET)
 	public String loginorcid(HttpSession session) {
 		//see if we are already logged in
@@ -99,6 +141,14 @@ public class LoginController {
 		return "redirect:/user/welcome";
 	}
 	
+	/**
+	 * Orcid callback page.
+	 *
+	 * @param oauthVerifier the oauth verifier
+	 * @param session the HTTP session
+	 * @param model the Spring model
+	 * @return the signup or welcome page depending on whether account exists.
+	 */
 	@RequestMapping(value={"/user/orcidcallback"}, method = RequestMethod.GET)
 	public String orcidcallback(@RequestParam(value="code", required=false) String oauthVerifier, HttpSession session, Model model) {
 		
@@ -124,6 +174,12 @@ public class LoginController {
 	}
 	
 
+	/**
+	 * Login using Twitter.
+	 *
+	 * @param session the HTTP session
+	 * @return the welcome page
+	 */
 	@RequestMapping(value={"/user/login/twitter"}, method = RequestMethod.GET)
 	public String logintwitter(HttpSession session) {
 		//see if we are already logged in
@@ -138,6 +194,15 @@ public class LoginController {
 		return "redirect:/user/welcome";
 	}
 	
+	/**
+	 * Twitter callback.
+	 *
+	 * @param oauthToken the oauth token
+	 * @param oauthVerifier the oauth verifier
+	 * @param session the HTTP session
+	 * @param model the Spring model
+	 * @return the signup or welcome page depending on whether account exists.
+	 */
 	@RequestMapping(value={"/user/twittercallback"}, method = RequestMethod.GET)
 	public String twittercallback(@RequestParam(value="oauth_token", required=false) String oauthToken,
 				@RequestParam(value="oauth_verifier", required=false) String oauthVerifier, HttpSession session, Model model) {
@@ -172,7 +237,10 @@ public class LoginController {
 	
 		
 	/**
-	 * Return page that shows login options
+	 * Return page that shows login options.
+	 *
+	 * @param model the Spring model
+	 * @param session the HTTP session
 	 * @return Login options page
 	 */
 	@RequestMapping(value="/user/login", method=RequestMethod.GET)

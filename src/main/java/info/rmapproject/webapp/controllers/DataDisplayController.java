@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.webapp.service.DataDisplayService;
@@ -22,25 +41,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 /**
- * Handles requests for the data visualization pages
- * @author khanson
+ * Handles requests for the data visualization pages.
  *
+ * @author khanson
  */
 
 @Controller
 @SessionAttributes({"user","account"})
 public class DataDisplayController {
 
-	/**Service for managing RMap data display*/
+	/** Service for managing RMap data display. */
 	@Autowired
 	private DataDisplayService dataDisplayService;
 
+	/** The log. */
 	private static final Logger log = LoggerFactory.getLogger(DataDisplayController.class);
 	
-	/** path parameter for large visualization view	 */
+	/**  path parameter for large visualization view. */
 	private static final String VISUAL_VIEW = "visual";
 	
-	/** path parameter for widget view	 */
+	/**  path parameter for widget view. */
 	private static final String WIDGET_VIEW = "widget";
 	
 	/**
@@ -52,12 +72,12 @@ public class DataDisplayController {
 	
 	
 	/**
-	 * GET details of a DiSCO
-	 * @param discoUri
-	 * @param visualize
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET details of a DiSCO.
+	 *
+	 * @param discoUri the disco uri
+	 * @param model the Spring model
+	 * @return the discos page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/discos/{uri}", method = RequestMethod.GET)
 	public String disco(@PathVariable(value="uri") String discoUri, 
@@ -72,12 +92,13 @@ public class DataDisplayController {
 	}	
 	
 	/**
-	 * GET details of a DiSCO in non-default view
-	 * @param discoUri
-	 * @param view
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET details of a DiSCO in non-default view.
+	 *
+	 * @param discoUri the disco uri
+	 * @param view the view
+	 * @param model the Spring model
+	 * @return the discos page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/discos/{uri}/{view}", method = RequestMethod.GET)
 	public String discoAltView(@PathVariable(value="uri") String discoUri, 
@@ -100,11 +121,12 @@ public class DataDisplayController {
 	}	
 
 	/**
-	 * GET details of an Agent
-	 * @param agentUri
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET details of an Agent.
+	 *
+	 * @param agentUri the agent uri
+	 * @param model the Spring model
+	 * @return the agents page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/agents/{uri}", method = RequestMethod.GET)
 	public String agent(@PathVariable(value="uri") String agentUri, Model model) throws Exception {
@@ -120,12 +142,13 @@ public class DataDisplayController {
 	
 	
 	/**
-	 * GET details of a Agent in non-default view
-	 * @param agentUri
-	 * @param view
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET details of a Agent in non-default view.
+	 *
+	 * @param agentUri the agent uri
+	 * @param view the view
+	 * @param model the Spring model
+	 * @return the agents page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/agents/{uri}/{view}", method = RequestMethod.GET)
 	public String agentAltView(@PathVariable(value="uri") String agentUri, 
@@ -148,15 +171,16 @@ public class DataDisplayController {
 	
 	
 	/**
-	 * GET details of a resource
-	 * @param resourceUri
+	 * GET details of a resource.
+	 *
+	 * @param resourceUri the resource uri
 	 * @param resview - This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
 	 * 					When resview==0, it will check for an RMap type, and where one is found the appropriate 
 	 * 					RMap object page will be displayed instead of the generic resources page. When resview==1, 
 	 * 					the /resources page will be displayed by default. Default is 0
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * @param model the Spring model
+	 * @return the resources page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/resources/{uri}", method = RequestMethod.GET)
 	public String resource(@PathVariable(value="uri") String resourceUri, 
@@ -189,16 +213,17 @@ public class DataDisplayController {
 	
 
 	/**
-	 * GET details of a resource and return in specific view format
-	 * @param resourceUri
+	 * GET details of a resource and return in specific view format.
+	 *
+	 * @param resourceUri the resource uri
 	 * @param view - determines the kind of view that will be returned - widget or visualize
 	 * @param resview - This is for when a URI is passed in that may be an RMap object URI (Agent, DiSCO, Event).
 	 * 					When resview==0, it will check for an RMap type, and where one is found the appropriate 
 	 * 					RMap object page will be displayed instead of the generic resources page. When resview==1, 
 	 * 					the /resources page will be displayed by default.
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * @param model the Spring model
+	 * @return the resources page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/resources/{uri}/{view}", method = RequestMethod.GET)
 	public String resourceAltView(@PathVariable(value="uri") String resourceUri, 
@@ -239,11 +264,12 @@ public class DataDisplayController {
 	
 			
 	/**
-	 * GET details of an Event
-	 * @param eventUri
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * GET details of an Event.
+	 *
+	 * @param eventUri the event uri
+	 * @param model the Spring model
+	 * @return the events page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/events/{uri}", method = RequestMethod.GET)
 	public String event(@PathVariable(value="uri") String eventUri, Model model) throws Exception {
@@ -257,10 +283,10 @@ public class DataDisplayController {
 
 	/**
 	 * Experiment for proof of concept - this doesn't allow you to save the DiSCOs you make.
-	 * @param discoUri
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param model the Spring model
+	 * @return the new disco page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/discos/new", method = RequestMethod.GET)
 	public String disconew(Model model) throws Exception {

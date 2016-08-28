@@ -1,3 +1,22 @@
+/*******************************************************************************
+ * Copyright 2016 Johns Hopkins University
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * This software was produced as part of the RMap Project (http://rmap-project.info),
+ * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
+ * collaboration between Data Conservancy, Portico, and IEEE.
+ *******************************************************************************/
 package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.auth.model.User;
@@ -20,29 +39,33 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 /**
- * Handles requests related to user management and sign in
- * @author khanson
+ * Handles requests related to user management and sign in.
  *
+ * @author khanson
  */
 @Controller
 @SessionAttributes({"user","account"})
 public class AccountController {
 	
-	//private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	//private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 	
-	/**Service for user management*/
+	/** Service for user management. */
 	@Autowired
 	private UserMgtService userMgtService;
 		
 	
-	/***************************
-	 * 
-	 * 		Web pages
-	 * 
-	 ***************************/
+/*
+ * *************************
+ * 
+ * 		Web pages
+ * 
+ * *************************.
+ */
 
 	/**
 	 * Get the welcome page after sign in
+	 * @param model the Spring Model
+	 * @param session the HTTP session
 	 * @return Welcome page
 	 */
 	@LoginRequired
@@ -52,8 +75,10 @@ public class AccountController {
 	}
 	
 	/**
-	 * Get the Sign Up Form page
-	 * @param model
+	 * Get the Sign Up Form page.
+	 *
+	 * @param model the Spring Model
+	 * @param session the HTTP session
 	 * @return the Sign Up Form page
 	 */
 	@LoginRequired
@@ -69,11 +94,13 @@ public class AccountController {
 	
 	/**
 	 * Receives the POSTed Sign Up form to be processed. Returns any form errors.
-	 * @param user
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param user the RMap User
+	 * @param result the form Result
+	 * @param session the HTTP session
+	 * @param model the Spring Model
+	 * @return the Welcome page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/signup", method=RequestMethod.POST)
@@ -93,10 +120,11 @@ public class AccountController {
 	}	
 	
 	/**
-	 * Get the User Settings form
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * Get the User Settings form.
+	 *
+	 * @param session the HTTP session
+	 * @param model the Spring model
+	 * @return the User Settings page
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/settings", method=RequestMethod.GET)
@@ -112,11 +140,12 @@ public class AccountController {
 	
 	/**
 	 * Receives the POSTed Settings form to be processed. Returns any form errors.
-	 * @param user
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param user the RMap User
+	 * @param result the form result
+	 * @param model the Spring model
+	 * @return the user settings page
+	 * @throws Exception the exception
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/settings", method=RequestMethod.POST)
@@ -132,11 +161,10 @@ public class AccountController {
 
 	/**
 	 * Logs out the user by completing the session.
-	 * @param user
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 *
+	 * @param status the session status
+	 * @return the home page
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/user/logout", method=RequestMethod.GET)
 	public String logout(SessionStatus status) throws Exception {
@@ -145,12 +173,11 @@ public class AccountController {
 	}		
 
 	/**
-	 * Page to create disco (placeholder)
-	 * @param user
-	 * @param result
-	 * @param model
-	 * @return
-	 * @throws Exception
+	 * Page to create DiSCO (placeholder).
+	 *
+	 * @param status the status
+	 * @return the string
+	 * @throws Exception the exception
 	 */
 	@RequestMapping(value="/user/disco", method=RequestMethod.GET)
 	public String createdisco(SessionStatus status) throws Exception {
