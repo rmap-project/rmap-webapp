@@ -116,15 +116,18 @@ public class ApiKeyController {
 			return "redirect:/home";
 		}*/
         if (result.hasErrors()) {
+    		model.addAttribute("notice", "Errors found, key could not be created.");
+    		model.addAttribute("targetPage", "keynew");	
             return "user/key";
         }
 		apiKey.setUserId(user.getUserId());
 		this.userMgtService.addApiKey(apiKey);
+		model.addAttribute("notice", "Your new key was successfully created!");	
 		return "redirect:/user/keys"; 		
 	}
 	
 	/**
-	 * Receives the POSTed New API Key form to be processed. Returns any form errors.
+	 * Shows the form to edit and existing API key
 	 *
 	 * @param keyId the Key ID parameter
 	 * @param model the Spring model
@@ -159,11 +162,14 @@ public class ApiKeyController {
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/key/edit", method=RequestMethod.POST)
-	public String updateUser(@Valid ApiKey apiKey, BindingResult result, ModelMap model) throws Exception {
+	public String updateUserKey(@Valid ApiKey apiKey, BindingResult result, ModelMap model) throws Exception {
         if (result.hasErrors()) {
+			model.addAttribute("targetPage", "keyedit");
+    		model.addAttribute("notice", "Errors found, key could not be saved.");	
             return "user/key";
         }
-		this.userMgtService.updateApiKey(apiKey);		
+		this.userMgtService.updateApiKey(apiKey);	
+		model.addAttribute("notice", "Key settings have been saved.");	
 		return "redirect:/user/keys"; 
 	}
 	

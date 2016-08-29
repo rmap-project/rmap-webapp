@@ -21,8 +21,12 @@ package info.rmapproject.webapp.controllers;
 
 import info.rmapproject.webapp.domain.SearchCommand;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,10 +76,21 @@ public class SearchController {
 	 * @throws Exception the exception
 	 */
 	@RequestMapping(method=RequestMethod.POST)
-	public String searchResults(@ModelAttribute("search") SearchCommand search,
-									BindingResult result, RedirectAttributes redirectAttributes) throws Exception {
+	public String searchResults(@Valid @ModelAttribute("search") SearchCommand search,
+									BindingResult result, RedirectAttributes redirectAttributes, Model model) throws Exception {
+		String searchterm = search.getSearch();
+		boolean isUri = true;
+		//make sure its a valid URI
+		try {
+			//TODO:there are some cases where this forms a valid URI but not a valid IRI - need to test that it passes on both
+			new URI(searchterm);
+		} catch (URISyntaxException ex){
+			isUri = false;
+		}		
 		
-		if (result.hasErrors()){
+		if (result.hasErrors() || !isUri){
+			model.addAttribute("search", search);
+    		model.addAttribute("notice", "Please enter a valid URI.");	
 			return "search";
 		}
 		redirectAttributes.addFlashAttribute("search", search);

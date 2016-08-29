@@ -106,6 +106,7 @@ public class AccountController {
 	@RequestMapping(value="/user/signup", method=RequestMethod.POST)
 	public String addUser(@Valid User user, BindingResult result, HttpSession session, Model model) throws Exception {
         if (result.hasErrors()) {
+    		model.addAttribute("notice", "Errors found, user could not be saved");	
             return "user/signup";
         }
 		int userId = this.userMgtService.addUser(user);
@@ -116,6 +117,7 @@ public class AccountController {
 		this.userMgtService.addUserIdentityProvider(userId, account);
 		
 		session.setAttribute("user", user); //save latest user details to session
+		model.addAttribute("notice", "Signup successful!");	
 		return "redirect:/user/welcome"; 		
 	}	
 	
@@ -134,7 +136,7 @@ public class AccountController {
 			return "redirect:/home";
 		}
 		user = this.userMgtService.getUserById(user.getUserId()); //refresh record to make sure editing latest
-		model.addAttribute("user",user);
+		model.addAttribute("userSettings",user);
         return "user/settings";	
 	}
 	
@@ -149,15 +151,20 @@ public class AccountController {
 	 */
 	@LoginRequired
 	@RequestMapping(value="/user/settings", method=RequestMethod.POST)
-	public String updateUserSettings(@ModelAttribute("user") User user, BindingResult result, ModelMap model) throws Exception {
+	public String updateUserSettings(@ModelAttribute("userSettings") @Valid User userSettings, BindingResult result, ModelMap model, HttpSession session) throws Exception {
         if (result.hasErrors()) {
+    		model.addAttribute("notice", "Errors found, settings could not be saved");	
             return "user/settings";
         }
-		this.userMgtService.updateUserSettings(user);
-		user = this.userMgtService.getUserById(user.getUserId()); //refresh record
-		model.addAttribute("user", user); //save latest user details to session
+		this.userMgtService.updateUserSettings(userSettings);
+		//refresh session record and attribute
+		User currUser = this.userMgtService.getUserById(userSettings.getUserId()); 
+		session.setAttribute("user",currUser);
+		model.addAttribute("user", currUser); //save latest user details to session
+		model.addAttribute("notice", "User settings have been saved.");
 		return "user/settings"; 		
 	}
+		
 
 	/**
 	 * Logs out the user by completing the session.

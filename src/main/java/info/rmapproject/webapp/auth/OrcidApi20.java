@@ -32,9 +32,9 @@ import com.github.scribejava.core.utils.OAuthEncoder;
  * 
  */
 public class OrcidApi20 extends DefaultApi20  {
-//TODO: is this class still used??
+
     /** The authentication URL. */
-    private static final String AUTH_URL = "https://www.orcid.org/oauth/authorize/?client_id=%s&scope=%s&response_type=%s&redirect_uri=%s";
+    private static final String AUTH_URL = "https://orcid.org/oauth/authorize?client_id=%s&scope=%s&response_type=%s&redirect_uri=%s";
     
     /** The token URL. */
     private static final String TOKEN_URL = "https://pub.orcid.org/oauth/token?grant_type=";

@@ -13,8 +13,15 @@
 	<h1>Settings</h1>
 	
 	<br/>
-	<form:form method="POST" modelAttribute="user">
+	<form:form method="POST" modelAttribute="userSettings">
+		<c:if test="${notice!=null}">
+			<p class="notice">
+				${notice}
+			</p>
+		</c:if>
 		<fieldset>
+		<form:hidden path="userId"/>
+		
 		<legend>User details</legend>
 		<form:label path="name">Name *</form:label> 
 		<form:errors path="name" cssClass="validationErrors"/>

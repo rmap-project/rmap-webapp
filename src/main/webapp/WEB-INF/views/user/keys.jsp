@@ -19,13 +19,19 @@
 	To trigger the creation of a System Agent, visit the <a href="<c:url value='/user/settings' />">settings</a> page.
 </p>
 </c:if>
+<c:if test="${notice!=null}">
+	<p class="notice">
+		${notice}
+	</p>
+</c:if>
 <p style="text-align:right;">
-<a href="<c:url value='/user/key/new' />">Create new key</a>
+	<a href="<c:url value='/user/key/new' />">Create new key</a>
 </p>
 <c:if test="${empty apiKeyList}">
-<fieldset style="text-align:center;">
-	<br/>No keys found.<br/><br/>
-</fieldset>
+
+	<fieldset style="text-align:center;">
+		<br/>No keys found.<br/><br/>
+	</fieldset>
 </c:if>
 
 <c:if test="${!empty apiKeyList}">

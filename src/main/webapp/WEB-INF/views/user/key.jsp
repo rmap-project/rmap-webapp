@@ -36,6 +36,12 @@ function clearfield (fieldname){
 <br/>
 
 <form:form method="POST" modelAttribute="apiKey">
+
+	<c:if test="${notice!=null}">
+		<p class="notice">
+			${notice}
+		</p>
+	</c:if>
 	<fieldset>
 		<form:hidden path="apiKeyId"/>
 		

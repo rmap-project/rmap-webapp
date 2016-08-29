@@ -28,6 +28,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class SearchCommand {
 	
 	/** The search. */
+	//TODO:use different validation - this ties the library to hibernate
 	@NotEmpty(message="A URI must be provided")
 	private String search;
 	
@@ -46,6 +47,7 @@ public class SearchCommand {
 	 * @param search the new search
 	 */
 	public void setSearch(String search)	{
+		search = search.trim();
 		this.search = search;
 	}
 	

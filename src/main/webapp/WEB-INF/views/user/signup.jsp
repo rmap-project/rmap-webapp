@@ -9,7 +9,11 @@
 <%@include file="/includes/bodystart.inc" %> 
 
 <h1>Sign Up</h1>
-
+<c:if test="${notice!=null}">
+	<p class="notice">
+		${notice}
+	</p>
+</c:if>
 <br/>
 <form:form method="POST" modelAttribute="user">
 	<fieldset>

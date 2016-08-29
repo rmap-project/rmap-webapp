@@ -7,6 +7,11 @@
 <body>
 <%@include file="/includes/bodystart.inc" %> 
 <h1>Welcome to the RMap Project</h1>
+<c:if test="${notice!=null}">
+	<p class="notice">
+		${notice}
+	</p>
+</c:if>
 <h2>What can I do here?</h2>
 <p>Logging in to RMap allows you to manage your write access to the RMap API. 
 Read only access to the RMap API does not require an account.  
