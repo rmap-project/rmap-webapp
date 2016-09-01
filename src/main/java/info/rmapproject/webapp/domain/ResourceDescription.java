@@ -19,9 +19,9 @@
  *******************************************************************************/
 package info.rmapproject.webapp.domain;
 
+import info.rmapproject.webapp.exception.ErrorCode;
+import info.rmapproject.webapp.exception.RMapWebException;
 import info.rmapproject.webapp.utils.WebappUtils;
-import info.rmapproject.webapps.exception.ErrorCode;
-import info.rmapproject.webapps.exception.RMapWebException;
 
 import java.io.Serializable;
 import java.util.Map;

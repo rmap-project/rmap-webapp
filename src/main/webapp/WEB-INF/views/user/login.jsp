@@ -9,6 +9,8 @@
 <%@include file="/includes/bodystart.inc" %> 
 <h1>Sign in</h1>
 <br/>
+<p>Signing in to RMap allows you to initiate an RMap System Agent and manage API access keys that can be used to write DiSCOs to the RMap API. 
+API documentation can be found on the <a href="https://rmap-project.atlassian.net/wiki">RMap technical wiki</a></p>
 <fieldset>
 <ul>
 	<li><a href="<c:url value='/user/login/google'/>"><img src="<c:url value='/includes/images/google-signin-button.png'/>" alt="Sign in with Google"/></a></li>

@@ -17,7 +17,7 @@
  * The RMap Project was funded by the Alfred P. Sloan Foundation and is a 
  * collaboration between Data Conservancy, Portico, and IEEE.
  *******************************************************************************/
-package info.rmapproject.webapps.exception;
+package info.rmapproject.webapp.exception;
 
 import info.rmapproject.auth.utils.Constants;
 

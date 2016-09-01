@@ -13,10 +13,11 @@
 
 <c:if test="${not user.hasRMapAgent() && not user.doRMapAgentSync}">
 <p class="notice">
-	NOTE: Currently the keys you generate will provide read-only access to the RMap triplestore.  
-	To create content in RMap, an RMap System Agent must be created for your account.  
-	This will be associated with any content you create in RMap. 
-	To trigger the creation of a System Agent, visit the <a href="<c:url value='/user/settings' />">settings</a> page.
+	WARNING: A public RMap System Agent is required for creating RMap DiSCOs.  
+	API Keys are used to generate RMap DiSCOs.  In order to add data to RMap, a public RMap System Agent must 
+	also be created so that it can be associated with your changes. 
+	To initiate the creation of an Agent, visit the <a href="<c:url value='/user/settings' />">settings</a> page
+	and set the option to generate an RMap:Agent to "yes".
 </p>
 </c:if>
 <c:if test="${notice!=null}">

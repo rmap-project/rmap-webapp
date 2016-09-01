@@ -25,6 +25,7 @@ import info.rmapproject.webapp.domain.ResourceDescription;
 import java.net.URI;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
 /**
  * Used to hold the information about a Resource needed to for representation on a webpage.
  * @author khanson

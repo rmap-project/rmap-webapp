@@ -69,7 +69,7 @@ public interface UserMgtService {
 	 * @param user the User
 	 * @return the new User ID
 	 */
-	public int addUser(User user);
+	public int addUser(User user, OAuthProviderAccount account);
 	
 	/**
 	 * Update User settings.

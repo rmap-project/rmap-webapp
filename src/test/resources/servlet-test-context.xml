@@ -4,19 +4,16 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
-		http://www.springframework.org/schema/aop  
-		http://www.springframework.org/schema/aop/spring-aop.xsd ">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 	<context:component-scan base-package="info.rmapproject.webapp" />
 	
-    <beans:import resource="classpath*:spring-rmapcore-context.xml" />
+    <beans:import resource="classpath:spring-rmapcore-context.xml" />
     <beans:import resource="classpath*:spring-rmapauth-context.xml" />
     
 	<beans:bean id="userMgtService" class="info.rmapproject.webapp.service.UserMgtServiceImpl"/>
@@ -27,7 +24,10 @@
     <bean id="rmapIdService" class="info.rmapproject.core.idservice.ArkIdService"/>
     <bean id="rdfHandler" class="info.rmapproject.core.rdfhandler.impl.openrdf.RioRDFHandler"/> 
 	<beans:bean id="triplestore" class="info.rmapproject.core.rmapservice.impl.openrdf.triplestore.SesameSailMemoryTriplestore"/>
--->
+-->	<!--  live triplestore for tests-->
+	<beans:bean id="triplestore" class="info.rmapproject.core.rmapservice.impl.openrdf.triplestore.SesameHttpTriplestore" scope="prototype"/>
+    <beans:bean id="rmapIdService" class="info.rmapproject.core.idservice.RandomStringIdService"/>
+ 	
 
 	<!-- OAUTH Configuration -->		
 	<!-- twitter oauth config -->	

@@ -27,7 +27,9 @@ import info.rmapproject.core.rmapservice.RMapService;
 import info.rmapproject.webapp.auth.OAuthProviderAccount;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,11 +87,17 @@ public class UserMgtServiceImpl implements UserMgtService {
 	}
 	
 	/* (non-Javadoc)
-	 * @see info.rmapproject.webapp.service.UserMgtService#addUser(info.rmapproject.auth.model.User)
+	 * @see info.rmapproject.webapp.service.UserMgtService#addUser(info.rmapproject.auth.model.User, info.rmapproject.webapp.auth.OAuthProviderAccount)
 	 */
 	@Override
-	public int addUser(User user) {
+	public int addUser(User user, OAuthProviderAccount account) {
+		//first 
+		UserIdentityProvider idProvider = makeUserIdentityProviderFromOAuthAcct(account, -1);
+		Set<UserIdentityProvider> idProviderSet = new HashSet<UserIdentityProvider>();
+		idProviderSet.add(idProvider);
+		user.setUserIdentityProviders(idProviderSet);
 		return rmapAuthService.addUser(user);
+		
 	}
 	
 	/* (non-Javadoc)
@@ -150,6 +158,17 @@ public class UserMgtServiceImpl implements UserMgtService {
 	 */
 	@Override
 	public int addUserIdentityProvider(int userId, OAuthProviderAccount account) {
+		UserIdentityProvider newAccount = makeUserIdentityProviderFromOAuthAcct(account, userId);				
+		return rmapAuthService.addUserIdProvider(newAccount);		
+	}
+	
+	/**
+	 * Generates a UserIdentityProvider object using an OAuthProviderAccount object
+	 * @param account the OAuth Provider account information
+	 * @param userId user ID
+	 * @return
+	 */
+	private UserIdentityProvider makeUserIdentityProviderFromOAuthAcct(OAuthProviderAccount account, int userId){
 		UserIdentityProvider newAccount = new UserIdentityProvider();
 		
 		newAccount.setUserId(userId);
@@ -160,9 +179,10 @@ public class UserMgtServiceImpl implements UserMgtService {
 		newAccount.setProviderAccountProfileUrl(account.getProfilePath());
 		newAccount.setCreatedDate(new Date());
 		newAccount.setLastAuthenticatedDate(new Date());
-				
-		return rmapAuthService.addUserIdProvider(newAccount);		
+		
+		return newAccount;
 	}
+	
 	
 	
 }

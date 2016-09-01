@@ -109,12 +109,9 @@ public class AccountController {
     		model.addAttribute("notice", "Errors found, user could not be saved");	
             return "user/signup";
         }
-		int userId = this.userMgtService.addUser(user);
-		user = this.userMgtService.getUserById(userId); //refresh record
-		
 		OAuthProviderAccount account = (OAuthProviderAccount) session.getAttribute("account");	
-		//create identity provider that is associated with the account
-		this.userMgtService.addUserIdentityProvider(userId, account);
+		int userId = this.userMgtService.addUser(user, account);
+		user = this.userMgtService.getUserById(userId); //refresh record
 		
 		session.setAttribute("user", user); //save latest user details to session
 		model.addAttribute("notice", "Signup successful!");	

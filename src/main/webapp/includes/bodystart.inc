@@ -61,7 +61,7 @@
 			
 			<c:if test="${uid==0&&uname.length()==0}">
 			<li id="menu-item-4">
-				<a href="<c:url value='/user/login'/>" title="Sign in to manage \nAPI access keys\nfor write access.">Sign in</a>
+				<a href="<c:url value='/user/login'/>" title="Sign in to manage API access keys for write access.">Sign in</a>
 				<div class="signin-menu">
 					<a href="<c:url value='/user/login/google'/>"><img src="<c:url value='/includes/images/google-signin-button.png'/>" alt="Sign in with Google"/></a><br/>
 					<a href="<c:url value='/user/login/twitter'/>"><img src="<c:url value='/includes/images/twitter-signin-button.png'/>" alt="Sign in with Twitter" width="190px"/></a><br/>
